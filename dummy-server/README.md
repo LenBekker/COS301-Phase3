@@ -1,5 +1,5 @@
 **prerequisites**
-* Nodejs https://nodejs.org/en/download/
+* Nodejs v10.15.3 https://nodejs.org/en/download/
 
 **run**
 ```
