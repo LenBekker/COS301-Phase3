@@ -13,6 +13,14 @@
 |**Interests:** |Reading, Learning, Games and Movies|
 |**Skills:**|C++, Java, C#, Web Dev, Go Lang, Databases|
 
+1. Copy template from  below
+2. Change name
+3. Add student nr
+4. Add LinkedIn, Github
+5. Add overview
+6. Change position(if not final year student)
+7. Add interests
+8. Add Skills
 
 |Team Member | Details | 
 | :---         | :---         |    
