@@ -22,3 +22,12 @@
 |**Position** |Final year student|
 |**Interests** |Template Interests|
 |**Skills**|Template Skills|
+
+1. Copy template
+2. Change name
+3. Add student nr
+4. Add LinkedIn, Github
+5. Add overview
+6. Change position(if not final year student)
+7. Add interests
+8. Add Skills
