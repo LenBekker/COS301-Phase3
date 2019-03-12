@@ -44,7 +44,14 @@ standard_input.on('data', function (data)
         
         if(data == 1)
         {
-          console.log("Option 1 chosen");
+           function insert(uId,uName,uSurname,uEmail,uPass){
+
+                    db.run(`INSERT INTO Clients(userId,Name,Surname,[E-mail],Password) VALUES(?,?,?,?,?)`, [uId,uName,uSurname,uEmail,uPass], function(err) {
+                   if (err) {
+                            return console.log(err.message);
+                         }
+                       });
+              }
         }
         if(data == 2)
         {
