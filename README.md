@@ -1,7 +1,7 @@
 # **COS 301 PHASE 3 GROUP 7**
 
 ## **Merlot Client Information System**
-
+![Group Picture](https://i.imgur.com/wgJ7DrH.jpg)
 ## **Team Members**
 
 |Team Member | Details | 
