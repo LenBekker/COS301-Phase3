@@ -56,6 +56,24 @@ standard_input.on('data', function (data)
         if(data == 2)
         {
           //add entry to data base
+           //add entry to data base
+          //delete entries 
+          //copy data to new table the delete from current table
+
+          function remove(uID)
+          {
+            db.run('SELECT userId FROM Clients Where userId =? ',[uID],function(err) {
+                   if (err) {return console.log(err.message);}
+                       });
+
+
+            let sql = 'SELECT userId FROM Clients Where userId =(?) ';
+            db.all(sql, [uID], (err, rows) => { if (err) {
+    throw err;
+  }
+  rows.forEach((row) => {
+    console.log(row.Name);
+  });
         }
         if(data == 3)
         {
