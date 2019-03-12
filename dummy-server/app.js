@@ -28,6 +28,8 @@ app.post('/api/user', function(req, res){
   var uID = req.body.id;
   var uOption = req.body.option;
 
+  res.header('Access-Control-Allow-Origin', '*'); //Temporary to allow cross origin POST from html
+
   db.serialize(function() 
   {
     var stmt = db.prepare("SELECT [E-mail], Password FROM Clients WHERE userId=(?)");
