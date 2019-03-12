@@ -16,9 +16,9 @@
 
 |Team Member | Details | 
 | :---         | :---         |    
-|** Template**|    **u12345678**   |
+|**Template Name**|    **u12345678**   |
 |**Profile** |[LinkedIn](https://www.google.co.za ) / [Github](https://www.google.co.za)|
-|**Overview**|Template|
+|**Overview**|Template Overview|
 |**Position** |Final year student|
-|**Interests** |Template|
-|**Skills**|Template|
+|**Interests** |Template Interests|
+|**Skills**|Template Skills|
