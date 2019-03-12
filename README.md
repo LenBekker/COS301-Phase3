@@ -13,6 +13,16 @@
 |**Interests:** |Reading, Learning, Games and Movies|
 |**Skills:**|C++, Java, C#, Web Dev, Go Lang, Databases|
 
+|Team Member | Details | 
+| :---         | :---         |    
+|**Kearabiloe Nare**|   **u10068083**    |
+|**Profile** |[LinkedIn]() / [Github](https://github.com/KearabiloeNare)|
+|**Overview**| Individual who is mostly interested in using technology to better the lives of others(mostly those who at a disadvantage).  I feel most people spend more time on their phones rather than computers and because of the like to focus in future on Android application development. |
+|**Position:** |CS student|
+|**Interests:** |Software Engineering, Computer Security, Fitness|
+|**Skills:**|Communictaion,Technical(HTML,CSS,Javascript,java,C++,MongoDB)|
+
+
 1. Copy template from  below
 2. Change name
 3. Add student nr
@@ -32,11 +42,3 @@
 |**Skills**|Template Skills|
 
 
-|Team Member | Details | 
-| :---         | :---         |    
-|**Kearabiloe Nare**|   **u10068083**    |
-|**Profile** |[LinkedIn]() / [Github](https://github.com/KearabiloeNare)|
-|**Overview**| Individual who is mostly interested in using technology to better the lives of others(mostly those who at a disadvantage).  I feel most people spend more time on their phones rather than computers and because of the like to focus in future on Android application development. |
-|**Position:** |CS student|
-|**Interests:** |Software Engineering, Computer Security, Fitness|
-|**Skills:**|Communictaion,Technical(HTML,CSS,Javascript,java,C++,MongoDB)|
