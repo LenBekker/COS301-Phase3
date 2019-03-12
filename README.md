@@ -2,6 +2,15 @@
 
 ## **Merlot Client Information System**
 
+* The client Information System is required to maintain a database  of all client information.
+* Provide a CRUD service (Not real banking interface)
+* Have the following functions
+    * Give userID -> Return E-Mail Address
+    * Give userID -> Return Fixed Password
+    * Sync User-list ie. Update the list of users in the caller's database to be the same as the list in the client information system.
+* Log all transactions
+* Service to produce log of transactions within given time span
+
 ## **Team Members**
 
 |Team Member | Details | 
