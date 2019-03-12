@@ -56,7 +56,17 @@ standard_input.on('data', function (data)
         }
         if(data == 4)
         {
-          //add entry to data base
+          let sql= "SELECT * FROM Clients";
+
+          db.all(sql, [], (err, rows) => {
+          if (err) {
+              throw err;
+              }
+             // console.log(rows);
+          rows.forEach((row) => {
+           console.log(row.userId+ "\t" +row.Name+ "\t" +row.Surname+ "\t" +row['E-mail']+ "\t" +row.Password);
+         });
+          });      
         }
     // User input exit.
     if(data === 5){
