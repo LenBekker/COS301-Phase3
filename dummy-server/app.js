@@ -60,10 +60,29 @@ standard_input.on('data', function (data)
         if(data == 3)
         {
           //add entry to data base
+          function Search(uID)
+          {
+            let sql= `SELECT (userId,Name,Surname,[E-mail],Password) FROM Clients WHERE userId=?`;
+            db.get(sql, [uID], (err, row) => {
+          if (err) {
+              throw err;
+              }
+              return row
+    ? console.log(row.userId, row.Name)
+    : console.log(`No client found with the id ${uID}`);
+         
+          });
+
+
+            
+
+          }
+
+          Search('123');
         }
         if(data == 4)
         {
-          function Display{
+          function Display(){
           let sql= "SELECT * FROM Clients";
 
           db.all(sql, [], (err, rows) => {
