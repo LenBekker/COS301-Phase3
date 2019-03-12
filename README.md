@@ -24,12 +24,24 @@
 
 |Team Member | Details | 
 | :---         | :---         |    
+|**Reinhardt Eiselen**|    **u14043302**   |
+|**Profile** |[LinkedIn](hhtps://www.linkedin.com/in/reinhardt-eiselen-0071a685 ) / [Github](https://github.com/EiselenR)|
+|**Overview**|Always positive looking for the next big challenge.Not afraid to say I don't know the answer, and willing to find out the answer lastly I take  a lot of pride in my work.|
+|**Position** |Final year student|
+|**Interests** |Music ,specifically live music.Some gaming here and there|
+|**Skills**|Final year BSc IT (information & knowledge Systsems) student,proficient in multiple programming languages : Python ,C++ ,C ,Java,x86 Assembler & full stack Web  developer and lastly android.|
+
+|Team Member | Details | 
+| :---         | :---         |    
 |**Template Name**|    **u12345678**   |
 |**Profile** |[LinkedIn](https://www.google.co.za ) / [Github](https://www.google.co.za)|
 |**Overview**|Template Overview|
 |**Position** |Final year student|
 |**Interests** |Template Interests|
 |**Skills**|Template Skills|
+|Team Member | Details | 
+
+
 
 
 |Team Member | Details | 
