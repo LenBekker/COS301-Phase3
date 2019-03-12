@@ -51,15 +51,6 @@
 |**Skills**|C++, Java, Test Driven Development, 3DS Max, Web Development: HTML, CSS, AJAX, JSON, Mongo DB, Bootstrap, JavaScript, SQL|
 
 
-|Team Member | Details | 
-| :---         | :---         |    
-|**Template Name**|    **u12345678**   |
-|**Profile** |[LinkedIn](https://www.google.co.za ) / [Github](https://www.google.co.za)|
-|**Overview**|Template Overview|
-|**Position** |Final year student|
-|**Interests** |Template Interests|
-|**Skills**|Template Skills|
-|Team Member | Details | 
 
 
 
