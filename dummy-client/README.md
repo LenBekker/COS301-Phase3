@@ -1,5 +1,5 @@
 Implementation(s) to test server API calls
-* WIP implementation 1 eg. Web Interface
+* Static Web Page
 * WIP implementation 2 eg. Java Interface
 
 **Requirements:**
