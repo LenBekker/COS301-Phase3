@@ -14,13 +14,19 @@ app.use(express.json());
   var PORT = 8080;
   server.listen(PORT);
 
-//userID email/password calls
+/*
+ userID email/password API calls
+  //Option 1 = Get Email 
+  //Option 2 = Get Password
+
+ Body-key inputs:
+ eg. 
+    id = 123456
+    option = 2
+*/
 app.post('/api/user', function(req, res){
   var uID = req.body.id;
   var uOption = req.body.option;
-
-  //Option 1 = Get Email 
-  //Option 2 = Get Password
 
   db.serialize(function() 
   {
@@ -32,10 +38,12 @@ app.post('/api/user', function(req, res){
           if(uOption == 1)
           {
             res.send(row['E-mail']);
+            //LOG?
           }
           if(uOption == 2)
           {
             res.send(row.Password);
+            //LOG?
           }
         }
         else
@@ -44,6 +52,11 @@ app.post('/api/user', function(req, res){
     stmt.finalize();
   });
 });
+
+app.post('/api/user/sync', function(req, res){
+  //Sync users in caller database to be same as client information system
+});
+
 
 // open database in memory
 let db = new sqlite3.Database('../database/merlotInfoSys.db', (err) => {
