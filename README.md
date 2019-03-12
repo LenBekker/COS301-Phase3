@@ -1,7 +1,7 @@
 # **COS 301 PHASE 3 GROUP 7**
 
 ## **Merlot Client Information System**
-![Temporary Photo](https://i.imgur.com/XzQpa3M.jpg)
+
 ## **Team Members**
 
 |Team Member | Details | 
@@ -14,15 +14,6 @@
 |**Skills:**|C++, Java, C#, Web Dev, Go Lang, Databases|
 
 
-1. Copy template from  below
-2. Change name
-3. Add student nr
-4. Add LinkedIn, Github
-5. Add overview
-6. Change position(if not final year student)
-7. Add interests
-8. Add Skills
-
 |Team Member | Details | 
 | :---         | :---         |    
 |**Template Name**|    **u12345678**   |
@@ -31,3 +22,13 @@
 |**Position** |Final year student|
 |**Interests** |Template Interests|
 |**Skills**|Template Skills|
+
+
+|Team Member | Details | 
+| :---         | :---         |    
+|**Kearabiloe Nare**|   **u10068083**    |
+|**Profile** |[LinkedIn]() / [Github](https://github.com/KearabiloeNare)|
+|**Overview**| Individual who is mostly interested in using technology to better the lives of others(mostly those who at a disadvantage).  I feel most people spend more time on their phones rather than computers and because of the like to focus in future on Android application development. |
+|**Position:** |CS student|
+|**Interests:** |Software Engineering, Computer Security, Fitness|
+|**Skills:**|Communictaion,Technical(HTML,CSS,Javascript,java,C++,MongoDB)|
