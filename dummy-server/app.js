@@ -5,10 +5,45 @@ var server = require('http').createServer(app);
 const readline = require('readline');
 app.disable('etag');
 
+//Allow encoded body
+app.use(express.urlencoded({extended: true})); 
+app.use(express.json());  
+
 //port to listen on
 
   var PORT = 8080;
   server.listen(PORT);
+
+//userID email/password calls
+app.post('/api/user', function(req, res){
+  var uID = req.body.id;
+  var uOption = req.body.option;
+
+  //Option 1 = Get Email 
+  //Option 2 = Get Password
+
+  db.serialize(function() 
+  {
+    var stmt = db.prepare("SELECT [E-mail], Password FROM Clients WHERE userId=(?)");
+    stmt.get(uID, function(err, row)
+    {
+        if(row != undefined)
+        {
+          if(uOption == 1)
+          {
+            res.send(row['E-mail']);
+          }
+          if(uOption == 2)
+          {
+            res.send(row.Password);
+          }
+        }
+        else
+          console.log("Undefined?");
+    });
+    stmt.finalize();
+  });
+});
 
 // open database in memory
 let db = new sqlite3.Database('../database/merlotInfoSys.db', (err) => {
@@ -39,9 +74,7 @@ standard_input.setEncoding('utf-8');
 
 // When user input data and click enter key.
 standard_input.on('data', function (data) 
-{
-    
-        
+{      
         if(data == 1)
         {
           console.log("Option 1 chosen");
@@ -69,7 +102,7 @@ standard_input.on('data', function (data)
           });      
         }
     // User input exit.
-    if(data === 5){
+    if(data == 5){
         // Program exit.
         console.log("User input complete, program exit.");
         db.close((err) => {
