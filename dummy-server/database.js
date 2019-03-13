@@ -54,7 +54,7 @@ exports.Display = function(){
   if (err) {
        return console.error(err.message);
       }
-      console.log(rows);
+      
   rows.forEach((row) => {
    console.log(row.Name+ "\t" +row.Surname+ "\t" +row['E-mail']+ "\t" +row.Password);
  	});
