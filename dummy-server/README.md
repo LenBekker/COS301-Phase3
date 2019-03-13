@@ -3,6 +3,8 @@ The server can execute CRUD operations but also serves as an API for other modul
 **Prerequisites**
 * Nodejs v10.15.3 https://nodejs.org/en/download/
 
+        import express, sqlite3
+        
 **Run:**
 ```
     npm ci
