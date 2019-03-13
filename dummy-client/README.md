@@ -15,6 +15,6 @@ Implementation(s) to test server API calls
       >userId=value1&option=value2
   
   * Sync user-list
-    * POST to url http:/serverURI:port/api/user/sync (eg. http://localhost:8080/api/user/sync)
+    * POST to url http://serverURI:port/api/user/sync (eg. http://localhost:8080/api/user/sync)
        
        Will return a list of users in the client information system database.
