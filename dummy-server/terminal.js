@@ -54,7 +54,7 @@ function command(command){
 			}
 			else{
 				console.log("Invalid arguements")
-				console.log("del <userID>");
+				console.log("del user");
 			}
 			break;
 		}
@@ -67,7 +67,7 @@ function command(command){
 			}
 			else{
 				console.log("Invalid arguements")
-				console.log("search <userID> ");
+				console.log("search user ");
 			}
 			break;
 		}
