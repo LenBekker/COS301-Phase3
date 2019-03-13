@@ -60,3 +60,10 @@ exports.Display = function(){
  	});
   });      
 }
+exports.UpdatePassword = function(uPass,uID){
+      let sql= `UPDATE Clients SET Password=? WHERE userId=?`;
+    db.run(sql, [uPass,uID],function(err) {
+     if (err) {     return console.log(err.message);}
+     console.log(`Row(s) updated: ${this.changes}`);
+         });
+}
