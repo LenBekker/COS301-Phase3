@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+        <title>Dummy Client</title>
+        <link href="../Web/bootstrap/bootstrap.min.css" rel="stylesheet"> 
+    </head>
+    <body>
+        <p class="panel">
+            <div class="form-control text-center">
+                <label >User ID:</label>
+                <input id="id" type="text"/>
+                <label >Option:</label>
+                <select id="option" >
+                    <option value=1>Email</option>
+                    <option value=2>Password</option>
+                </select>
+                <a class="btn btn-success" href="#" role="button" onclick="hello()">Query</a>
+            </div>
+        </p>
+        <p class="panel">
+            <div class="form-control text-center">
+                <br>
+                <label>Result</label>
+                <input id="result">
+            </div>
+        </p>
+    </body>
+
+    <script>
+        function hello()
+        {
+            var url = "http://localhost:8080/api/user";
+            var x = document.getElementById("result");
+            var user = document.getElementById("id").value;
+            var opt = document.getElementById("option").value;
+
+            var params = "id=" + user + "&" + "option=" + opt;
+            console.log(params);
+
+            http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            http.onload  = function() 
+            {
+                if(http.readyState == 4 && http.status == 200) 
+                {
+                    x.value  = http.responseText;
+                }
+                else
+                {
+                    x.value = "failed";
+                }
+            }
+            http.send(params);            
+        }
+    </script>
+</html>
+    
