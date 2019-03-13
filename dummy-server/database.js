@@ -25,7 +25,7 @@ exports.remove = function(uID)  {
       }
 
       return row? console.log(row.userId+ "\t" +row.Name+ "\t" +row.Surname+ "\t" +row['E-mail']+ "\t" +row.Password): console.log(`No client found with the id ${uID}`);
-  db.run(`INSERT INTO Delete_Clients(Name,Surname,[E-mail],Password) VALUES(?,?,?,?)`, [row.Name,row.Surname,row['E-mail'],row.Password], function(err) {
+  db.run(`INSERT INTO Delete_Clients(userId,Name,Surname,[E-mail],Password) VALUES(?,?,?,?,?)`, [row.userId,row.Name,row.Surname,row['E-mail'],row.Password], function(err) {
 	   if (err) {return console.log(err.message);}
 	       });
   });
