@@ -5,40 +5,69 @@
         <title>Dummy Client</title>
         <link href="../Web/bootstrap/bootstrap.min.css" rel="stylesheet"> 
     </head>
-    <body>
-        <p class="panel">
-            <div class="form-control text-center">
-                <label >User ID:</label>
-                <input id="id" type="text"/>
-                <label >Option:</label>
-                <select id="option" >
-                    <option value=1>Email</option>
-                    <option value=2>Password</option>
-                </select>
-                <a class="btn btn-success" href="#" role="button" onclick="hello()">Query</a>
+    <body >
+        <div class="container-fluid">
+            <br>
+            <div class="panel-group form-control">
+                <div class="panel-heading">API Retrieve [Open Console for log]</div>
+                <div class="panel-body ">
+                    <div class="text-center">
+                        <label >User ID:</label>
+                        <input id="id" type="text"/>
+                        <label >Option:</label>
+                        <select id="option" >
+                            <option value=1>Email</option>
+                            <option value=2>Password</option>
+                        </select>
+                        <a class="btn btn-success" href="#" role="button" onclick="APIpost()">POST Query</a>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="text-center">
+                        <br>
+                        <label>Result</label>
+                        <input id="result">
+                    </div>
+                </div>
             </div>
-        </p>
-        <p class="panel">
-            <div class="form-control text-center">
-                <br>
-                <label>Result</label>
-                <input id="result">
+            <br>
+            <div class="panel-group form-control">
+                <div class="panel-heading">API Sync Users [Open Console for log]</div>
+                <div class="panel-body">
+                    <div class="text-center">
+                        <a class="btn btn-success" href="#" role="button" onclick="APISync()">Sync from Clients Table</a>
+                        <br><br>
+                    </div>
+                    <div class="panel-body">
+                        <label>User List:</label>
+                        <br>
+                        <textarea id="sync" class="w-100" readonly>
+                        </textarea>
+                    </div>
+                </div>
+
             </div>
-        </p>
+        </div> 
     </body>
 
     <script>
-        function hello()
+        /*
+            Function preforms a HTTP POST Request to the server to query the database on the server 
+            and return the E-mail or Password of the UserId depending on the option selected.
+        */
+        function APIpost()
         {
+            /*
+                URL and PORT determined by NodeJS server.
+            */
             var url = "http://localhost:8080/api/user";
             var x = document.getElementById("result");
             var user = document.getElementById("id").value;
             var opt = document.getElementById("option").value;
 
-            var params = "id=" + user + "&" + "option=" + opt;
-            console.log(params);
+            var params = "userId=" + user + "&" + "option=" + opt;
 
-            http = new XMLHttpRequest();
+            var http = new XMLHttpRequest();
             http.open("POST", url, true);
             http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -47,14 +76,45 @@
                 if(http.readyState == 4 && http.status == 200) 
                 {
                     x.value  = http.responseText;
+                    console.log("[Success] retrieved: " + http.responseText);
                 }
                 else
                 {
-                    x.value = "failed";
+                    console.log("[Failed] " + http.status + " : " + http.responseText);
                 }
             }
+            console.log("POST with parameters: " + params);
             http.send(params);            
-        }
+        };
+
+        /*
+            Function to retrieve all users in clients table from server
+        */
+        function APISync()
+        {
+            /*
+                URL and PORT determined by NodeJS server.
+            */
+            var url = "http://localhost:8080/api/user/sync";
+            var x = document.getElementById("sync");
+            var http = new XMLHttpRequest();
+
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            http.onload  = function() 
+            {
+                if(http.readyState == 4 && http.status == 200) 
+                {
+                    x.value  = http.responseText;
+                    console.log("[Sync Success]");
+                }
+                else
+                {
+                    console.log("[Sync Failed] " + http.status);
+                }
+            }
+            http.send();  
+        };
     </script>
 </html>
     
