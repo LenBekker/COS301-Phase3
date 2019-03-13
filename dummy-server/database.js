@@ -68,3 +68,11 @@ exports.UpdatePassword = function(uPass,uID){
      console.log(`Row(s) updated: ${this.changes}`);
          });
 }
+//takes the new email as first arguement and userID of the password to be changed
+exports.UpdateEmail = function(uEmail,uID){
+      let sql= `UPDATE Clients SET [E-mail]=? WHERE userId=?`;
+    db.run(sql, [uEmail,uID],function(err) {
+     if (err) {     return console.log(err.message);}
+     console.log(`Row(s) updated: ${this.changes}`);
+         });
+}
