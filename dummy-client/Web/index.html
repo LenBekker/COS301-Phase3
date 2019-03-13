@@ -6,11 +6,11 @@
         <link href="../Web/bootstrap/bootstrap.min.css" rel="stylesheet"> 
     </head>
     <body >
-        <div class="container">
+        <div class="container-fluid">
             <br>
             <div class="panel-group form-control">
-                <div class="panel-heading">API TESTING [Open Console for log]</div>
-                <div class="panel-body">
+                <div class="panel-heading">API Retrieve [Open Console for log]</div>
+                <div class="panel-body ">
                     <div class="text-center">
                         <label >User ID:</label>
                         <input id="id" type="text"/>
@@ -29,6 +29,23 @@
                         <input id="result">
                     </div>
                 </div>
+            </div>
+            <br>
+            <div class="panel-group form-control">
+                <div class="panel-heading">API Sync Users [Open Console for log]</div>
+                <div class="panel-body">
+                    <div class="text-center">
+                        <a class="btn btn-success" href="#" role="button" onclick="APISync()">Sync from Clients Table</a>
+                        <br><br>
+                    </div>
+                    <div class="panel-body">
+                        <label>User List:</label>
+                        <br>
+                        <textarea id="sync" class="w-100" readonly>
+                        </textarea>
+                    </div>
+                </div>
+
             </div>
         </div> 
     </body>
@@ -50,7 +67,7 @@
 
             var params = "userId=" + user + "&" + "option=" + opt;
 
-            http = new XMLHttpRequest();
+            var http = new XMLHttpRequest();
             http.open("POST", url, true);
             http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -68,7 +85,36 @@
             }
             console.log("POST with parameters: " + params);
             http.send(params);            
-        }
+        };
+
+        /*
+            Function to retrieve all users in clients table from server
+        */
+        function APISync()
+        {
+            /*
+                URL and PORT determined by NodeJS server.
+            */
+            var url = "http://localhost:8080/api/user/sync";
+            var x = document.getElementById("sync");
+            var http = new XMLHttpRequest();
+
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            http.onload  = function() 
+            {
+                if(http.readyState == 4 && http.status == 200) 
+                {
+                    x.value  = http.responseText;
+                    console.log("[Sync Success]");
+                }
+                else
+                {
+                    console.log("[Sync Failed] " + http.status);
+                }
+            }
+            http.send();  
+        };
     </script>
 </html>
     

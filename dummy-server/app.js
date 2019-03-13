@@ -38,7 +38,8 @@ app.post('/api/user', function(req, res){
   var uID = req.body.userId;
   var uOption = req.body.option;
 
-  res.header('Access-Control-Allow-Origin', '*'); //Temporary to allow cross origin POST from html
+  //[Temporary?] Allow cross origin POST from html (not restricted to eg. localhost only)
+  res.header('Access-Control-Allow-Origin', '*'); 
 
   db.serialize(function() 
   {
@@ -50,17 +51,17 @@ app.post('/api/user', function(req, res){
           if(uOption == 1)
           {
             res.send(row['E-mail']);
-            console.log("API Request from clientID: " + uID + " for E-mail, responded with " + row['E-mail']);
+            console.log("API Request from userId: " + uID + " for E-mail, responded with " + row['E-mail']);
           }
           if(uOption == 2)
           {
             res.send(row.Password);
-            console.log("API Request from clientID: " + uID + " for Password, responded with " + row.Password);
+            console.log("API Request from userId: " + uID + " for Password, responded with " + row.Password);
           }
         }
         else
         {
-          console.error("FAILED API Request from: " + uID);
+          console.error("FAILED API Request from userId: " + uID);
           res.status('404').send('User or Option Invalid');
         }
     });
@@ -71,14 +72,31 @@ app.post('/api/user', function(req, res){
 
 app.post('/api/user/sync', function(req, res){
   //Sync users in caller database to be same as client information system
+  //Assuming this means they want all the clients in the clients table
+
+  let db = new sqlite3.Database('../database/merlotInfoSys.db', (err) => 
+  {
+    if (err) 
+    {
+      return console.error(err.message);
+    }
+  });
+
+  //[Temporary?] Allow cross origin POST from html (not restricted to eg. localhost only)
+  res.header('Access-Control-Allow-Origin', '*'); 
+
+  let sql= 'SELECT * FROM Clients';
+
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+          res.status('500').send("Database error occured");
+          return console.error(err.message);
+        }
+    //console.log(rows);
+    res.send(rows);        
+  });
+
+  db.close();
 });
 
-
-// open database in memory
-// let db = new sqlite3.Database('../database/merlotInfoSys.db', (err) => {
-//     if (err) {
-//       return console.error(err.message);
-//     }
-//     console.log('Connected to the in-memory SQlite database.');
-//   });
 terminal.AllowInput();
