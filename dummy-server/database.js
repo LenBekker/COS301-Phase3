@@ -60,6 +60,7 @@ exports.Display = function(){
  	});
   });      
 }
+//takes the new password as first arguement and userID of the password to be changed
 exports.UpdatePassword = function(uPass,uID){
       let sql= `UPDATE Clients SET Password=? WHERE userId=?`;
     db.run(sql, [uPass,uID],function(err) {
