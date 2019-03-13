@@ -8,7 +8,7 @@ let db = new sqlite3.Database('../database/merlotInfoSys.db', (err) => {
   });
 
 
-exports.insert = function(uId,uName,uSurname,uEmail,uPass){
+exports.insert = function(uName,uSurname,uEmail,uPass){
        db.run(`INSERT INTO Clients(Name,Surname,[E-mail],Password) VALUES(?,?,?,?)`, [uName,uSurname,uEmail,uPass], function(err) {
         if (err) {
                    return console.log(err.message);
