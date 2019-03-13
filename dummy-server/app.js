@@ -92,7 +92,7 @@ app.post('/api/user/sync', function(req, res){
           res.status('500').send("Database error occured");
           return console.error(err.message);
         }
-    //console.log(rows);
+    console.log("API Sync Request");
     res.send(rows);        
   });
 
