@@ -39,7 +39,7 @@ function command(command){
 			}
 			else{
 				console.log("Invalid arguements")
-				console.log("add <userID> <name> <surname> <email> <pass>");
+				console.log("add <name> <surname> <email> <pass>");
 				
 			}
 
@@ -54,7 +54,7 @@ function command(command){
 			}
 			else{
 				console.log("Invalid arguements")
-				console.log("del <userID>");
+				console.log("del user");
 			}
 			break;
 		}
@@ -67,7 +67,7 @@ function command(command){
 			}
 			else{
 				console.log("Invalid arguements")
-				console.log("search <userID> ");
+				console.log("search user ");
 			}
 			break;
 		}
@@ -86,9 +86,9 @@ function command(command){
 		}
 		default:{
 			console.log("============ Commands ============");
-			console.log("1) add <userID> <name> <surname> <email> <pass>");
-			console.log("2) del <userID> ");
-			console.log("3) search <userID> ");
+			console.log("1) add <name> <surname> <email> <pass>");
+			console.log("2) del user ");
+			console.log("3) search user ");
 			console.log("4) list");
 			console.log("5) exit");
 			console.log("");
