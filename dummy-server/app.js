@@ -26,6 +26,15 @@ app.use(express.json());
     option = 2
 */
 app.post('/api/user', function(req, res){
+
+  let db = new sqlite3.Database('../database/merlotInfoSys.db', (err) => 
+  {
+    if (err) 
+    {
+      return console.error(err.message);
+    }
+  });
+
   var uID = req.body.id;
   var uOption = req.body.option;
 
@@ -50,9 +59,10 @@ app.post('/api/user', function(req, res){
           }
         }
         else
-          console.log("Undefined?");
+          console.error("Undefined?");
     });
     stmt.finalize();
+    db.close();
   });
 });
 
