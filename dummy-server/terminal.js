@@ -39,7 +39,7 @@ function command(command){
 			}
 			else{
 				console.log("Invalid arguements")
-				console.log("add <userID> <name> <surname> <email> <pass>");
+				console.log("add <name> <surname> <email> <pass>");
 				
 			}
 
