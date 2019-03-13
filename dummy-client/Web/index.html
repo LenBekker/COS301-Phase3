@@ -34,8 +34,15 @@
     </body>
 
     <script>
+        /*
+            Function preforms a HTTP POST Request to the server to query the database on the server 
+            and return the E-mail or Password of the UserId depending on the option selected.
+        */
         function APIpost()
         {
+            /*
+                URL and PORT determined by NodeJS server.
+            */
             var url = "http://localhost:8080/api/user";
             var x = document.getElementById("result");
             var user = document.getElementById("id").value;
