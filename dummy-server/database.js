@@ -37,13 +37,13 @@ exports.remove = function(uID)  {
 
 
 exports.Search = function(uID)  {
-    let sql= `SELECT Name,Surname,[E-mail],Password FROM Clients WHERE userId=?`;
+    let sql= `SELECT userId, Name,Surname,[E-mail],Password FROM Clients WHERE userId=?`;
     db.get(sql, [uID], (err, row) => {
 
   if (err) {
       	return console.error(err.message);
       }
-      return row? console.log(row.Name+ "\t" +row.Surname+ "\t" +row['E-mail']+ "\t" +row.Password): console.log(`No client found with the id ${uID}`);
+      return row? console.log(row.userId + "\t"+ row.Name+ "\t" +row.Surname+ "\t" +row['E-mail']+ "\t" +row.Password): console.log(`No client found with the id ${uID}`);
   });
 }
 
@@ -54,9 +54,9 @@ exports.Display = function(){
   if (err) {
        return console.error(err.message);
       }
-      
+      console.log(rows);
   rows.forEach((row) => {
-   console.log(row.Name+ "\t" +row.Surname+ "\t" +row['E-mail']+ "\t" +row.Password);
+   console.log(row.userId+ "\t"+ row.Name+ "\t" +row.Surname+ "\t" +row['E-mail']+ "\t" +row.Password);
  	});
   });      
 }
