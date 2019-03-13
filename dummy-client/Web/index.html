@@ -5,26 +5,32 @@
         <title>Dummy Client</title>
         <link href="../Web/bootstrap/bootstrap.min.css" rel="stylesheet"> 
     </head>
-    <body>
-        <p class="panel">
-            <div class="form-control text-center">
-                <label >User ID:</label>
-                <input id="id" type="text"/>
-                <label >Option:</label>
-                <select id="option" >
-                    <option value=1>Email</option>
-                    <option value=2>Password</option>
-                </select>
-                <a class="btn btn-success" href="#" role="button" onclick="hello()">Query</a>
+    <body >
+        <div class="container">
+            <br>
+            <div class="panel-group form-control">
+                <div class="panel-heading">API TESTING</div>
+                <div class="panel-body">
+                    <div class="text-center">
+                        <label >User ID:</label>
+                        <input id="id" type="text"/>
+                        <label >Option:</label>
+                        <select id="option" >
+                            <option value=1>Email</option>
+                            <option value=2>Password</option>
+                        </select>
+                        <a class="btn btn-success" href="#" role="button" onclick="hello()">Query</a>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="text-center">
+                        <br>
+                        <label>Result</label>
+                        <input id="result">
+                    </div>
+                </div>
             </div>
-        </p>
-        <p class="panel">
-            <div class="form-control text-center">
-                <br>
-                <label>Result</label>
-                <input id="result">
-            </div>
-        </p>
+        </div> 
     </body>
 
     <script>
