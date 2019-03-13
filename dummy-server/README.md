@@ -14,7 +14,7 @@ The server can execute CRUD operations but also serves as an API for other modul
     1) Insert
     2) Delete
     3) Search
-    4) List All
+    4) List
     5) Exit
 ```
 
@@ -22,17 +22,28 @@ The server can execute CRUD operations but also serves as an API for other modul
     
 * Insert [userId, Name, Surname, E-mail, Password]:
     
-        1 754 Pete Smith P.Smith@gmail.com p@ssWorD1979
+    * [Input]  
+    
+            1 Pete Smith P.Smith@gmail.com p@ssWorD1979
+        > Inserts Pete into table.
     
 * Delete [userId]:
 
-        2 754
+    * [Input] 
+
+            2 754
+        > Deletes row where UserId == 754
     
 * Search [userId]:
     
-        3 753
+    * [Input] 
+            
+            3 753
+        > Returns row where UserId == 754
     
-* List All:
-        
-        4
-
+* List:
+    
+    * [Input]
+    
+            4
+     > Returns all rows
