@@ -86,9 +86,9 @@ function command(command){
 		}
 		default:{
 			console.log("============ Commands ============");
-			console.log("1) add <userID> <name> <surname> <email> <pass>");
-			console.log("2) del <userID> ");
-			console.log("3) search <userID> ");
+			console.log("1) add <name> <surname> <email> <pass>");
+			console.log("2) del user ");
+			console.log("3) search user ");
 			console.log("4) list");
 			console.log("5) exit");
 			console.log("");
