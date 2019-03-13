@@ -5,6 +5,6 @@ The server acts as an API for calls made from the user for database operations
 
 **run**
 ```
-    npm install
+    npm ci
     node app.js
 ```
