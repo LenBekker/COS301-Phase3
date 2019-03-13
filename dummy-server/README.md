@@ -46,4 +46,4 @@ The server can execute CRUD operations but also serves as an API for other modul
     * [Input]
     
             4
-     > Returns all rows
+        > Returns all rows
