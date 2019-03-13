@@ -50,16 +50,19 @@ app.post('/api/user', function(req, res){
           if(uOption == 1)
           {
             res.send(row['E-mail']);
-            //LOG?
+            console.log("API Request from clientID: " + uID + " for E-mail, responded with " + row['E-mail']);
           }
           if(uOption == 2)
           {
             res.send(row.Password);
-            //LOG?
+            console.log("API Request from clientID: " + uID + " for Password, responded with " + row.Password);
           }
         }
         else
-          console.error("Undefined?");
+        {
+          console.error("FAILED API Request from: " + uID);
+          res.status('404').send('User or Option Invalid');
+        }
     });
     stmt.finalize();
     db.close();

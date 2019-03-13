@@ -9,7 +9,7 @@
         <div class="container">
             <br>
             <div class="panel-group form-control">
-                <div class="panel-heading">API TESTING</div>
+                <div class="panel-heading">API TESTING [Open Console for log]</div>
                 <div class="panel-body">
                     <div class="text-center">
                         <label >User ID:</label>
@@ -19,7 +19,7 @@
                             <option value=1>Email</option>
                             <option value=2>Password</option>
                         </select>
-                        <a class="btn btn-success" href="#" role="button" onclick="hello()">Query</a>
+                        <a class="btn btn-success" href="#" role="button" onclick="APIpost()">POST Query</a>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -34,7 +34,7 @@
     </body>
 
     <script>
-        function hello()
+        function APIpost()
         {
             var url = "http://localhost:8080/api/user";
             var x = document.getElementById("result");
@@ -42,7 +42,6 @@
             var opt = document.getElementById("option").value;
 
             var params = "id=" + user + "&" + "option=" + opt;
-            console.log(params);
 
             http = new XMLHttpRequest();
             http.open("POST", url, true);
@@ -53,12 +52,14 @@
                 if(http.readyState == 4 && http.status == 200) 
                 {
                     x.value  = http.responseText;
+                    console.log("[Success] retrieved: " + http.responseText);
                 }
                 else
                 {
-                    x.value = "failed";
+                    console.log("[Failed] " + http.status + " : " + http.responseText);
                 }
             }
+            console.log("POST with parameters: " + params);
             http.send(params);            
         }
     </script>
