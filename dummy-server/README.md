@@ -1,6 +1,6 @@
-The server can execute CRUD operations but also servers as an API for other modules to use.
+The server can execute CRUD operations but also serves as an API for other modules to use.
 
-**prerequisites**
+**Prerequisites**
 * Nodejs v10.15.3 https://nodejs.org/en/download/
 
 **Run:**
