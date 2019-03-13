@@ -14,21 +14,25 @@ The server can execute CRUD operations but also servers as an API for other modu
     1) Insert
     2) Delete
     3) Search
-    4) List
+    4) List All
     5) Exit
 ```
 
 **Example Command #**
     
-    Insert [userId, Name, Surname, E-mail, Password]:
-    1 754 Pete Smith P.Smith@gmail.com p@ssWorD1979
+* Insert [userId, Name, Surname, E-mail, Password]:
     
-    Delete [userId]:
-    2 754
+        1 754 Pete Smith P.Smith@gmail.com p@ssWorD1979
     
-    Search [userId]:
-    3 753
+* Delete [userId]:
+
+        2 754
     
-    List:
-    4
+* Search [userId]:
+    
+        3 753
+    
+* List All:
+        
+        4
 
