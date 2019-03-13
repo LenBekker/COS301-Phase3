@@ -1,4 +1,4 @@
-The server acts as an API for calls made from the user for database operations
+The server can execute CRUD operations but also servers as an API for other modules to use.
 
 **prerequisites**
 * Nodejs v10.15.3 https://nodejs.org/en/download/
