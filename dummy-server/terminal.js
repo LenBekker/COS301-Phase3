@@ -1,7 +1,10 @@
-var db = null;
-exports.AllowInput= function(database){
+
+var database = require("./database.js");
+exports.AllowInput= function(){
 	//Allow the terminal to multitask by creating another process decicated to listening for commands
 	var stdin = process.openStdin();
+
+
 	stdin.addListener("data", function(d) {
 	  	var commands = d.toString().trim();
 	  	commands = commands.split(" ");
@@ -29,50 +32,51 @@ function command(command){
 			
 			
 		case "1":
-		case "add ":{
-			if(command.length == 6 )
+		case "add":{
+			if(command.length == 5 )
 			{
-				insert(array[1],array[2],array[3],array[4],array[5]);
+				database.insert(command[1],command[2],command[3],command[4]);
 			}
 			else{
 				console.log("Invalid arguements")
-				console.log("add <userID> <name> <surname> <email> <pass>");
+				console.log("add <name> <surname> <email> <pass>");
 				
 			}
+
 			break;
 		}
-			
+				
 		case "2":
-		case "del ":{
+		case "del":{
 			if(command.length == 2 )
 			{
-				remove(array[1]);
+				database.remove(command[1]);
 			}
 			else{
 				console.log("Invalid arguements")
-				console.log("del <userID>");
+				console.log("del user");
 			}
 			break;
 		}
 			
 		case "3":
-		case "search ":{
+		case "search":{
 			if(command.length == 2 )
 			{
-				search(array[1]);
+				database.Search(command[1]);
 			}
 			else{
 				console.log("Invalid arguements")
-				console.log("add <userID> ");
+				console.log("search user ");
 			}
 			break;
 		}
 			
 		case "4":
-		case "list ":{
-			if(command.length == 6 )
+		case "list":{
+			if(command.length == 1 )
 			{
-				Display();
+				database.Display();
 			}
 			else{
 				console.log("Invalid arguements")
@@ -82,8 +86,11 @@ function command(command){
 		}
 		default:{
 			console.log("============ Commands ============");
-			console.log("1) add <userID> <name> <surname> <email> <pass>");
-			console.log("4) exit");
+			console.log("1) add <name> <surname> <email> <pass>");
+			console.log("2) del user ");
+			console.log("3) search user ");
+			console.log("4) list");
+			console.log("5) exit");
 			console.log("");
 
 
@@ -93,57 +100,3 @@ function command(command){
 }
 }
 
-function insert(uId,uName,uSurname,uEmail,uPass){
-       db.run(`INSERT INTO Clients(userId,Name,Surname,[E-mail],Password) VALUES(?,?,?,?,?)`, [uId,uName,uSurname,uEmail,uPass], function(err) {
-        if (err) {
-                   return console.log(err.message);
-                 }
-         });
-}
-
-function remove(uID)
-  {
-     db.run('CREATE TABLE IF NOT EXISTS Delete_Clients (userId NVARCHAR(50) NOT NULL, Name NVARCHAR(50) NULL,[E-mail] NVARCHAR(50) NULL,Password NVARCHAR(50) NULL)');
-    let sql= `SELECT userId,Name,Surname,[E-mail],Password FROM Clients WHERE userId=?`;
-    db.get(sql, [uID], (err, row) => {
-       if (err) {
-      return console.error(err.message);
-      }
-
-      return row? console.log(row.userId+ "\t" +row.Name+ "\t" +row.Surname+ "\t" +row['E-mail']+ "\t" +row.Password): console.log(`No client found with the id ${uID}`);
-  db.run(`INSERT INTO Delete_Clients(userId,Name,Surname,[E-mail],Password) VALUES(?,?,?,?,?)`, [row.userId,row.Name,row.Surname,row['E-mail'],row.Password], function(err) {
-	   if (err) {return console.log(err.message);}
-	       });
-  });
-
-    db.run('DELETE FROM Clients WHERE userId=?',[uID],function(err) {
-	   if (err) {     return console.log(err.message);}
-	       });
-  }
-
-
-function Search(uID)
-  {
-    let sql= `SELECT userId,Name,Surname,[E-mail],Password FROM Clients WHERE userId=?`;
-    db.get(sql, [uID], (err, row) => {
-
-  if (err) {
-      	return console.error(err.message);
-      }
-      return row? console.log(row.userId+ "\t" +row.Name+ "\t" +row.Surname+ "\t" +row['E-mail']+ "\t" +row.Password): console.log(`No client found with the id ${uID}`);
-  });
-  }
-
- function Display(){
-  let sql= "SELECT * FROM Clients";
-
-  db.all(sql, [], (err, rows) => {
-  if (err) {
-      throw err;
-      }
-     // console.log(rows);
-  rows.forEach((row) => {
-   console.log(row.userId+ "\t" +row.Name+ "\t" +row.Surname+ "\t" +row['E-mail']+ "\t" +row.Password);
- });
-  });      
-  }
