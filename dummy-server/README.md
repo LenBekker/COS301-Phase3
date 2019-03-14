@@ -76,10 +76,12 @@ The server can execute CRUD operations but also serves as an API for other modul
  * UpdateEmail [E-mail,userId]:
  
     * [Input]
-        5  P.Smithnew@gmail.com 1
+    
+             5  P.Smithnew@gmail.com 1
+             
         or 
         
-            updateEmail P.Smithnew@gmail.com 1
+                  updateEmail P.Smithnew@gmail.com 1
         
          > updates pete old email to new email address
 
