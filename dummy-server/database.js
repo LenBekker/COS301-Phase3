@@ -8,8 +8,8 @@ let db = new sqlite3.Database('../database/merlotInfoSys.db', (err) => {
   });
 
 
-exports.insert = function(uId,uName,uSurname,uEmail,uPass){
-       db.run(`INSERT INTO Clients(userId,Name,Surname,[E-mail],Password) VALUES(?,?,?,?,?)`, [uId,uName,uSurname,uEmail,uPass], function(err) {
+exports.insert = function(uName,uSurname,uEmail,uPass){
+       db.run(`INSERT INTO Clients(Name,Surname,[E-mail],Password) VALUES(?,?,?,?)`, [uName,uSurname,uEmail,uPass], function(err) {
         if (err) {
                    return console.log(err.message);
                  }
@@ -37,13 +37,13 @@ exports.remove = function(uID)  {
 
 
 exports.Search = function(uID)  {
-    let sql= `SELECT userId,Name,Surname,[E-mail],Password FROM Clients WHERE userId=?`;
+    let sql= `SELECT userId, Name,Surname,[E-mail],Password FROM Clients WHERE userId=?`;
     db.get(sql, [uID], (err, row) => {
 
   if (err) {
       	return console.error(err.message);
       }
-      return row? console.log(row.userId+ "\t" +row.Name+ "\t" +row.Surname+ "\t" +row['E-mail']+ "\t" +row.Password): console.log(`No client found with the id ${uID}`);
+      return row? console.log(row.userId + "\t"+ row.Name+ "\t" +row.Surname+ "\t" +row['E-mail']+ "\t" +row.Password): console.log(`No client found with the id ${uID}`);
   });
 }
 
@@ -56,7 +56,23 @@ exports.Display = function(){
       }
       console.log(rows);
   rows.forEach((row) => {
-   console.log(row.userId+ "\t" +row.Name+ "\t" +row.Surname+ "\t" +row['E-mail']+ "\t" +row.Password);
+   console.log(row.userId+ "\t"+ row.Name+ "\t" +row.Surname+ "\t" +row['E-mail']+ "\t" +row.Password);
  	});
   });      
+}
+//takes the new password as first arguement and userID of the password to be changed
+exports.UpdatePassword = function(uPass,uID){
+      let sql= `UPDATE Clients SET Password=? WHERE userId=?`;
+    db.run(sql, [uPass,uID],function(err) {
+     if (err) {     return console.log(err.message);}
+     console.log(`Row(s) updated: ${this.changes}`);
+         });
+}
+//takes the new email as first arguement and userID of the password to be changed
+exports.UpdateEmail = function(uEmail,uID){
+      let sql= `UPDATE Clients SET [E-mail]=? WHERE userId=?`;
+    db.run(sql, [uEmail,uID],function(err) {
+     if (err) {     return console.log(err.message);}
+     console.log(`Row(s) updated: ${this.changes}`);
+         });
 }

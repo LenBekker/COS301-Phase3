@@ -33,9 +33,9 @@ function command(command){
 			
 		case "1":
 		case "add":{
-			if(command.length == 6 )
+			if(command.length == 5 )
 			{
-				database.insert(command[1],command[2],command[3],command[4],command[5]);
+				database.insert(command[1],command[2],command[3],command[4]);
 			}
 			else{
 				console.log("Invalid arguements")
@@ -45,7 +45,7 @@ function command(command){
 
 			break;
 		}
-			
+				
 		case "2":
 		case "del":{
 			if(command.length == 2 )

@@ -2,14 +2,23 @@ The server can execute CRUD operations but also serves as an API for other modul
 
 **Prerequisites**
 * Nodejs v10.15.3 https://nodejs.org/en/download/
+* (Might need to explicitly install sqlite3 and express from npm?)
 
-        import express, sqlite3
-        
-**Run:**
+**Install:**
 ```
     npm ci
-    node app.js
 ```
+
+**Test:**
+```
+    npm test
+```
+
+**Run:**
+```
+    npm start
+```
+
 
 **Commands:**
 ```
