@@ -21,20 +21,21 @@ The server can execute CRUD operations but also serves as an API for other modul
 
 **Commands:**
 ```
-    1) Add
-    2) Del
-    3) Search
-    4) List
-    5) Exit
+    1 | add
+    2 | del
+    3 | search
+    4 | list
+    5 | exit
 ```
 
 **Example Command #**
     
-* Insert [Name, Surname, E-mail, Password]:
+* Inserts [Name, Surname, E-mail, Password]:
     
     * [Input]  
     
             1 Pete Smith P.Smith@gmail.com p@ssWorD1979
+            add Pete Smith P.Smith@gmail.com p@ssWorD1979
         > Inserts Pete into table.
     
 * Delete [userId]:
@@ -42,6 +43,9 @@ The server can execute CRUD operations but also serves as an API for other modul
     * [Input] 
 
             2 754
+        or
+                                    
+            del 754
         > Deletes row where UserId == 754
     
 * Search [userId]:
@@ -49,6 +53,9 @@ The server can execute CRUD operations but also serves as an API for other modul
     * [Input] 
             
             3 753
+        or
+          
+            search 753
         > Returns row where UserId == 754
     
 * List:
@@ -56,4 +63,7 @@ The server can execute CRUD operations but also serves as an API for other modul
     * [Input]
     
             4
+        or
+        
+            list
         > Returns all rows
