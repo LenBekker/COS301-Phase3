@@ -35,6 +35,8 @@ The server can execute CRUD operations but also serves as an API for other modul
     * [Input]  
     
             1 Pete Smith P.Smith@gmail.com p@ssWorD1979
+        or
+        
             add Pete Smith P.Smith@gmail.com p@ssWorD1979
         > Inserts Pete into table.
     
