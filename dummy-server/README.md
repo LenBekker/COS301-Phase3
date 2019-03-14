@@ -25,7 +25,10 @@ The server can execute CRUD operations but also serves as an API for other modul
     2 | del
     3 | search
     4 | list
-    5 | exit
+    5 | updateEmail
+    6 | updatePassword
+    7 | list
+    8 | Exit
 ```
 
 **Example Command #**
@@ -69,3 +72,35 @@ The server can execute CRUD operations but also serves as an API for other modul
         
             list
         > Returns all rows
+        
+ * UpdateEmail [E-mail,userId]:
+ 
+    * [Input]
+        5  P.Smithnew@gmail.com 1
+        or 
+        
+            updateEmail P.Smithnew@gmail.com 1
+        
+         > updates pete old email to new email address
+
+
+ * UpdatePassword [Password,userId]:
+ 
+    * [Input]
+        5  newPasfdrre^$%6 1
+        
+        or 
+                
+                updatePassword P.Smithnew@gmail.com 1
+         > updates pete old passwod to new password
+         
+         
+ * List:
+    
+    * [Input]
+    
+            7
+        or
+        
+            listDeleted
+        > Returns all rows        
