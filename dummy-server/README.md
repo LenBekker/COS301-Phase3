@@ -87,11 +87,13 @@ The server can execute CRUD operations but also serves as an API for other modul
  * UpdatePassword [Password,userId]:
  
     * [Input]
-        5  newPasfdrre^$%6 1
+    
+             5  newPasfdrre^$%6 1
         
         or 
                 
                 updatePassword P.Smithnew@gmail.com 1
+                
          > updates pete old passwod to new password
          
          
@@ -103,4 +105,4 @@ The server can execute CRUD operations but also serves as an API for other modul
         or
         
             listDeleted
-        > Returns all rows        
+        > Returns all deleted rows        
