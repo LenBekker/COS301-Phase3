@@ -2,7 +2,6 @@ The server can execute CRUD operations but also serves as an API for other modul
 
 **Prerequisites**
 * Nodejs v10.15.3 https://nodejs.org/en/download/
-* (Might need to explicitly install sqlite3 and express from npm?)
 
 **Install:**
 ```
@@ -22,8 +21,8 @@ The server can execute CRUD operations but also serves as an API for other modul
 
 **Commands:**
 ```
-    1) Insert
-    2) Delete
+    1) Add
+    2) Del
     3) Search
     4) List
     5) Exit
@@ -31,7 +30,7 @@ The server can execute CRUD operations but also serves as an API for other modul
 
 **Example Command #**
     
-* Insert [userId, Name, Surname, E-mail, Password]:
+* Insert [Name, Surname, E-mail, Password]:
     
     * [Input]  
     
