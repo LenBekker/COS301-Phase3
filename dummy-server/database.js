@@ -76,3 +76,40 @@ exports.UpdateEmail = function(uEmail,uID){
      console.log(`Row(s) updated: ${this.changes}`);
          });
 }
+
+exports.AuditInsert = function(){
+  var TriggerInsert = "CREATE TRIGGER IF NOT EXISTS  triggerInsert AFTER INSERT ON Clients BEGIN INSERT INTO Audit (userid, actionPerformed,timeAccessed) VALUES (new.userId,'new client inserted', datetime('now')); END;";
+db.run(TriggerInsert,function(err) {
+  if (err) { return console.log(err.message);}
+});
+
+}
+
+exports.AuditDelete = function(){
+var TriggerDelete = "CREATE TRIGGER IF NOT EXISTS  triggerDelete AFTER DELETE ON Clients BEGIN INSERT INTO Audit(userid,actionPerformed,timeAccessed) VALUES (new.userId,'client has been deleted', datetime('now')); END;";
+db.run(TriggerDelete,function(err) {
+  if (err) { return console.log(err.message);}
+
+});
+}
+
+
+exports.AuditEmailUpdate = function(){
+var createTriggerUpdate = "CREATE TRIGGER IF NOT EXISTS  triggerUpdate AFTER UPDATE OF [E-mail] ON Clients BEGIN UPDATE Audit SET actionPerformed = 'Client email been updated' where userId = old.userId; END;";
+db.run(createTriggerUpdate,function(err) {
+
+  if (err) { return console.log(err.message);}
+
+});
+}
+
+exports.AuditPasswordUpdate = function(){
+var createTriggerUpdate = "CREATE TRIGGER IF NOT EXISTS  triggerUpdate AFTER UPDATE OF Password ON Clients BEGIN UPDATE Audit SET actionPerformed = 'Client password been updated' where userId = old.userId; END;";
+db.run(createTriggerUpdate,function(err) {
+
+  if (err) { return console.log(err.message);}
+
+});
+
+}
+
