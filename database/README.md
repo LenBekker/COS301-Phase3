@@ -2,13 +2,16 @@
 
 **SQLite** View Standalone with [SQLite Studio](https://sqlitestudio.pl/index.rvt)
 
-## **Consists out of 2 Tables:**
+## **Consists out of 3 Tables:**
 ### **Clients Table**
 | userId  | Name  | Surname  | E-mail  | Password  |
 |---|---|---|---|---|
 
-### **Transaction Table** WIP
-| userID  | transactionID  | accountID  | accessTime  |
-|---|---|---|---|
+### **Audit Table** WIP
+| userId  | actionPerformed  | timeAccessed  | 
+|---|---|---|
 
+### **Deleted Table**
+| userId  | Name  | Surname  | E-mail  | Password  |
+|---|---|---|---|---|
 
