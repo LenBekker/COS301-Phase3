@@ -26,6 +26,10 @@ The server can execute CRUD operations but also serves as an API for other modul
     3 | search
     4 | list
     5 | exit
+    
+not yet implemented
+    6 | update
+    7 | log
 ```
 
 **Example Command #**
@@ -69,3 +73,23 @@ The server can execute CRUD operations but also serves as an API for other modul
         
             list
         > Returns all rows
+        
+* Update:
+    
+    * [Input]
+    
+            placeholder
+        or
+        
+            placeholder
+        > Does something
+        
+* Log:
+
+    * [Input]
+    
+            placeholder2
+        or
+        
+            placeholder2
+        > Does something else
