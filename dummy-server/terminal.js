@@ -22,7 +22,7 @@ function command(command){
 	switch(cmd){
 		
 		
-		case "5":
+		case "8":
 		case "exit":{
 			stdin.removeAllListeners('data');
 			console.log("============ Stopping Server ============");
@@ -39,7 +39,7 @@ function command(command){
 				database.insert(command[1],command[2],command[3],command[4]);
 			}
 			else{
-				console.log("Invalid arguements")
+				console.log("Invalid arguments")
 				console.log("add <name> <surname> <email> <pass>");
 				
 			}
@@ -53,11 +53,11 @@ function command(command){
 			{
 				database.AuditDelete();
 				database.remove(command[1]);
+
 			}
 			else{
-				console.log("Invalid arguements")
-				console.log("del user");
-			}
+				console.log("Invalid arguments for del user")
+				}
 			break;
 		}
 			
@@ -68,9 +68,8 @@ function command(command){
 				database.Search(command[1]);
 			}
 			else{
-				console.log("Invalid arguements")
-				console.log("search user ");
-			}
+				console.log("Invalid arguments search user ")
+				}
 			break;
 		}
 			
@@ -81,18 +80,54 @@ function command(command){
 				database.Display();
 			}
 			else{
-				console.log("Invalid arguements")
-				console.log("list Entries");
-			}
+				console.log("Invalid arguments for list Entries")
+				}
 			break;
 		}
+		case "5":
+		case "updateEmail":{
+			 if(command.length == 3)
+			 {
+			 	database.UpdateEmail(command[1],command[2]);
+			 }
+			 else{
+			 	console.log("Invalid arguments Update email entry")
+				 }
+			 break;
+		}
+		case "6":
+		case "updatePassword":{
+			 if(command.length == 3)
+			 {
+			 	database.UpdatePassword(command[1],command[2]);
+			 }
+			 else{
+			 	console.log("Invalid arguments for Update Password entry")
+					 }
+			 break;
+		}
+		case "7":
+		case "listDeleted":{
+			 if(command.length == 1)
+			 {
+			 	database.DisplayDeleted();
+			 }
+			 else{
+			 	console.log("Invalid arguments for deleted table")
+						 }
+			 break;
+		}
+
 		default:{
 			console.log("============ Commands ============");
 			console.log("1) add <name> <surname> <email> <pass>");
 			console.log("2) del user ");
 			console.log("3) search user ");
 			console.log("4) list");
-			console.log("5) exit");
+			console.log("5) updateEmail <newEmail> <userId>");
+			console.log("6) updatePassword <newPassword> <userId>");
+			console.log("7) list deleted table")
+			console.log("8) Exit")
 			console.log("");
 
 

@@ -17,17 +17,18 @@ exports.insert = function(uName,uSurname,uEmail,uPass){
 }
 
 exports.remove = function(uID)  {
-     db.run('CREATE TABLE IF NOT EXISTS Delete_Clients (userId NVARCHAR(50) NOT NULL, Name NVARCHAR(50) NULL,[E-mail] NVARCHAR(50) NULL,Password NVARCHAR(50) NULL)');
+     db.run('CREATE TABLE IF NOT EXISTS Deleted (userId NVARCHAR(50) NOT NULL, Name NVARCHAR(50) NULL,Surname NVARCHAR(50) NULL,[E-mail] NVARCHAR(50) NULL,Password NVARCHAR(50) NULL)');
     let sql= `SELECT userId,Name,Surname,[E-mail],Password FROM Clients WHERE userId=?`;
     db.get(sql, [uID], (err, row) => {
        if (err) {
       return console.error(err.message);
       }
+        db.run(`INSERT INTO Deleted(userId,Name,Surname,[E-mail],Password) VALUES(?,?,?,?,?)`, [row.userId,row.Name,row.Surname,row['E-mail'],row.Password], function(err) {
+               if (err) {return console.log(err.message);}
+         });
+  
+      return row? console.log(`Row(s) removed: 1`): console.log(`No client found with the id ${uID}`);
 
-      return row? console.log(row.userId+ "\t" +row.Name+ "\t" +row.Surname+ "\t" +row['E-mail']+ "\t" +row.Password): console.log(`No client found with the id ${uID}`);
-  db.run(`INSERT INTO Delete_Clients(userId,Name,Surname,[E-mail],Password) VALUES(?,?,?,?,?)`, [row.userId,row.Name,row.Surname,row['E-mail'],row.Password], function(err) {
-	   if (err) {return console.log(err.message);}
-	       });
   });
 
     db.run('DELETE FROM Clients WHERE userId=?',[uID],function(err) {
@@ -60,6 +61,21 @@ exports.Display = function(){
  	});
   });      
 }
+
+exports.DisplayDeleted = function(){
+  let sql= 'SELECT * FROM Deleted';
+
+  db.all(sql, [], (err, rows) => {
+  if (err) {
+       return console.error(err.message);
+      }
+      console.log(rows);
+  rows.forEach((row) => {
+   console.log(row.userId+ "\t"+ row.Name+ "\t" +row.Surname+ "\t" +row['E-mail']+ "\t" +row.Password);
+  });
+  });      
+}
+
 //takes the new password as first arguement and userID of the password to be changed
 exports.UpdatePassword = function(uPass,uID){
       let sql= `UPDATE Clients SET Password=? WHERE userId=?`;
