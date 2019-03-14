@@ -86,7 +86,7 @@ db.run(TriggerInsert,function(err) {
 }
 
 exports.AuditDelete = function(){
-var TriggerDelete = "CREATE TRIGGER IF NOT EXISTS  triggerDelete AFTER DELETE ON Clients BEGIN INSERT INTO Audit(userid,actionPerformed,timeAccessed) VALUES (new.userId,'client has been deleted', datetime('now')); END;";
+var TriggerDelete = "CREATE TRIGGER IF NOT EXISTS  triggerDelete AFTER DELETE ON Clients BEGIN INSERT INTO Audit(userid,actionPerformed,timeAccessed) VALUES (old.userId,'client has been deleted', datetime('now')); END;";
 db.run(TriggerDelete,function(err) {
   if (err) { return console.log(err.message);}
 
