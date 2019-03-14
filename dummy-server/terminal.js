@@ -35,6 +35,7 @@ function command(command){
 		case "add":{
 			if(command.length == 5 )
 			{
+				database.AuditInsert();
 				database.insert(command[1],command[2],command[3],command[4]);
 			}
 			else{
@@ -50,6 +51,7 @@ function command(command){
 		case "del":{
 			if(command.length == 2 )
 			{
+				database.AuditDelete();
 				database.remove(command[1]);
 			}
 			else{
