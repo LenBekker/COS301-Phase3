@@ -22,7 +22,7 @@ function command(command){
 	switch(cmd){
 		
 		
-		case "8":
+		case "9":
 		case "exit":{
 			stdin.removeAllListeners('data');
 			console.log("============ Stopping Server ============");
