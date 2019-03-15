@@ -55,7 +55,6 @@ exports.Display = function(){
   if (err) {
        return console.error(err.message);
       }
-      console.log(rows);
   rows.forEach((row) => {
    console.log(row.userId+ "\t"+ row.Name+ "\t" +row.Surname+ "\t" +row['E-mail']+ "\t" +row.Password);
  	});
@@ -69,7 +68,6 @@ exports.DisplayDeleted = function(){
   if (err) {
        return console.error(err.message);
       }
-      console.log(rows);
   rows.forEach((row) => {
    console.log(row.userId+ "\t"+ row.Name+ "\t" +row.Surname+ "\t" +row['E-mail']+ "\t" +row.Password);
   });
@@ -126,6 +124,20 @@ db.run(createTriggerUpdate,function(err) {
   if (err) { return console.log(err.message);}
 
 });
+	
+exports.DisplayAuditsTimeSpan = function(){
+  let sql= "select * from Audit where timeAccessed>=datetime('now','-30 day')";
+
+  db.all(sql, [], (err, rows) => {
+  if (err) {
+       return console.error(err.message);
+      }
+      
+  rows.forEach((row) => {
+   console.log(row.userId+ "\t"+ row.actionPerformed+ "\t" +row.timeAccessed);
+  });
+  });      
+}
 
 }
 
