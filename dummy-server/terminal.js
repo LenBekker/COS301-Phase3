@@ -117,6 +117,18 @@ function command(command){
 						 }
 			 break;
 		}
+		case "8":
+		case "ListT":{
+			if(command.length == 1 )
+			{
+				database.DisplayAuditsTimeSpan();
+			}
+			else{
+				console.log("Invalid arguments for list Entries")
+				}
+			break;
+		}	
+			
 
 		default:{
 			console.log("============ Commands ============");
@@ -127,7 +139,8 @@ function command(command){
 			console.log("5) updateEmail <newEmail> <userId>");
 			console.log("6) updatePassword <newPassword> <userId>");
 			console.log("7) list deleted table")
-			console.log("8) Exit")
+			console.log("8) List audit timespan");
+			console.log("9) Exit");
 			console.log("");
 
 
