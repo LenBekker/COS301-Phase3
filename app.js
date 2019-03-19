@@ -27,7 +27,7 @@ app.use(express.json());
 */
 app.post('/api/user', function(req, res){
 
-  let db = new sqlite3.Database('../database/merlotInfoSys.db', (err) => 
+  let db = new sqlite3.Database('database/merlotInfoSys.db', (err) => 
   {
     if (err) 
     {
@@ -74,7 +74,7 @@ app.post('/api/user/sync', function(req, res){
   //Sync users in caller database to be same as client information system
   //Assuming this means they want all the clients in the clients table
 
-  let db = new sqlite3.Database('../database/merlotInfoSys.db', (err) => 
+  let db = new sqlite3.Database('database/merlotInfoSys.db', (err) => 
   {
     if (err) 
     {
