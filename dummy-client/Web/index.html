@@ -8,6 +8,13 @@
     <body >
         <div class="container-fluid">
             <br>
+            <label >Server URL</label>
+            <select id="url" >
+                <option value="http://localhost">http://localhost</option>
+                <option value="https://merlotcisg7.herokuapp.com">https://merlotcisg7.herokuapp.com</option> 
+            </select>
+            <label >Server PORT</label>
+            <input id="port" value="8080" type="text"/>
             <div class="panel-group form-control">
                 <div class="panel-heading">API Retrieve [Open Console for log]</div>
                 <div class="panel-body ">
@@ -19,7 +26,7 @@
                             <option value=1>Email</option>
                             <option value=2>Password</option>
                         </select>
-                        <a class="btn btn-success" href="#" role="button" onclick="APIpost()">POST Query</a>
+                        <a class="btn btn-success" href="#" role="button" onclick="APIpost(document.getElementById('url').value, document.getElementById('port').value)">POST Query</a>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -35,7 +42,7 @@
                 <div class="panel-heading">API Sync Users [Open Console for log]</div>
                 <div class="panel-body">
                     <div class="text-center">
-                        <a class="btn btn-success" href="#" role="button" onclick="APISync()">Sync from Clients Table</a>
+                        <a class="btn btn-success" href="#" role="button" onclick="APISync(document.getElementById('url').value, document.getElementById('port').value)">Sync from Clients Table</a>
                         <br><br>
                     </div>
                     <div class="panel-body">
@@ -55,12 +62,13 @@
             Function preforms a HTTP POST Request to the server to query the database on the server 
             and return the E-mail or Password of the UserId depending on the option selected.
         */
-        function APIpost()
+        function APIpost(u, p)
         {
             /*
                 URL and PORT determined by NodeJS server.
             */
-            var url = "http://localhost:8080/api/user";
+            var url = u + ":" + p + "/api/user";
+            console.log("TEST: " + url);
             var x = document.getElementById("result");
             var user = document.getElementById("id").value;
             var opt = document.getElementById("option").value;
@@ -90,12 +98,12 @@
         /*
             Function to retrieve all users in clients table from server
         */
-        function APISync()
+        function APISync(u, p)
         {
             /*
                 URL and PORT determined by NodeJS server.
             */
-            var url = "http://localhost:8080/api/user/sync";
+            var url = u + ":" + p + "/api/user/sync";
             var x = document.getElementById("sync");
             var http = new XMLHttpRequest();
 

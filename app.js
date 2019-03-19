@@ -12,8 +12,9 @@ app.use(express.json());
 
 //port to listen on
 
-  var PORT = 8080;
+  var PORT = process.env.PORT || 8080;
   server.listen(PORT);
+  console.log("Service is running on port: " + PORT);
 
 /*
  userID email/password API calls
