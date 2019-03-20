@@ -4,7 +4,8 @@ var app = express();
 var server = require('http').createServer(app);
 const readline = require('readline');
 app.disable('etag');
-const terminal = require("./terminal.js");
+var database = require("./database.js");
+//const terminal = require("./terminal.js");
 
 //Allow encoded body
 app.use(express.urlencoded({extended: true})); 
@@ -28,76 +29,34 @@ app.use(express.json());
 */
 app.post('/api/user', function(req, res){
 
-  let db = new sqlite3.Database('database/merlotInfoSys.db', (err) => 
-  {
-    if (err) 
-    {
-      return console.error(err.message);
-    }
-  });
-
   var uID = req.body.userId;
   var uOption = req.body.option;
 
+  console.log(req.param.userId);
+
   //[Temporary?] Allow cross origin POST from html (not restricted to eg. localhost only)
   res.header('Access-Control-Allow-Origin', '*'); 
 
-  db.serialize(function() 
-  {
-    var stmt = db.prepare("SELECT [E-mail], Password FROM Clients WHERE userId=(?)");
-    stmt.get(uID, function(err, row)
-    {
-        if(row != undefined)
-        {
-          if(uOption == 1)
-          {
-            res.send(row['E-mail']);
-            console.log("API Request from userId: " + uID + " for E-mail, responded with " + row['E-mail']);
-          }
-          if(uOption == 2)
-          {
-            res.send(row.Password);
-            console.log("API Request from userId: " + uID + " for Password, responded with " + row.Password);
-          }
-        }
-        else
-        {
-          console.error("FAILED API Request from userId: " + uID);
-          res.status('404').send('User or Option Invalid');
-        }
-    });
-    stmt.finalize();
-    db.close();
-  });
+  try{
+    database.APIGet(uID, uOption, res);
+  }
+  catch(err){
+    console.error(err);
+  }
+  
+  
+});
+
+app.get('/', function (req, res){
+  res.send("Welcome to Merlot CIS\n Only api/user POST is currently set up");
 });
 
 app.post('/api/user/sync', function(req, res){
-  //Sync users in caller database to be same as client information system
-  //Assuming this means they want all the clients in the clients table
+  //???
 
-  let db = new sqlite3.Database('database/merlotInfoSys.db', (err) => 
-  {
-    if (err) 
-    {
-      return console.error(err.message);
-    }
-  });
-
-  //[Temporary?] Allow cross origin POST from html (not restricted to eg. localhost only)
   res.header('Access-Control-Allow-Origin', '*'); 
 
-  let sql= 'SELECT * FROM Clients';
+  /* Implement in database.js */
+  //database.APISync();
 
-  db.all(sql, [], (err, rows) => {
-    if (err) {
-          res.status('500').send("Database error occured");
-          return console.error(err.message);
-        }
-    console.log("API Sync Request");
-    res.send(rows);        
-  });
-
-  db.close();
 });
-
-terminal.AllowInput();
