@@ -176,7 +176,7 @@ exports.DisplayAuditsTimeSpan = function(){
   });      
 }
 
-exports.APIGet = function(uID, uOption, res){
+exports.APIUser = function(uID, uOption, res){
   db.serialize(function() {
     var stmt = db.prepare("SELECT [E-mail], Password FROM Clients WHERE userId=(?)");
 
@@ -186,19 +186,28 @@ exports.APIGet = function(uID, uOption, res){
             res.send(row['E-mail']);
             console.log("API Request from userId: " + uID + " for E-mail, responded with " + row['E-mail']);
           }
-          if(uOption == 2){
+          else if(uOption == 2){
             res.send(row.Password);
             console.log("API Request from userId: " + uID + " for Password, responded with " + row.Password);
+          }
+          else{
+            //Invalid Option
           }
         }
         else{
           console.error("FAILED API Request from userId: " + uID);
-          res.status('404').send('FAILED API REQUEST\n userID: ' + uID + '\n option: ' + uOption);
+          res.status('400').send('FAILED API REQUEST\n userId: ' + uID + '\n option: ' + uOption);
         }
     });
     stmt.finalize();
     //db.close();
   });
+  //console.log(res.statusCode); //200..........?
+  return res.statusCode;
+}
+
+exports.APISync = function(){
+  //TODO
 }
 
 

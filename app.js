@@ -32,13 +32,11 @@ app.post('/api/user', function(req, res){
   var uID = req.body.userId;
   var uOption = req.body.option;
 
-  console.log(req.param.userId);
-
   //[Temporary?] Allow cross origin POST from html (not restricted to eg. localhost only)
   res.header('Access-Control-Allow-Origin', '*'); 
 
   try{
-    database.APIGet(uID, uOption, res);
+    database.APIUser(uID, uOption, res);
   }
   catch(err){
     console.error(err);
