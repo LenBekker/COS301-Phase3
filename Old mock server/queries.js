@@ -64,11 +64,27 @@ const deleteUser = (request, response) => {
   })
 }
 
+
+
+
+
+
+
+
 module.exports = {
   getUsers,
   getUserById,
   createUser,
   updateUser,
   deleteUser,
+  insert,
+  Deactivate,
+  Reactivate,
+  FindEmail,
+  UpdateEmail,
+  UpdatePhoneNumber,
+  UpdateAddress,
+
+
 }
 
