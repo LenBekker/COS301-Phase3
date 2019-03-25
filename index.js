@@ -21,6 +21,20 @@ app.post('/users', db.createUser)
 app.put('/users/:id', db.updateUser)
 app.delete('/users/:id', db.deleteUser)
 
+
+try {
+      
+      app.post('/users', db.insert);
+      app.put('/users/deactivate',db.Deactivate);
+      app.put('/users/reactivate',db.Reactivate);
+      app.put('/users/updateemail',db.UpdateEmail);
+      app.put('/users/updateaddress',db.UpdateAddress);
+      app.put('/users/updatephonenumber',db.UpdatePhoneNumber);
+      app.get('users/findemail',db.FindEmail);//need to fix this function
+}catch(msg) {
+console.log("Ignored");
+}
+
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
 })
