@@ -63,7 +63,101 @@ const deleteUser = (request, response) => {
     response.status(200).send(`User deleted with ID: ${id}`)
   })
 }
+const insert = (request,response) => {
+  const uName=request.query['"Name"']
+  const uSurname = request.query['"Surname"']
+  const uEmail = request.query['"Email"']
+  const uPhoneNumber = request.query['"PhoneNumber"']
+  const uAddress = request.query['"Address"']
+ 
+  const insertQuery = 'INSERT INTO clients("Name","Surname","Email","PhoneNumber","Address","Active") VALUES($1, $2, $3, $4, $5, $6)';
+  pool.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'], (err,res) => {
+    if(err){
+        throw err
+    }else{
+           response.status(200).send();
+    }
+}) 
 
+}
+
+const Deactivate = (request,response) =>{
+  const id = parseInt(request.query['"ClientID"'])
+  const deactivateQuery='UPDATE clients SET "Active"= \'False\'  WHERE ClientID = $1';
+  pool.query(deactivateQuery,[id],(err,res)=> {
+    if(err){
+      throw err
+    }else{
+      response.status(200).send(`ClientID: ${id} deactivated`);
+    }
+  })
+}
+
+const Reactivate =(request,response) =>{
+  const id = parseInt(request.query['"ClientID"']);
+  const reactivateQuery='UPDATE clients SET "Active"= \'True\'  WHERE ClientID = $1';
+  pool.query(reactivateQuery,[id],(err,res) =>{
+    if(err){
+      throw err
+    }else{
+      response.status(200).send(`ClientId: ${id} reactivated`);
+    }
+  })
+}
+
+const FindEmail = (request,response) =>{
+  const id = parseInt(request.query['"ClientID"']);
+  const findemailQuery='SELECT "Email" FROM clients WHERE ClientID = $1';
+  pool.query(findemailQuery,[id],(err,res) =>{
+    if(err){
+      throw err
+    }else{
+      response.status(200).json(res.rows)
+    }
+  })
+
+}
+
+const UpdateEmail = (request,response) =>{
+
+  const id = parseInt(request.query['"ClientID"']);
+  const uEmail = request.query['"Email"'];
+  const updateemailQuery='UPDATE clients SET "Email"= $1  WHERE ClientID = $2';
+  pool.query(updateemailQuery,[uEmail,id],(err,res)=>{
+    if(err){
+      throw err
+    }else{
+      response.status(200).send(`Email of ClientID: ${id} updated`)
+    }
+})
+}
+
+const UpdatePhoneNumber = (request,response) =>{
+  const id = parseInt(request.query['"ClientID"']);
+  const uPhoneNumber = request.query['"PhoneNumber"'];
+  const updatephonenumberQuery='UPDATE clients SET "PhoneNumber"= $1  WHERE ClientID = $2';
+  pool.query(updatephonenumberQuery,[uPhoneNumber,id],(err,res)=>{
+    if(err){
+      throw err
+    }else{
+      response.status(200).send(`PhoneNumber of ClientID: ${id} updated`)
+    }
+})
+}
+
+const UpdateAddress = (request,response) =>{
+  const id = parseInt(request.query['"ClientID"']);
+  const uAddress = request.query['"Address"'];
+  const updateaddressQuery='UPDATE clients SET "Address"= $1  WHERE ClientID = $2';
+  
+  pool.query(updateaddressQuery,[uAddress,id],(err,res)=>{
+      if(err){
+        throw err
+      }else{
+        response.status(200).send(`Address of ClientID: ${id} updated`)
+      }
+  })
+}
 
 
 
