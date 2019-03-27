@@ -1,8 +1,9 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
+const dbsetup = require('./dbSetup.js')
 const db = require('./queries.js')
-const port = 3000
+const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json())
 app.use(
@@ -10,6 +11,9 @@ app.use(
     extended: true,
   })
 )
+
+//Setup connect to postgres database(must exist) and create table if does not exist
+dbsetup.psqlSetup();
 
 app.get('/', (request, response) => {
   response.json({ info: 'Node.js, Express, and Postgres API' })
@@ -22,8 +26,7 @@ app.put('/users/:id', db.updateUser)
 app.delete('/users/:id', db.deleteUser)
 
 
-try {
-      
+try {  
       app.post('/users', db.insert);
       app.put('/users/deactivate',db.Deactivate);
       app.put('/users/reactivate',db.Reactivate);
