@@ -1,4 +1,8 @@
 const Pool = require('pg').Pool
+
+//Heroku connection url
+//const conn = process.env.DATABASE_URL || pool?;
+
 const pool = new Pool({
   user: 'me',
   host: 'localhost',
