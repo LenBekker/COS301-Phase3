@@ -15,28 +15,60 @@ app.use(
 //Setup connect to postgres database(must exist) and create table if does not exist
 dbsetup.psqlSetup();
 
-app.get('/', (request, response) => {
-  response.json({ info: 'Node.js, Express, and Postgres API' })
+app.post('/', (req, res) => {
+  var data = req.body;
+  console.log(data);
+  var feedback = formatContent(req,res);
 })
 
-app.get('/users', db.getUsers)
-app.get('/users/:id', db.getUserById)
-app.post('/users', db.createUser)
-app.put('/users/:id', db.updateUser)
-app.delete('/users/:id', db.deleteUser)
 
 
-try {  
-      app.post('/users', db.insert);
-      app.put('/users/deactivate',db.Deactivate);
-      app.put('/users/reactivate',db.Reactivate);
-      app.put('/users/updateemail',db.UpdateEmail);
-      app.put('/users/updateaddress',db.UpdateAddress);
-      app.put('/users/updatephonenumber',db.UpdatePhoneNumber);
-      app.get('users/findemail',db.FindEmail);//need to fix this function
-}catch(msg) {
-console.log("Ignored");
+function formatContent(req,res)
+{
+    switch(req.body.option)
+    {
+        case "getUsers"://works
+        return db.getUsers(req,res);
+
+        case "getUserById"://works
+        return db.getUserById(req,res);
+
+        case "getActive"://works
+        return db.getActive(req,res);
+
+        case "getEmail"://does not work
+        return db.FindEmail(req,res);
+
+        case "insert"://works
+        return db.insert(req,res);
+
+        case "delete"://works 
+        return db.deleteUser(req,res);
+
+        case "updateEmail"://works 
+        return db.UpdateEmail(req,res);
+
+        case "updatePhone"://works
+        return db.UpdatePhoneNumber(req,res);
+
+        case "updateAddress"://works
+        return db.UpdateAddress(req,res);
+
+        case "reactivate"://???
+        return db.Reactivate(req,res);
+
+        case "deactivate"://???
+        return db.Deactivate(req,res);
+
+
+        default:{
+            return res.status(200).json({ 'status':'failed','message':'Invalid Type'})
+        }
+    }
 }
+
+
+
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
