@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const app = express()
 const dbsetup = require('./dbSetup.js')
 const db = require('./queries.js')
+var path = require('path');
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json())
@@ -14,6 +15,10 @@ app.use(
 
 //Setup connect to postgres database(must exist) and create table if does not exist
 dbsetup.psqlSetup();
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname + '/Web/index.html'));
+});
 
 app.post('/', (req, res) => {
   var data = req.body;
