@@ -26,10 +26,10 @@
 | :---         | :---         |    
 |**Kearabiloe Nare**|   **u10068083**    |
 |**Profile** |[Github](https://github.com/KearabiloeNare)|
-|**Overview**| Individual who is mostly interested in using technology to better the lives of others(mostly those who at a disadvantage).  I feel most people spend most of thier on time phones rather than computers and because of this would like to focus on Android application development in the future. |
+|**Overview**| Individual who is mostly interested in using technology to better the lives of others(mainly disadvantage individuals).  I feel most people spend most of thier time on phones rather than computers and because of this would like to focus on Android application development. |
 |**Position:** |BSc Computer Science|
 |**Interests:** |Software Engineering, Computer Security, Fitness|
-|**Skills:**|Communictaion,Technical(HTML,CSS,Javascript,java,C++,MongoDB)|
+|**Skills:**|HTML,CSS,Javascript,java,C++,MongoDB|
 
 |Team Member | Details | 
 | :---         | :---         |    
