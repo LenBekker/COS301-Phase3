@@ -18,7 +18,7 @@ const psqlSetup = () => {
     const createQuery =
     `CREATE TABLE IF NOT EXISTS
     Client(
-        ClientID SERIAL PRIMARY KEY,
+        ClientId SERIAL PRIMARY KEY,
         Name VARCHAR(64) NOT NULL,
         Surname VARCHAR(64) NOT NULL,
         Email VARCHAR(128) NOT NULL,
