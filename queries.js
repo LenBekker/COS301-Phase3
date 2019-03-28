@@ -6,7 +6,7 @@ const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'me',
   host: 'localhost',
-  database: 'cis_data',
+  database: 'clientinfo', //cis_data
   password: 'password',
   port: 5432,
 })
@@ -116,13 +116,16 @@ const Reactivate =(request,response) =>{
 //not working??????
 const FindEmail = (request,response) =>{
   const id = parseInt(request.body.clientid)
-  const findemailQuery='SELECT email,name,surname FROM client WHERE clientid = $1';
+  const findemailQuery='SELECT email FROM client WHERE clientid = $1';
   pool.query(findemailQuery,[id],(err,res) =>{
     if(err){
       throw err
-    }else{
-      response.status(200).json({"status":"success","email": res.rows[0].email,"name": res.rows[0].name,"surname": res.rows[0].surname});
     }
+    if(res.rows[0])
+      response.status(200).json({"email": res.rows[0].email});
+    else
+      response.status(200).json({'status':'failed','message':'id does not exist'});
+    
   })
 
 }
