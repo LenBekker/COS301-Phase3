@@ -15,25 +15,24 @@ Add New Client Request
 ```javascript
 var http = require('http');
 
-const data = {
-    option : "insert",
-    name: "Peter",
-    surname: "Griffin",
-    email: "peter.griff@familymail.com",
-    phonenumber: "5550112",
-    address: "31 Spooner Street"
-}
+const data = JSON.stringify({
+  option : 'insert',
+  name: 'Peter',
+  surname: 'Griffin',
+  email: 'peter.griff@familymail.com',
+  phonenumber: '5550112',
+  address: '31 Spooner Street'
+})
 
 const options = {
-    hostname : CIS_URL,
-    port : CIS_PORT,
-    path : '/',
-    method : 'POST',
-    body : data,
-    headers : {
-        'Content-Type' : 'application/json',
-        'Content-Length' : data.length
-    }
+  hostname : CIS_URL,
+  port : CIS_PORT,
+  path : "/",
+  method : "POST",
+  headers : {
+      'Content-Type': 'application/json',
+      'Content-Length': data.length
+  }
 }
 
 ```
