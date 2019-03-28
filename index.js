@@ -4,6 +4,7 @@ const app = express()
 const dbsetup = require('./dbSetup.js')
 const db = require('./queries.js')
 var path = require('path');
+var http = require('http');
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json())
@@ -72,9 +73,48 @@ function formatContent(req,res)
     }
 }
 
-
-
-
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
 })
+
+
+/* TEMORARY HTTP POST USING JSON TEST */
+
+const data = JSON.stringify({
+  option : 'insert',
+  name: 'Peter',
+  surname: 'Griffin',
+  email: 'peter.griff@familymail.com',
+  phonenumber: '5550112',
+  address: '31 Spooner Street'
+})
+
+const data2 = JSON.stringify({
+  option : 'getEmail',
+  clientid: "1"
+})
+
+const options = {
+  hostname : "localhost",
+  port : 3000,
+  path : "/",
+  method : "POST",
+  headers : {
+      'Content-Type': 'application/json',
+      'Content-Length': data.length
+  }
+}
+
+var result;
+
+var createClient = http.request(options, (res) => {
+  res.on('data', (d) => {
+    //do something with data?
+  })
+  res.on('error', function(e) {
+    console.log('problem with request: ' + e.message);
+  });
+});
+
+//execute insert or getEmail
+createClient.write(data); // createClient.write(data2);
