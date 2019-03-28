@@ -6,12 +6,14 @@ const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'me',
   host: 'localhost',
-  database: 'clientinfo',
+  database: 'cis_data',
   password: 'password',
   port: 5432,
 })
+
+//working
 const getUsers = (request, response) => {
-  pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
+  pool.query('SELECT * FROM client ORDER BY ClientID ASC', (error, results) => {
     if (error) {
       throw error
     }
@@ -19,10 +21,11 @@ const getUsers = (request, response) => {
   })
 }
 
+//works returns json object
 const getUserById = (request, response) => {
-  const id = parseInt(request.params.id)
+  const id = parseInt(request.body.clientid)
 
-  pool.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
+  pool.query('SELECT * FROM client WHERE clientid = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
@@ -30,14 +33,14 @@ const getUserById = (request, response) => {
   })
 }
 
-const createUser = (request, response) => {
-  const { name, email } = request.body
+const getActive = (request, response) => {
+  const id = parseInt(request.body.clientid)
 
-  pool.query('INSERT INTO users (name, email) VALUES ($1, $2)', [name, email], (error, results) => {
+  pool.query('SELECT active FROM client WHERE clientid = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
-    response.status(201).send(`User added with ID: ${result.insertId}`)
+    response.status(200).json({"status":results.rows[0].active});
   })
 }
 
@@ -56,77 +59,79 @@ const updateUser = (request, response) => {
     }
   )
 }
-
+//works on a post reguest
 const deleteUser = (request, response) => {
-  const id = parseInt(request.params.id)
+  const id = parseInt(request.body.clientid)
 
-  pool.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
+  pool.query('DELETE FROM client WHERE clientid = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
     response.status(200).send(`User deleted with ID: ${id}`)
   })
 }
+
+//Insert working on post request;
 const insert = (request,response) => {
-  const uName=request.query['"Name"']
-  const uSurname = request.query['"Surname"']
-  const uEmail = request.query['"Email"']
-  const uPhoneNumber = request.query['"PhoneNumber"']
-  const uAddress = request.query['"Address"']
+  const uName=request.body.name;
+  const uSurname = request.body.surname;
+  const uEmail = request.body.email;
+  const uPhoneNumber = request.body.phonenumber;
+  const uAddress = request.body.address;
  
-  const insertQuery = 'INSERT INTO clients("Name","Surname","Email","PhoneNumber","Address","Active") VALUES($1, $2, $3, $4, $5, $6)';
+  const insertQuery = 'INSERT INTO client("clientid","name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6)';
   pool.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'], (err,res) => {
     if(err){
         throw err
     }else{
-           response.status(200).send();
+           response.status(200).send(`User inserted`);
     }
 }) 
 
 }
-
+//Working
 const Deactivate = (request,response) =>{
-  const id = parseInt(request.query['"ClientID"'])
-  const deactivateQuery='UPDATE clients SET "Active"= \'False\'  WHERE ClientID = $1';
+  const id = parseInt(request.body.clientid)
+  const deactivateQuery='UPDATE client SET active= \'false\'  WHERE clientid = $1';
   pool.query(deactivateQuery,[id],(err,res)=> {
     if(err){
       throw err
     }else{
-      response.status(200).send(`ClientID: ${id} deactivated`);
+      response.status(200).json( {"status":0});
     }
   })
 }
-
+//Working
 const Reactivate =(request,response) =>{
-  const id = parseInt(request.query['"ClientID"']);
-  const reactivateQuery='UPDATE clients SET "Active"= \'True\'  WHERE ClientID = $1';
+  const id = parseInt(request.body.clientid);
+  const reactivateQuery='UPDATE client SET active = \'true\'  WHERE clientid = $1';
   pool.query(reactivateQuery,[id],(err,res) =>{
     if(err){
       throw err
     }else{
-      response.status(200).send(`ClientId: ${id} reactivated`);
+      response.status(200).json( {"status":1});
     }
   })
 }
-
+//not working??????
 const FindEmail = (request,response) =>{
-  const id = parseInt(request.query['"ClientID"']);
-  const findemailQuery='SELECT "Email" FROM clients WHERE ClientID = $1';
+  const id = parseInt(request.body.clientid)
+  const findemailQuery='SELECT email,name,surname FROM client WHERE clientid = $1';
   pool.query(findemailQuery,[id],(err,res) =>{
     if(err){
       throw err
     }else{
-      response.status(200).json(res.rows)
+      response.status(200).json({"email": res.rows[0].email,"name": res.rows[0].name,"surname": res.rows[0].surname});
     }
   })
 
 }
-
+//works on post request( bug that alters position in table,does not change ID though)
 const UpdateEmail = (request,response) =>{
 
-  const id = parseInt(request.query['"ClientID"']);
-  const uEmail = request.query['"Email"'];
-  const updateemailQuery='UPDATE clients SET "Email"= $1  WHERE ClientID = $2';
+  const id = parseInt(request.body.clientid);
+  const uEmail = request.body.email;
+  const updateemailQuery='UPDATE client SET email = $1  WHERE clientid = $2';
   pool.query(updateemailQuery,[uEmail,id],(err,res)=>{
     if(err){
       throw err
@@ -135,11 +140,11 @@ const UpdateEmail = (request,response) =>{
     }
 })
 }
-
+//Works
 const UpdatePhoneNumber = (request,response) =>{
-  const id = parseInt(request.query['"ClientID"']);
-  const uPhoneNumber = request.query['"PhoneNumber"'];
-  const updatephonenumberQuery='UPDATE clients SET "PhoneNumber"= $1  WHERE ClientID = $2';
+  const id = parseInt(request.body.clientid);
+  const uPhoneNumber = parseInt(request.body.phone);
+  const updatephonenumberQuery='UPDATE client SET phonenumber = $1  WHERE clientid = $2';
   pool.query(updatephonenumberQuery,[uPhoneNumber,id],(err,res)=>{
     if(err){
       throw err
@@ -148,11 +153,11 @@ const UpdatePhoneNumber = (request,response) =>{
     }
 })
 }
-
+//Works
 const UpdateAddress = (request,response) =>{
-  const id = parseInt(request.query['"ClientID"']);
-  const uAddress = request.query['"Address"'];
-  const updateaddressQuery='UPDATE clients SET "Address"= $1  WHERE ClientID = $2';
+  const id = parseInt(request.body.clientid);
+  const uAddress = request.body.address;
+  const updateaddressQuery='UPDATE client SET address = $1  WHERE clientid = $2';
   
   pool.query(updateaddressQuery,[uAddress,id],(err,res)=>{
       if(err){
@@ -172,8 +177,8 @@ const UpdateAddress = (request,response) =>{
 module.exports = {
   getUsers,
   getUserById,
-  createUser,
   updateUser,
+  getActive,
   deleteUser,
   insert,
   Deactivate,
