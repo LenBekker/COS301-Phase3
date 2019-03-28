@@ -2,6 +2,8 @@
 
 ## API Documentation
 
+    CIS_URL = N/A
+    CIS_PORT = N/A
 
 | Endpoint  | API              | Method 	|Option Parameter| Parameters  | Response   | 
 |:--------: |:------------     | :--:  	  | ----------- |-------------|----------|
