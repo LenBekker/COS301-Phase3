@@ -17,7 +17,7 @@ const getUsers = (request, response) => {
     if (error) {
       throw error
     }
-    response.status(200).json(results.rows)
+    response.status(200).json({"status":"success","data":results.rows[0]});
   })
 }
 
@@ -40,7 +40,7 @@ const getActive = (request, response) => {
     if (error) {
       throw error
     }
-    response.status(200).json({"status":results.rows[0].active});
+    response.status(200).json({"status":"success","data":results.rows[0].active});
   })
 }
 
@@ -79,7 +79,7 @@ const insert = (request,response) => {
   const uPhoneNumber = request.body.phonenumber;
   const uAddress = request.body.address;
  
-  const insertQuery = 'INSERT INTO client("clientid","name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6)';
+  const insertQuery = 'INSERT INTO client("name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6)';
   pool.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'], (err,res) => {
     if(err){
         throw err
@@ -97,7 +97,7 @@ const Deactivate = (request,response) =>{
     if(err){
       throw err
     }else{
-      response.status(200).json( {"status":0});
+      response.status(200).json({"status":0,"message":"successfully Deactivated"});
     }
   })
 }
@@ -109,7 +109,7 @@ const Reactivate =(request,response) =>{
     if(err){
       throw err
     }else{
-      response.status(200).json( {"status":1});
+      response.status(200).json({"status":1,"message":"successfully Reactivated"});
     }
   })
 }
@@ -121,7 +121,7 @@ const FindEmail = (request,response) =>{
     if(err){
       throw err
     }else{
-      response.status(200).json({"email": res.rows[0].email,"name": res.rows[0].name,"surname": res.rows[0].surname});
+      response.status(200).json({"status":"success","email": res.rows[0].email,"name": res.rows[0].name,"surname": res.rows[0].surname});
     }
   })
 
@@ -136,7 +136,7 @@ const UpdateEmail = (request,response) =>{
     if(err){
       throw err
     }else{
-      response.status(200).send(`Email of ClientID: ${id} updated`)
+      response.status(200).json({"status":"success","message":`Email of ClientID: ${id} updated`})
     }
 })
 }
@@ -149,7 +149,7 @@ const UpdatePhoneNumber = (request,response) =>{
     if(err){
       throw err
     }else{
-      response.status(200).send(`PhoneNumber of ClientID: ${id} updated`)
+      response.status(200).json({"status":"success","message":`PhoneNumber of ClientID: ${id} updated`})
     }
 })
 }
@@ -163,7 +163,7 @@ const UpdateAddress = (request,response) =>{
       if(err){
         throw err
       }else{
-        response.status(200).send(`Address of ClientID: ${id} updated`)
+        response.status(200).json({"status":"success","message":`Address of ClientID: ${id} updated`})
       }
   })
 }
