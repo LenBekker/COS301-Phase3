@@ -29,11 +29,11 @@ const psqlSetup = () => {
 
     pool.query(createQuery)
     .then((res) => {
-            console.log("[Postgres Connection]: Client Table Exists");
+            console.log("[Postgres Connection]: Client Table Found");
             pool.end();
     })
     .catch((err) => {
-        console.log("[Postgres Connection]: Created Table Client from Schema");
+        console.log("[Postgres Connection]: Created Client Table from Schema");
             console.log(err);
             pool.end();
     });
