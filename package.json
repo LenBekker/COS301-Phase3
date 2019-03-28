@@ -1,17 +1,20 @@
 {
   "name": "group7server",
-  "version": "0.0.0",
-  "description": "backend for merlot client information system",
-  "main": "app.js",
+  "version": "0.0.1",
+  "description": "Merlot client information system",
+  "main": "index.js",
   "dependencies": {
     "express": "^4.16.4",
-    "sqlite3": "^4.0.6"
+    "mock-express-response": "^0.2.2",
+    "pg": "^7.9.0"
   },
-  "devDependencies": {"jest": "^24.5.0"},
+  "devDependencies": {
+    "jest": "^24.5.0"
+  },
   "scripts": {
     "test": "jest",
-    "start": "node app.js"
+    "start": "node index.js"
   },
-  "author": "COS301 - group 7 merlot",
+  "author": "COS301 - Group 7 Merlot",
   "license": "ISC"
 }
