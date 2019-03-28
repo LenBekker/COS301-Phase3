@@ -6,6 +6,7 @@ const db = require('./queries.js')
 var path = require('path');
 var http = require('http');
 const fs = require('fs');
+const cors = require('cors')
 
 
 const port = process.env.PORT || 3000;
@@ -16,7 +17,7 @@ app.use(
     extended: true,
   })
 )
-
+app.use(cors());//Middleware for CORS 
 //Setup connect to postgres database(must exist) and create table if does not exist
 dbsetup.psqlSetup();
 
