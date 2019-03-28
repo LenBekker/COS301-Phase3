@@ -5,6 +5,9 @@ const dbsetup = require('./dbSetup.js')
 const db = require('./queries.js')
 var path = require('path');
 var http = require('http');
+const fs = require('fs');
+
+
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json())
@@ -101,20 +104,13 @@ const options = {
   method : "POST",
   headers : {
       'Content-Type': 'application/json',
-      'Content-Length': data.length
+      'Content-Length': data2.length
   }
 }
 
-var result;
-
-var createClient = http.request(options, (res) => {
-  res.on('data', (d) => {
-    //do something with data?
-  })
-  res.on('error', function(e) {
-    console.log('problem with request: ' + e.message);
+http.request(options, (res) =>{
+  res.on('data', (chunk) => {
+    console.log(`Response Body: ${chunk}`);
   });
-});
+}).write(data2);
 
-//execute insert or getEmail
-createClient.write(data); // createClient.write(data2);
