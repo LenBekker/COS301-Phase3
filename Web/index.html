@@ -2,56 +2,138 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-        <title>Dummy Client</title>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet"> 
-    </head>
-    <body >
+        	<title>CIS_Front</title>
+        	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet"> 
+   	 </head>
+	
+<body >
         <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        NB! Change everything to CRUD
+                       
                             <br>
                             <label >Server URL</label>
                             <select id="url" >
-                                <option value="http://localhost:8080">localhost:8080</option>
+                                <option value="http://localhost:3000">localhost:3000</option>
                                 <option value="https://merlotcisg7.herokuapp.com">merlotcisg7.herokuapp.com</option> 
                             </select>
-                            <div class="panel-group form-control">
-                                <div class="panel-heading">API Retrieve [Open Console for log]</div>
-                                <div class="panel-body ">
-                                    <div class="text-center">
-                                        <label >User ID:</label>
-                                        <input id="id" type="text"/>
-                                        <label >Option:</label>
-                                        <select id="option" >
-                                            <option value=1>Email</option>
-                                            <option value=2>Password</option>
-                                        </select>
-                                        <a class="btn btn-success" href="#" role="button" onclick="APIpost(document.getElementById('url').value)">POST Query</a>
-                                    </div>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="text-center">
-                                        <br>
-                                        <label>Result</label>
-                                        <input id="result">
+<!--Create client section-->                            
+                            <br>
+                            <div class = "panel-group form-control">
+                                <div class="panel-heading"> Create Client </div>
+                                <br>
+                                <div class ="panel-body">
+                                    <div class="text-left">
+                                      
+                                      <input id="Name"  placeholder="Name" type="text" />
+                                      <br>
+                                      <br>
+                                      
+                                      <input id="Surname"  placeholder="Surname" type="text"/>
+                                      <br>
+                                      <br>
+                                      
+                                      <input id="Email" placeholder="Email" type="text"/>
+                                      <br>
+                                      <br>
+                                      
+                                      <input id="PhoneNumber" placeholder="PhoneNumber" type="text"/>
+                                      <br>
+                                      <br>
+                                      
+                                      <input id="Address"  placeholder="Address" type="text"/>
+                                      <br>
+                                      <br>
+    
+                                      <a class="btn btn-success" href="#" role="button" onclick="">Create</a>
+                                        
                                     </div>
                                 </div>
                             </div>
                             <br>
-                    </div>
-                </div>
+ <!-- deactivate_Reactivate User -->                         
+                            <div class = "panel-group form-control">
+                                <div class="panel-heading"> Deactivate/Reactivate </div>
+                                <div class ="panel-body">
+                                  <div class="text-left">
+                                      <select id="Deactive_Reactive" >
+                                          <option value=1>Deactivate</option>
+                                          <option value=2>Reactivate</option>
+                                      </select>
+                                      <br>
+                                      <br>
+                                      <input id="ClientID" placeholder="ClientID" type="text"/>
+                                      <br>
+                                      <br>
+                                      <a class="btn btn-success" href="#" role="button" onclick="">Update</a>
+
+                                  </div>
+                                </div>
+                            </div>   
+                            <br> 
+
+<!-- update Requests-->
+                            <div class = "panel-group form-control">
+                                <div class="panel-heading"> Update Client </div>
+                                <div class ="panel-body">
+                                  <div class="text-left">
+                                      <select id="update" >
+                                          <option value=1>Email</option>
+                                          <option value=2>PhoneNumber</option>
+                                          <option value=2>Address</option>
+                                      </select>
+                                      <br>
+                                      <br>
+                                      <input id="ClientID" placeholder="ClientID" type="text"/>
+                                      <br>
+                                      <br>
+                                      <input id="e_p_a" placeholder="New Info" type="text"/>
+                                      <br>
+                                      <br>
+                                      <a class="btn btn-success" href="#" role="button" onclick="">Update</a>
+                                  </div>
+                                </div>
+                            </div> 
+                            <br>
+
+<!--Retrival of Information-->
+
+<div class = "panel-group form-control">
+    <div class="panel-heading"> Retrieve </div>
+    <div class ="panel-body">
+      <div class="text-left">
+          <select id="update" >
+              <option value=1>Email</option>
+              <option value=2>Active</option>
+              <option value=2>Address</option>
+          </select>
+          <br>
+          <br>
+          <input id="ClientID" placeholder="ClientID" type="text"/>
+          <br>
+          <br>
+          <input id="result" placeholder="Result" type="text"/>
+          <br>
+          <br>
+          <a class="btn btn-success" href="#" role="button" onclick="">Retrieve</a>
+      </div>
+    </div>
+</div> 
+<br>
+                   
+                         
+
                 <div class="row">
                     <div class="col-md-12">
                             <div class="panel-group form-control">
-                                    <div class="panel-heading">API Sync Users [Open Console for log]</div>
+                                    <div class="panel-heading">Print Database</div>
                                     <div class="panel-body">
                                         <div class="text-center">
-                                            <a class="btn btn-success" href="#" role="button" onclick="APISync(document.getElementById('url').value)">Sync from Clients Table</a>
+                                            <a class="btn btn-success" href="#" role="button" onclick="GetClients(document.getElementById('url').value)">Clients</a>
                                             <br><br>
                                         </div>
                                         <div class="panel-body">
-                                            <label>User List:</label>
+                                            <label>Active Clients:</label>
                                             <br>
                                             <textarea id="sync" class="w-100" readonly>
                                             </textarea>
@@ -79,68 +161,33 @@
     <script>
         /*
             Function preforms a HTTP POST Request to the server to query the database on the server 
-            and return the E-mail or Password of the UserId depending on the option selected.
+            
         */
-        function APIpost(u)
-        {
-            /*
-                URL and PORT determined by NodeJS server.
-            */
-            var url = u + "/api/user";
-            var x = document.getElementById("result");
-            var user = document.getElementById("id").value;
-            var opt = document.getElementById("option").value;
 
-            var params = "userId=" + user + "&" + "option=" + opt;
+       // function CreateClient(){} todo
 
-            var http = new XMLHttpRequest();
-            http.open("POST", url, true);
-            http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-            http.onload  = function() 
-            {
-                if(http.readyState == 4 && http.status == 200) 
-                {
-                    x.value  = http.responseText;
-                    console.log("[Success] retrieved: " + http.responseText);
-                }
-                else
-                {
-                    console.log("[Failed] " + http.status + " : " + http.responseText);
-                }
+	// Function to retrieve all users in clients table from server
+        function GetClients(u){
+          var url = u;
+          var http = new XMLHttpRequest();
+          http.open("POST", url, true);
+          http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+          http.onreadystatechange = function()
+          {
+            if(this.readyState = 4 && this.status == 200)
+		        {
+              console.log(this.responseText);
+              document.getElementById("sync").value=this.responseText;
             }
-            console.log("POST with parameters: " + params);
-            http.send(params);            
-        };
+          }
+          http.send(JSON.stringify({"option" : "getUsers"}));
+          }
 
-        /*
-            Function to retrieve all users in clients table from server
-        */
-        function APISync(u, p)
-        {
-            /*
-                URL and PORT determined by NodeJS server.
-            */
-            var url = u + "/api/user/sync";
-            var x = document.getElementById("sync");
-            var http = new XMLHttpRequest();
+       // function getEmail(u){  } todo
 
-            http.open("POST", url, true);
-            http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            http.onload  = function() 
-            {
-                if(http.readyState == 4 && http.status == 200) 
-                {
-                    x.value  = http.responseText;
-                    console.log("[Sync Success]");
-                }
-                else
-                {
-                    console.log("[Sync Failed] " + http.status);
-                }
-            }
-            http.send();  
-        };
+
+
+
+       
     </script>
 </html>
-    
