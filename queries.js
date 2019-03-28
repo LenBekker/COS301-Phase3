@@ -55,7 +55,7 @@ const updateUser = (request, response) => {
       if (error) {
         throw error
       }
-      response.status(200).send(`User modified with ID: ${id}`)
+      response.status(200).json({"status":"success","message":`successfully updated user: ${id}`})
     }
   )
 }
@@ -67,7 +67,7 @@ const deleteUser = (request, response) => {
     if (error) {
       throw error
     }
-    response.status(200).send(`User deleted with ID: ${id}`)
+    response.status(200).json({"status":"success","message":`successfully deleted user: ${id}`})
   })
 }
 
@@ -84,7 +84,7 @@ const insert = (request,response) => {
     if(err){
         throw err
     }else{
-           response.status(200).send(`User inserted`);
+      response.status(200).json({"status":"success","message":"successfully inserted"});
     }
 }) 
 
@@ -97,7 +97,7 @@ const Deactivate = (request,response) =>{
     if(err){
       throw err
     }else{
-      response.status(200).json({"status":0,"message":"successfully Deactivated"});
+      response.status(200).json({"status":"success","message":"successfully Deactivated"});
     }
   })
 }
@@ -109,7 +109,7 @@ const Reactivate =(request,response) =>{
     if(err){
       throw err
     }else{
-      response.status(200).json({"status":1,"message":"successfully Reactivated"});
+      response.status(200).json({"status":"success","message":"successfully Reactivated"});
     }
   })
 }
@@ -118,14 +118,15 @@ const FindEmail = (request,response) =>{
   const id = parseInt(request.body.clientid)
   const findemailQuery='SELECT email, name, surname FROM client WHERE clientid = $1';
   pool.query(findemailQuery,[id],(err,res) =>{
-    if(err){
+    if(err)
+    {
       throw err
     }
     if(res.rows[0])
       response.status(200).json({"email": res.rows[0].email, "name":res.rows[0].name, "surname":res.rows[0].surname});
     else
       response.status(200).json({'status':'failed','message':'id does not exist'});
-    
+
   })
 
 }
@@ -170,11 +171,6 @@ const UpdateAddress = (request,response) =>{
       }
   })
 }
-
-
-
-
-
 
 
 module.exports = {
