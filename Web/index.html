@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+        <title>Dummy Client</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet"> 
+    </head>
+    <body >
+        <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        NB! Change everything to CRUD
+                            <br>
+                            <label >Server URL</label>
+                            <select id="url" >
+                                <option value="http://localhost:8080">localhost:8080</option>
+                                <option value="https://merlotcisg7.herokuapp.com">merlotcisg7.herokuapp.com</option> 
+                            </select>
+                            <div class="panel-group form-control">
+                                <div class="panel-heading">API Retrieve [Open Console for log]</div>
+                                <div class="panel-body ">
+                                    <div class="text-center">
+                                        <label >User ID:</label>
+                                        <input id="id" type="text"/>
+                                        <label >Option:</label>
+                                        <select id="option" >
+                                            <option value=1>Email</option>
+                                            <option value=2>Password</option>
+                                        </select>
+                                        <a class="btn btn-success" href="#" role="button" onclick="APIpost(document.getElementById('url').value)">POST Query</a>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="text-center">
+                                        <br>
+                                        <label>Result</label>
+                                        <input id="result">
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                            <div class="panel-group form-control">
+                                    <div class="panel-heading">API Sync Users [Open Console for log]</div>
+                                    <div class="panel-body">
+                                        <div class="text-center">
+                                            <a class="btn btn-success" href="#" role="button" onclick="APISync(document.getElementById('url').value)">Sync from Clients Table</a>
+                                            <br><br>
+                                        </div>
+                                        <div class="panel-body">
+                                            <label>User List:</label>
+                                            <br>
+                                            <textarea id="sync" class="w-100" readonly>
+                                            </textarea>
+                                        </div>
+                                    </div>
+                    
+                                </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                    </div>
+                </div>
+            </div>
+    </body>
+
+    <script>
+        /*
+            Function preforms a HTTP POST Request to the server to query the database on the server 
+            and return the E-mail or Password of the UserId depending on the option selected.
+        */
+        function APIpost(u)
+        {
+            /*
+                URL and PORT determined by NodeJS server.
+            */
+            var url = u + "/api/user";
+            var x = document.getElementById("result");
+            var user = document.getElementById("id").value;
+            var opt = document.getElementById("option").value;
+
+            var params = "userId=" + user + "&" + "option=" + opt;
+
+            var http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            http.onload  = function() 
+            {
+                if(http.readyState == 4 && http.status == 200) 
+                {
+                    x.value  = http.responseText;
+                    console.log("[Success] retrieved: " + http.responseText);
+                }
+                else
+                {
+                    console.log("[Failed] " + http.status + " : " + http.responseText);
+                }
+            }
+            console.log("POST with parameters: " + params);
+            http.send(params);            
+        };
+
+        /*
+            Function to retrieve all users in clients table from server
+        */
+        function APISync(u, p)
+        {
+            /*
+                URL and PORT determined by NodeJS server.
+            */
+            var url = u + "/api/user/sync";
+            var x = document.getElementById("sync");
+            var http = new XMLHttpRequest();
+
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            http.onload  = function() 
+            {
+                if(http.readyState == 4 && http.status == 200) 
+                {
+                    x.value  = http.responseText;
+                    console.log("[Sync Success]");
+                }
+                else
+                {
+                    console.log("[Sync Failed] " + http.status);
+                }
+            }
+            http.send();  
+        };
+    </script>
+</html>
+    
