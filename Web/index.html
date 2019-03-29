@@ -14,16 +14,16 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">New Clients</a>
+                    <a class="nav-link" href="create.html">New Clients</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Existing Clients</a>
+                    <a class="nav-link" href="update.html">Existing Clients</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Retrievals</a>
+                    <a class="nav-link" href="retrival.html">Retrievals</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Database</a>
+                    <a class="nav-link" href="database.html">Database</a>
                 </li>
                 </ul>
             </div>
@@ -75,108 +75,7 @@
                                 </div>
                             </div>
                             <br>
- <!-- deactivate_Reactivate User -->                         
-                            <div class = "panel-group form-control">
-                               
-                                <div class ="panel-body">
-                                  <div class="text-left">
-                                      <select id="Deactive_Reactive" >
-                                          <option value=1>Deactivate</option>
-                                          <option value=2>Reactivate</option>
-                                      </select>
-                                      <br>
-                                      <br>
-                                      <input id="reactivateDeactivateId" placeholder="ClientID" type="number"/>
-                                      <br>
-                                      <br>
-                                      <a class="btn btn-success" href="#" role="button" onclick="makeActive_Deactive(document.getElementById('url').value)">Deactivate/Reactivate</a>
-
-                                  </div>
-                                </div>
-                            </div>   
-                            <br> 
-
-<!-- update Requests-->
-                            <div class = "panel-group form-control">
-                                
-                                <div class ="panel-body">
-                                  <div class="text-left">
-                                      <select id="update" >
-                                          <option value=1>Email</option>
-                                          <option value=2>PhoneNumber</option>
-                                          <option value=3>Address</option>
-                                      </select>
-                                      <br>
-                                      <br>
-                                      <input id="ci" placeholder="ClientID" type="number"/>
-                                      <br>
-                                      <br>
-                                      <input id="e_p_a" placeholder="New Info" type="text"/>
-                                      <br>
-                                      <br>
-                                      <a class="btn btn-success" href="#" role="button" onclick="updateItem(document.getElementById('url').value)">Update Client </a>
-                                  </div>
-                                </div>
-                            </div> 
-                            <br>
-
-<!--Retrival of email and active status given ID-->
-
-<div class = "panel-group form-control">
-   
-    <div class ="panel-body">
-      <div class="text-left">
-          <select id="retrieve" >
-              <option value=1>Email</option>
-              <option value=2>Active</option>
-         </select>
-          <br>
-          <br>
-          <input id="retid" placeholder="ClientID" type="number"/>
-          <br>
-          <br>
-          <textarea id="printretrive" class="w-100" readonly>
-            </textarea>
-          <br>
-          <br>
-          <a class="btn btn-success" href="#" role="button" onclick="getItem(document.getElementById('url').value)">Retrieve</a>
-      </div>
-    </div>
-</div> 
-
-
-
-<br>
-       
-                      <div class="row">
-                    <div class="col-md-12">
- <!--Print Clients-->                     
-                            <div class="panel-group form-control">
-                                    
-                                    <div class="panel-body">
-                                        <div class="text-left">
-                                            <a class="btn btn-success" href="#" role="button" onclick="GetClients(document.getElementById('url').value)">Print Database</a>
-                                            <br><br>
-                                        </div>
-                                        <div class="panel-body">
-                                            <label>Clients:</label>
-                                            <br>
-                                            <textarea id="sync" class="w-100" class="h-100"  readonly>
-                                            </textarea>
-                                        </div>
-                                    </div>
-                    
-                                </div>
-                    </div>
-                </div>
- <!--Reterive logs-->
-   <br>
-             <div class="text-left">
-            <a class="btn btn-success" href="#" role="button" onclick="getLogs(document.getElementById('url').value)">retrieve logs</a>
-            <br><br>
-        </div>
-        
-    </div>
+ 
                 
     </body>
 
