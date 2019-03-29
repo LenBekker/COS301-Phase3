@@ -96,29 +96,32 @@
                             </div> 
                             <br>
 
-<!--Retrival of Information-->
+<!--Retrival of email and active status given ID-->
 
 <div class = "panel-group form-control">
     <div class="panel-heading"> Retrieve </div>
     <div class ="panel-body">
       <div class="text-left">
-          <select id="update" >
+          <select id="retrieve" >
               <option value=1>Email</option>
               <option value=2>Active</option>
-              <option value=2>Address</option>
-          </select>
+         </select>
           <br>
           <br>
-          <input id="ClientID" placeholder="ClientID" type="text"/>
+          <input id="retid" placeholder="ClientID" type="number"/>
           <br>
           <br>
-          <input id="result" placeholder="Result" type="text"/>
+          <textarea id="printretrive" class="w-100" readonly>
+            </textarea>
           <br>
           <br>
-          <a class="btn btn-success" href="#" role="button" onclick="">Retrieve</a>
+          <a class="btn btn-success" href="#" role="button" onclick="getItem(document.getElementById('url').value)">Retrieve</a>
       </div>
     </div>
 </div> 
+
+
+
 <br>
                    
                          
@@ -300,8 +303,50 @@
           http.send(JSON.stringify({"option" : "getUsers"}));
           }
 
-       // function getEmail(u){  } todo
+       //give id retive email and  active status functions
 
+          function getItem(u){
+            var url =u;
+            var item = document.getElementById("retrieve").value;
+            var cid =document.getElementById("retid").value;
+            if(item==1){
+                getEmail(url,cid);
+            }else if(item==2){
+                getActive(url,cid);
+            }
+          }
+
+        function getEmail(u,v){
+          var url=u, idclient=v;
+          var http = new XMLHttpRequest();
+          http.open("POST", url, true);
+          http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+          http.onreadystatechange = function(){
+            if(this.readyState = 4 && this.status == 200){
+               document.getElementById("printretrive").value=this.responseText;
+            }
+          }
+          var obj={};
+            obj["option"]="getEmail";
+            obj["clientid"]=parseInt(idclient);
+            http.send(JSON.stringify(obj));
+          
+        }
+        function getActive(u,v){
+          var url=u, idclient=v;
+          var http = new XMLHttpRequest();
+          http.open("POST", url, true);
+          http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+          http.onreadystatechange = function(){
+            if(this.readyState = 4 && this.status == 200){
+               document.getElementById("printretrive").value=this.responseText;
+            }
+          }
+          var obj={};
+            obj["option"]="getActive";
+            obj["clientid"]=parseInt(idclient);
+            http.send(JSON.stringify(obj));
+        }
 
 
 
