@@ -80,17 +80,17 @@
                                       <select id="update" >
                                           <option value=1>Email</option>
                                           <option value=2>PhoneNumber</option>
-                                          <option value=2>Address</option>
+                                          <option value=3>Address</option>
                                       </select>
                                       <br>
                                       <br>
-                                      <input id="ClientID" placeholder="ClientID" type="text"/>
+                                      <input id="ci" placeholder="ClientID" type="number"/>
                                       <br>
                                       <br>
                                       <input id="e_p_a" placeholder="New Info" type="text"/>
                                       <br>
                                       <br>
-                                      <a class="btn btn-success" href="#" role="button" onclick="">Update</a>
+                                      <a class="btn btn-success" href="#" role="button" onclick="updateItem(document.getElementById('url').value)">Update</a>
                                   </div>
                                 </div>
                             </div> 
@@ -163,7 +163,78 @@
             Function preforms a HTTP POST Request to the server to query the database on the server 
             
         */
-
+		
+	    //update functions
+	    function updateItem(u){
+            var url =u;
+            var item = document.getElementById("update").value;
+            var cid =document.getElementById("ci").value;
+            var ninfo =document.getElementById("e_p_a").value;
+            if(item==1){
+                updateEmail(url,cid,ninfo);
+            }else if(item==2){
+                updatePhonenumber(url,cid,ninfo);
+            }else if(item==3){
+                updateAddress(url,cid,ninfo);
+            }
+          }
+          function updateEmail(u,v,w){
+            var url=u, idclient=v, nemail=w;
+            var http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            http.onreadystatechange = function(){
+                if(this.readyState = 4 && this.status == 200)
+                    { }
+            }
+            
+            var obj={};
+            obj["option"]="updateEmail";
+            obj["clientid"]=parseInt(idclient);
+            obj["email"]=nemail;
+            http.send(JSON.stringify(obj));
+          
+        }
+        function updatePhonenumber(u,v,w){
+            var url=u, idclient=v, nphonenumber=w;
+            var http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            http.onreadystatechange = function(){
+                if(this.readyState = 4 && this.status == 200)
+                    { }
+            }
+            
+            var obj={};
+            obj["option"]="updatePhone";
+            obj["clientid"]=parseInt(idclient);
+            obj["phone"]=nphonenumber;
+            http.send(JSON.stringify(obj));
+          
+        }
+        function updateAddress(u,v,w){
+            var url=u, idclient=v, naddress=w;
+            var http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            http.onreadystatechange = function(){
+                if(this.readyState = 4 && this.status == 200)
+                    { }
+            }
+            
+            var obj={};
+            obj["option"]="updateAddress";
+            obj["clientid"]=parseInt(idclient);
+            obj["address"]=naddress;
+            http.send(JSON.stringify(obj));
+        }
+	    
+	    
+	    
+	    
+	    
+	    
+	    
        // function CreateClient(){} todo
 
 	// Function to retrieve all users in clients table from server
