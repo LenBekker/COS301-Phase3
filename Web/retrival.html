@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+        <title>CIS FrontEnd</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet"> 
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" rel="stylesheet"> 
+        <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!--Navbar not working-->  
+            <a class="navbar-brand" href="#">Client Information System</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="create.html">New Clients</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="update.html">Existing Clients</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="retrival.html">Retrievals</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="database.html">Database</a>
+                </li>
+                </ul>
+            </div>
+        </nav> 
+    </head>
+    <body >
+        <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                       
+                            <br>
+                            <label >Server URL</label>
+                            <select id="url" >
+                                <option value="http://localhost:3000">localhost:3000</option>
+                                
+                                <option value="https://merlotcisg7.herokuapp.com">merlotcisg7.herokuapp.com</option> 
+                            </select>
+
+
+<!--Retrival of email and active status given ID-->
+
+<div class = "panel-group form-control">
+   
+    <div class ="panel-body">
+      <div class="text-left">
+          <select id="retrieve" >
+              <option value=1>Email</option>
+              <option value=2>Active</option>
+         </select>
+          <br>
+          <br>
+          <input id="retid" placeholder="ClientID" type="number"/>
+          <br>
+          <br>
+          <textarea id="printretrive" class="w-100" readonly>
+            </textarea>
+          <br>
+          <br>
+          <a class="btn btn-success" href="#" role="button" onclick="getItem(document.getElementById('url').value)">Retrieve</a>
+      </div>
+    </div>
+</div> 
+
+
+
+    <br>
+    <!--Reterive logs-->
+    <br>
+    <div class="text-left">
+    <a class="btn btn-success" href="#" role="button" onclick="getLogs(document.getElementById('url').value)">retrieve logs</a>
+    <br><br>
+    </div>
+
+</div>
+</div>
+        </div>         
+    </body>
+
+    <script>
+        /*
+            Function preforms a HTTP POST Request to the server to query the database on the server 
+            and return the E-mail or Password of the UserId depending on the option selected.
+        */
+      
+
+        // print all clients function
+        function GetClients(u){
+          var url = u;
+          var http = new XMLHttpRequest();
+          http.open("POST", url, true);
+          http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+          http.onreadystatechange = function()
+          {
+            if(this.readyState = 4 && this.status == 200)
+		        {
+              console.log(this.responseText);
+              document.getElementById("sync").value=this.responseText;
+            }
+          }
+          http.send(JSON.stringify({"option" : "getUsers"}));
+          }
+       
+
+        //give id retive email and  active status functions
+
+          function getItem(u){
+            var url =u;
+            var item = document.getElementById("retrieve").value;
+            var cid =document.getElementById("retid").value;
+            if(item==1){
+                getEmail(url,cid);
+            }else if(item==2){
+                getActive(url,cid);
+            }
+          }
+
+        function getEmail(u,v){
+          var url=u, idclient=v;
+          var http = new XMLHttpRequest();
+          http.open("POST", url, true);
+          http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+          http.onreadystatechange = function(){
+            if(this.readyState = 4 && this.status == 200){
+               document.getElementById("printretrive").value=this.responseText;
+            }
+          }
+          var obj={};
+            obj["option"]="getEmail";
+            obj["clientid"]=parseInt(idclient);
+            http.send(JSON.stringify(obj));
+          
+        }
+        function getActive(u,v){
+          var url=u, idclient=v;
+          var http = new XMLHttpRequest();
+          http.open("POST", url, true);
+          http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+          http.onreadystatechange = function(){
+            if(this.readyState = 4 && this.status == 200){
+               document.getElementById("printretrive").value=this.responseText;
+            }
+          }
+          var obj={};
+            obj["option"]="getActive";
+            obj["clientid"]=parseInt(idclient);
+            http.send(JSON.stringify(obj));
+        }
+        
+	 //getlog function
+          function getLogs(u){
+          var url = u;
+          var http = new XMLHttpRequest();
+          http.open("POST", url, true);
+          http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+          http.onreadystatechange = function()
+          {
+            if(this.readyState = 4 && this.status == 200)
+		        {  }
+          }
+          //http.send(JSON.stringify({"option" : "getLogs"}));
+          }
+
+
+
+
+
+
+
+       
+       
+    </script>
+</html>
