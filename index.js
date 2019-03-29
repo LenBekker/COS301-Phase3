@@ -8,8 +8,10 @@ var http = require('http');
 const fs = require('fs');
 const cors = require('cors')
 
-
 const port = process.env.PORT || 3000;
+
+//Setup connect to postgres database(must exist) and create table if does not exist
+dbsetup.psqlSetup();
 
 app.use(bodyParser.json())
 app.use(
@@ -18,12 +20,15 @@ app.use(
   })
 )
 app.use(cors());//Middleware for CORS 
-//Setup connect to postgres database(must exist) and create table if does not exist
-dbsetup.psqlSetup();
 
+// Static Home Page
+const HomePage = path.join(__dirname, '/Web');
+app.use("/", express.static(HomePage));
+
+/* //Non-static page
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/Web/index.html'));
-});
+});*/
 
 app.post('/', (req, res) => {
   var data = req.body;
