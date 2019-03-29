@@ -169,6 +169,14 @@
                                 </div>
                     </div>
                 </div>
+ <!--Reterive logs-->
+   <br>
+             <div class="text-left">
+            <a class="btn btn-success" href="#" role="button" onclick="getLogs(document.getElementById('url').value)">retrieve logs</a>
+            <br><br>
+        </div>
+        
+    </div>
                 
     </body>
 
@@ -370,7 +378,19 @@
             http.send(JSON.stringify(obj));
         }
         
-
+	 //getlog function
+          function getLogs(u){
+          var url = u;
+          var http = new XMLHttpRequest();
+          http.open("POST", url, true);
+          http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+          http.onreadystatechange = function()
+          {
+            if(this.readyState = 4 && this.status == 200)
+		        {  }
+          }
+          //http.send(JSON.stringify({"option" : "getLogs"}));
+          }
 
 
 
