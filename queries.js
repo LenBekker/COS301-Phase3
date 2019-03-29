@@ -1,4 +1,7 @@
 const Pool = require('pg').Pool
+const csv=require('csvtojson')
+
+
 
 //Heroku connection url
 //const conn = process.env.DATABASE_URL || pool?;
@@ -6,7 +9,15 @@ const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'me',
   host: 'localhost',
-  database: 'clientinfo', //cis_data
+  database: 'cis_data', //cis_data
+  password: 'password',
+  port: 5432,
+})
+
+const pool2 = new Pool({
+  user: 'me',
+  host: 'localhost',
+  database: 'cis_data', //cis_data
   password: 'password',
   port: 5432,
 })
@@ -23,7 +34,7 @@ const getUsers = (request, response) => {
 
 //works returns json object
 const getUserById = (request, response) => {
-  const id = parseInt(request.body.clientid)
+  const id = parseInt(request.body.clientId)
 
   pool.query('SELECT * FROM client WHERE clientid = $1', [id], (error, results) => {
     if (error) {
@@ -34,7 +45,7 @@ const getUserById = (request, response) => {
 }
 
 const getActive = (request, response) => {
-  const id = parseInt(request.body.clientid)
+  const id = parseInt(request.body.clientId)
 
   pool.query('SELECT active FROM client WHERE clientid = $1', [id], (error, results) => {
     if (error) {
@@ -61,7 +72,7 @@ const updateUser = (request, response) => {
 }
 //works on a post reguest
 const deleteUser = (request, response) => {
-  const id = parseInt(request.body.clientid)
+  const id = parseInt(request.body.clientId)
 
   pool.query('DELETE FROM client WHERE clientid = $1', [id], (error, results) => {
     if (error) {
@@ -82,7 +93,7 @@ const insert = (request,response) => {
   const insertQuery = 'INSERT INTO client("name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6)';
   pool.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'], (err,res) => {
     if(err){
-        throw err
+        response.status(200).json({"status":"failed","message":"unseccessfully inserted/try again"});
     }else{
       response.status(200).json({"status":"success","message":"successfully inserted"});
     }
@@ -91,31 +102,32 @@ const insert = (request,response) => {
 }
 //Working
 const Deactivate = (request,response) =>{
-  const id = parseInt(request.body.clientid)
+  const id = parseInt(request.body.clientId)
   const deactivateQuery='UPDATE client SET active= \'false\'  WHERE clientid = $1';
   pool.query(deactivateQuery,[id],(err,res)=> {
-    if(err){
-      throw err
+    if(res.rowCount < 1 || err){
+      response.status(200).json({"status":"false","message":"unsuccessful"});
     }else{
-      response.status(200).json({"status":"success","message":"successfully Deactivated"});
+      response.status(200).json({"status":"True","message":"successfully Deactivated"});
     }
   })
 }
 //Working
 const Reactivate =(request,response) =>{
-  const id = parseInt(request.body.clientid);
+  const id = parseInt(request.body.clientId);
   const reactivateQuery='UPDATE client SET active = \'true\'  WHERE clientid = $1';
   pool.query(reactivateQuery,[id],(err,res) =>{
-    if(err){
-      throw err
+    if(res.rowCount < 1 || err){
+       response.status(200).json({"status":"false","message":"unseccessfull"});
     }else{
-      response.status(200).json({"status":"success","message":"successfully Reactivated"});
+    	//console.log(res) 
+      response.status(200).json({"status":"True","message":"successfully Reactivated"});
     }
   })
 }
-//not working??????
+//
 const FindEmail = (request,response) =>{
-  const id = parseInt(request.body.clientid)
+  const id = parseInt(request.body.clientId)
   const findemailQuery='SELECT email, name, surname FROM client WHERE clientid = $1';
   pool.query(findemailQuery,[id],(err,res) =>{
     if(err)
@@ -125,7 +137,7 @@ const FindEmail = (request,response) =>{
     if(res.rows[0])
       response.status(200).json({"email": res.rows[0].email, "name":res.rows[0].name, "surname":res.rows[0].surname});
     else
-      response.status(200).json({'status':'failed','message':'id does not exist'});
+      response.status(400).json({'status':'failed','message':'id does not exist'});
 
   })
 
@@ -133,7 +145,7 @@ const FindEmail = (request,response) =>{
 //works on post request( bug that alters position in table,does not change ID though)
 const UpdateEmail = (request,response) =>{
 
-  const id = parseInt(request.body.clientid);
+  const id = parseInt(request.body.clientId);
   const uEmail = request.body.email;
   const updateemailQuery='UPDATE client SET email = $1  WHERE clientid = $2';
   pool.query(updateemailQuery,[uEmail,id],(err,res)=>{
@@ -146,7 +158,7 @@ const UpdateEmail = (request,response) =>{
 }
 //Works
 const UpdatePhoneNumber = (request,response) =>{
-  const id = parseInt(request.body.clientid);
+  const id = parseInt(request.body.clientId);
   const uPhoneNumber = parseInt(request.body.phone);
   const updatephonenumberQuery='UPDATE client SET phonenumber = $1  WHERE clientid = $2';
   pool.query(updatephonenumberQuery,[uPhoneNumber,id],(err,res)=>{
@@ -159,7 +171,7 @@ const UpdatePhoneNumber = (request,response) =>{
 }
 //Works
 const UpdateAddress = (request,response) =>{
-  const id = parseInt(request.body.clientid);
+  const id = parseInt(request.body.clientId);
   const uAddress = request.body.address;
   const updateaddressQuery='UPDATE client SET address = $1  WHERE clientid = $2';
   
@@ -173,8 +185,41 @@ const UpdateAddress = (request,response) =>{
 }
 
 
+
+
+
+
+
+
+
+const insertCSV = (request,response)=>{ 
+
+const csvFilePath='./test.csv'
+		csv()
+		.fromFile(csvFilePath)
+		.then((jsonObj)=>{
+		   //console.log();
+	for(i in jsonObj)
+	{
+  	 uName=jsonObj[i].name;
+	 uSurname = jsonObj[i].surname;
+	 uEmail = jsonObj[i].email;
+	 uPhoneNumber = jsonObj[i].phonenumber;
+	 uAddress = jsonObj[i].address;
+ 
+
+  const insertQuery = 'INSERT INTO client("name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6)';
+  pool2.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'])
+}
+})
+		console.log("successfull upload")
+		response.status(200).json({"status":"success","message":"successfully inserted"});
+} 
+		
+
 module.exports = {
   getUsers,
+  insertCSV,
   getUserById,
   updateUser,
   getActive,

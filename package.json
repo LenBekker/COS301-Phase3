@@ -4,8 +4,12 @@
   "description": "Merlot client information system",
   "main": "index.js",
   "dependencies": {
+    "cors": "^2.8.5",
+    "csv-parser": "^2.2.0",
+    "csvtojson": "^2.0.8",
     "express": "^4.16.4",
     "mock-express-response": "^0.2.2",
+    "papaparse": "^4.6.3",
     "pg": "^7.9.0"
   },
   "devDependencies": {
