@@ -70,6 +70,9 @@ function formatContent(req,res)
         case "deactivate"://???
         return db.Deactivate(req,res);
 
+        case "insertCSV"://???
+        return db.insertCSV(req,res);
+
 
         default:{
             return res.status(200).json({ 'status':'failed','message':'Invalid Type'})
@@ -82,12 +85,16 @@ app.listen(port, () => {
 })
 
 
+
+///upload of csv file 
+
+
 /* TEMORARY HTTP POST USING JSON TEST */
 
 const data = JSON.stringify({
   option : 'insert',
   name: 'Peter',
-  surname: 'Griffin',
+  surname: '',
   email: 'peter.griff@familymail.com',
   phonenumber: '5550112',
   address: '31 Spooner Street'
@@ -95,7 +102,7 @@ const data = JSON.stringify({
 
 const data2 = JSON.stringify({
   option : 'getEmail',
-  clientid: "1"
+  clientId: "1"
 })
 
 const options = {
@@ -105,13 +112,13 @@ const options = {
   method : "POST",
   headers : {
       'Content-Type': 'application/json',
-      'Content-Length': data2.length
+      'Content-Length': data.length
   }
 }
-
+/*
 http.request(options, (res) =>{
   res.on('data', (chunk) => {
     console.log(`Response Body: ${chunk}`);
   });
-}).write(data2);
-
+}).write(data);
+*/
