@@ -17,7 +17,7 @@ const getUsers = (request, response) => {
     if (error) {
       throw error
     }
-    response.status(200).json({"status":"success","data":results.rows[0]});
+    response.status(200).json(results.rows)
   })
 }
 
