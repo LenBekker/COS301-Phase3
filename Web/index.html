@@ -2,12 +2,14 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-        	<title>CIS_Front</title>
-        	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet"> 
-   	 </head>
-	
-<body >
+        <title>CIS FrontEnd</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet"> 
+    </head>
+    <body >
         <div class="container-fluid">
+
+
+          
                 <div class="row">
                     <div class="col-md-12">
                        
@@ -15,6 +17,7 @@
                             <label >Server URL</label>
                             <select id="url" >
                                 <option value="http://localhost:3000">localhost:3000</option>
+                                
                                 <option value="https://merlotcisg7.herokuapp.com">merlotcisg7.herokuapp.com</option> 
                             </select>
 <!--Create client section-->                            
@@ -45,7 +48,7 @@
                                       <br>
                                       <br>
     
-                                      <a class="btn btn-success" href="#" role="button" onclick="">Create</a>
+                                      <a class="btn btn-success" href="#" role="button" onclick="CreateClient(document.getElementById('url').value)">Create</a>
                                         
                                     </div>
                                 </div>
@@ -123,11 +126,10 @@
 
 
 <br>
-                   
-                         
-
-                <div class="row">
+       
+                      <div class="row">
                     <div class="col-md-12">
+ <!--Print Clients-->                     
                             <div class="panel-group form-control">
                                     <div class="panel-heading">Print Database</div>
                                     <div class="panel-body">
@@ -136,7 +138,7 @@
                                             <br><br>
                                         </div>
                                         <div class="panel-body">
-                                            <label>Active Clients:</label>
+                                            <label>Clients:</label>
                                             <br>
                                             <textarea id="sync" class="w-100" readonly>
                                             </textarea>
@@ -164,11 +166,42 @@
     <script>
         /*
             Function preforms a HTTP POST Request to the server to query the database on the server 
-            
+            and return the E-mail or Password of the UserId depending on the option selected.
         */
-	    
-	    
-	 //reactivate deactivted functions
+        // create a new client function
+        function CreateClient(u){
+            var url = u;
+            var http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            var obj={};
+            obj["option"]="insert";
+            obj["name"]= document.getElementById("Name").value;
+            obj["surname"]=document.getElementById("Surname").value;
+            obj["email"]=document.getElementById("Email").value;
+            obj["phonenumber"]=document.getElementById("PhoneNumber").value;
+            obj["address"]=document.getElementById("Address").value;
+            http.send(JSON.stringify(obj));
+
+        }
+
+        // print all clients function
+        function GetClients(u){
+          var url = u;
+          var http = new XMLHttpRequest();
+          http.open("POST", url, true);
+          http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+          http.onreadystatechange = function()
+          {
+            if(this.readyState = 4 && this.status == 200)
+		        {
+              console.log(this.responseText);
+              document.getElementById("sync").value=this.responseText;
+            }
+          }
+          http.send(JSON.stringify({"option" : "getUsers"}));
+          }
+        //reactivate deactivted functions
         function makeActive_Deactive(u){
             var url =u;
             var item= document.getElementById("Deactive_Reactive").value;
@@ -212,9 +245,14 @@
 
         }
 
-		
-	    //update functions
-	    function updateItem(u){
+
+
+
+
+
+
+          //update client information functions
+          function updateItem(u){
             var url =u;
             var item = document.getElementById("update").value;
             var cid =document.getElementById("ci").value;
@@ -277,33 +315,8 @@
             obj["address"]=naddress;
             http.send(JSON.stringify(obj));
         }
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-       // function CreateClient(){} todo
 
-	// Function to retrieve all users in clients table from server
-        function GetClients(u){
-          var url = u;
-          var http = new XMLHttpRequest();
-          http.open("POST", url, true);
-          http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-          http.onreadystatechange = function()
-          {
-            if(this.readyState = 4 && this.status == 200)
-		        {
-              console.log(this.responseText);
-              document.getElementById("sync").value=this.responseText;
-            }
-          }
-          http.send(JSON.stringify({"option" : "getUsers"}));
-          }
-
-       //give id retive email and  active status functions
+        //give id retive email and  active status functions
 
           function getItem(u){
             var url =u;
@@ -347,9 +360,16 @@
             obj["clientid"]=parseInt(idclient);
             http.send(JSON.stringify(obj));
         }
+        
 
 
 
+
+
+
+
+
+       
        
     </script>
 </html>
