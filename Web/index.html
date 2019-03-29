@@ -2,11 +2,34 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-        	<title>CIS_Front</title>
-        	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet"> 
-   	 </head>
-	
-<body >
+        <title>CIS FrontEnd</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet"> 
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" rel="stylesheet"> 
+        <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!--Navbar not working-->  
+            <a class="navbar-brand" href="#">Client Information System</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">New Clients</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Existing Clients</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Retrievals</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Database</a>
+                </li>
+                </ul>
+            </div>
+        </nav> 
+    </head>
+    <body >
         <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
@@ -15,12 +38,13 @@
                             <label >Server URL</label>
                             <select id="url" >
                                 <option value="http://localhost:3000">localhost:3000</option>
+                                
                                 <option value="https://merlotcisg7.herokuapp.com">merlotcisg7.herokuapp.com</option> 
                             </select>
 <!--Create client section-->                            
                             <br>
                             <div class = "panel-group form-control">
-                                <div class="panel-heading"> Create Client </div>
+                                
                                 <br>
                                 <div class ="panel-body">
                                     <div class="text-left">
@@ -45,7 +69,7 @@
                                       <br>
                                       <br>
     
-                                      <a class="btn btn-success" href="#" role="button" onclick="">Create</a>
+                                      <a class="btn btn-success" href="#" role="button" onclick="CreateClient(document.getElementById('url').value)">Create Client</a>
                                         
                                     </div>
                                 </div>
@@ -53,7 +77,7 @@
                             <br>
  <!-- deactivate_Reactivate User -->                         
                             <div class = "panel-group form-control">
-                                <div class="panel-heading"> Deactivate/Reactivate </div>
+                               
                                 <div class ="panel-body">
                                   <div class="text-left">
                                       <select id="Deactive_Reactive" >
@@ -62,10 +86,10 @@
                                       </select>
                                       <br>
                                       <br>
-                                      <input id="ClientID" placeholder="ClientID" type="text"/>
+                                      <input id="reactivateDeactivateId" placeholder="ClientID" type="number"/>
                                       <br>
                                       <br>
-                                      <a class="btn btn-success" href="#" role="button" onclick="">Update</a>
+                                      <a class="btn btn-success" href="#" role="button" onclick="makeActive_Deactive(document.getElementById('url').value)">Deactivate/Reactivate</a>
 
                                   </div>
                                 </div>
@@ -74,68 +98,70 @@
 
 <!-- update Requests-->
                             <div class = "panel-group form-control">
-                                <div class="panel-heading"> Update Client </div>
+                                
                                 <div class ="panel-body">
                                   <div class="text-left">
                                       <select id="update" >
                                           <option value=1>Email</option>
                                           <option value=2>PhoneNumber</option>
-                                          <option value=2>Address</option>
+                                          <option value=3>Address</option>
                                       </select>
                                       <br>
                                       <br>
-                                      <input id="ClientID" placeholder="ClientID" type="text"/>
+                                      <input id="ci" placeholder="ClientID" type="number"/>
                                       <br>
                                       <br>
                                       <input id="e_p_a" placeholder="New Info" type="text"/>
                                       <br>
                                       <br>
-                                      <a class="btn btn-success" href="#" role="button" onclick="">Update</a>
+                                      <a class="btn btn-success" href="#" role="button" onclick="updateItem(document.getElementById('url').value)">Update Client </a>
                                   </div>
                                 </div>
                             </div> 
                             <br>
 
-<!--Retrival of Information-->
+<!--Retrival of email and active status given ID-->
 
 <div class = "panel-group form-control">
-    <div class="panel-heading"> Retrieve </div>
+   
     <div class ="panel-body">
       <div class="text-left">
-          <select id="update" >
+          <select id="retrieve" >
               <option value=1>Email</option>
               <option value=2>Active</option>
-              <option value=2>Address</option>
-          </select>
+         </select>
           <br>
           <br>
-          <input id="ClientID" placeholder="ClientID" type="text"/>
+          <input id="retid" placeholder="ClientID" type="number"/>
           <br>
           <br>
-          <input id="result" placeholder="Result" type="text"/>
+          <textarea id="printretrive" class="w-100" readonly>
+            </textarea>
           <br>
           <br>
-          <a class="btn btn-success" href="#" role="button" onclick="">Retrieve</a>
+          <a class="btn btn-success" href="#" role="button" onclick="getItem(document.getElementById('url').value)">Retrieve</a>
       </div>
     </div>
 </div> 
-<br>
-                   
-                         
 
-                <div class="row">
+
+
+<br>
+       
+                      <div class="row">
                     <div class="col-md-12">
+ <!--Print Clients-->                     
                             <div class="panel-group form-control">
-                                    <div class="panel-heading">Print Database</div>
+                                    
                                     <div class="panel-body">
-                                        <div class="text-center">
-                                            <a class="btn btn-success" href="#" role="button" onclick="GetClients(document.getElementById('url').value)">Clients</a>
+                                        <div class="text-left">
+                                            <a class="btn btn-success" href="#" role="button" onclick="GetClients(document.getElementById('url').value)">Print Database</a>
                                             <br><br>
                                         </div>
                                         <div class="panel-body">
-                                            <label>Active Clients:</label>
+                                            <label>Clients:</label>
                                             <br>
-                                            <textarea id="sync" class="w-100" readonly>
+                                            <textarea id="sync" class="w-100" class="h-100"  readonly>
                                             </textarea>
                                         </div>
                                     </div>
@@ -143,30 +169,40 @@
                                 </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                    </div>
-                </div>
-            </div>
+ <!--Reterive logs-->
+   <br>
+             <div class="text-left">
+            <a class="btn btn-success" href="#" role="button" onclick="getLogs(document.getElementById('url').value)">retrieve logs</a>
+            <br><br>
+        </div>
+        
+    </div>
+                
     </body>
 
     <script>
         /*
             Function preforms a HTTP POST Request to the server to query the database on the server 
-            
+            and return the E-mail or Password of the UserId depending on the option selected.
         */
+        // create a new client function
+        function CreateClient(u){
+            var url = u;
+            var http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            var obj={};
+            obj["option"]="insert";
+            obj["name"]= document.getElementById("Name").value;
+            obj["surname"]=document.getElementById("Surname").value;
+            obj["email"]=document.getElementById("Email").value;
+            obj["phonenumber"]=document.getElementById("PhoneNumber").value;
+            obj["address"]=document.getElementById("Address").value;
+            http.send(JSON.stringify(obj));
 
-       // function CreateClient(){} todo
+        }
 
-	// Function to retrieve all users in clients table from server
+        // print all clients function
         function GetClients(u){
           var url = u;
           var http = new XMLHttpRequest();
@@ -182,12 +218,187 @@
           }
           http.send(JSON.stringify({"option" : "getUsers"}));
           }
+        //reactivate deactivted functions
+        function makeActive_Deactive(u){
+            var url =u;
+            var item= document.getElementById("Deactive_Reactive").value;
+            var cid =document.getElementById("reactivateDeactivateId").value;
+            if(item==1){
+                deactivate(url,cid);
+            }else if(item==2){
+                reactivate(url,cid);
+            }
+        }
+        function deactivate(u,v){
+            var url=u, idclient=v;
+            var http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            http.onreadystatechange = function(){
+                if(this.readyState = 4 && this.status == 200)
+                    { GetClients(u);}
+            }
+            
+            var obj={};
+            obj["option"]="deactivate";
+            obj["clientid"]=parseInt(idclient);
+            http.send(JSON.stringify(obj));
 
-       // function getEmail(u){  } todo
+        }
+        function reactivate(u,v){
+            var url=u, idclient=v;
+            var http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            http.onreadystatechange = function(){
+                if(this.readyState = 4 && this.status == 200)
+                    { GetClients(u);}
+            }
+            
+            var obj={};
+            obj["option"]="reactivate";
+            obj["clientid"]=parseInt(idclient);
+            http.send(JSON.stringify(obj));
+
+        }
 
 
 
 
+
+
+
+          //update client information functions
+          function updateItem(u){
+            var url =u;
+            var item = document.getElementById("update").value;
+            var cid =document.getElementById("ci").value;
+            var ninfo =document.getElementById("e_p_a").value;
+            if(item==1){
+                updateEmail(url,cid,ninfo);
+            }else if(item==2){
+                updatePhonenumber(url,cid,ninfo);
+            }else if(item==3){
+                updateAddress(url,cid,ninfo);
+            }
+          }
+          function updateEmail(u,v,w){
+            var url=u, idclient=v, nemail=w;
+            var http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            http.onreadystatechange = function(){
+                if(this.readyState = 4 && this.status == 200)
+                    { GetClients(u);}
+            }
+            
+            var obj={};
+            obj["option"]="updateEmail";
+            obj["clientid"]=parseInt(idclient);
+            obj["email"]=nemail;
+            http.send(JSON.stringify(obj));
+          
+        }
+        function updatePhonenumber(u,v,w){
+            var url=u, idclient=v, nphonenumber=w;
+            var http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            http.onreadystatechange = function(){
+                if(this.readyState = 4 && this.status == 200)
+                    { GetClients(u);}
+            }
+            
+            var obj={};
+            obj["option"]="updatePhone";
+            obj["clientid"]=parseInt(idclient);
+            obj["phone"]=nphonenumber;
+            http.send(JSON.stringify(obj));
+          
+        }
+        function updateAddress(u,v,w){
+            var url=u, idclient=v, naddress=w;
+            var http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            http.onreadystatechange = function(){
+                if(this.readyState = 4 && this.status == 200)
+                    { GetClients(u);}
+            }
+            
+            var obj={};
+            obj["option"]="updateAddress";
+            obj["clientid"]=parseInt(idclient);
+            obj["address"]=naddress;
+            http.send(JSON.stringify(obj));
+        }
+
+        //give id retive email and  active status functions
+
+          function getItem(u){
+            var url =u;
+            var item = document.getElementById("retrieve").value;
+            var cid =document.getElementById("retid").value;
+            if(item==1){
+                getEmail(url,cid);
+            }else if(item==2){
+                getActive(url,cid);
+            }
+          }
+
+        function getEmail(u,v){
+          var url=u, idclient=v;
+          var http = new XMLHttpRequest();
+          http.open("POST", url, true);
+          http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+          http.onreadystatechange = function(){
+            if(this.readyState = 4 && this.status == 200){
+               document.getElementById("printretrive").value=this.responseText;
+            }
+          }
+          var obj={};
+            obj["option"]="getEmail";
+            obj["clientid"]=parseInt(idclient);
+            http.send(JSON.stringify(obj));
+          
+        }
+        function getActive(u,v){
+          var url=u, idclient=v;
+          var http = new XMLHttpRequest();
+          http.open("POST", url, true);
+          http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+          http.onreadystatechange = function(){
+            if(this.readyState = 4 && this.status == 200){
+               document.getElementById("printretrive").value=this.responseText;
+            }
+          }
+          var obj={};
+            obj["option"]="getActive";
+            obj["clientid"]=parseInt(idclient);
+            http.send(JSON.stringify(obj));
+        }
+        
+	 //getlog function
+          function getLogs(u){
+          var url = u;
+          var http = new XMLHttpRequest();
+          http.open("POST", url, true);
+          http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+          http.onreadystatechange = function()
+          {
+            if(this.readyState = 4 && this.status == 200)
+		        {  }
+          }
+          //http.send(JSON.stringify({"option" : "getLogs"}));
+          }
+
+
+
+
+
+
+
+       
        
     </script>
 </html>
