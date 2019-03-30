@@ -141,7 +141,7 @@
             
             var obj={};
             obj["option"]="deactivate";
-            obj["clientid"]=parseInt(idclient);
+            obj["clientId"]=parseInt(idclient);
             http.send(JSON.stringify(obj));
 
         }
@@ -157,7 +157,7 @@
             
             var obj={};
             obj["option"]="reactivate";
-            obj["clientid"]=parseInt(idclient);
+            obj["clientId"]=parseInt(idclient);
             http.send(JSON.stringify(obj));
 
         }
@@ -194,7 +194,7 @@
             
             var obj={};
             obj["option"]="updateEmail";
-            obj["clientid"]=parseInt(idclient);
+            obj["clientId"]=parseInt(idclient);
             obj["email"]=nemail;
             http.send(JSON.stringify(obj));
           
@@ -211,7 +211,7 @@
             
             var obj={};
             obj["option"]="updatePhone";
-            obj["clientid"]=parseInt(idclient);
+            obj["clientId"]=parseInt(idclient);
             obj["phone"]=nphonenumber;
             http.send(JSON.stringify(obj));
           
@@ -228,7 +228,7 @@
             
             var obj={};
             obj["option"]="updateAddress";
-            obj["clientid"]=parseInt(idclient);
+            obj["clientId"]=parseInt(idclient);
             obj["address"]=naddress;
             http.send(JSON.stringify(obj));
         }
