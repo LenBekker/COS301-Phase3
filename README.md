@@ -1,35 +1,59 @@
-# COS301-Phase3
+# **COS 301 PHASE 3 GROUP 7**
 
-Functional Requirements
+## **Merlot Client Information System**
 
-R 23 The CIS will provide a web human interface for easy CRUD of all the
-client information in the CIS database.
+* See documentation folder for API usage and other software requirements.
 
-R 24 The CIS will provide an internal service to create a client. This service
-may be used by the CIS web interface and the service of R 25.
-  * R 24.1 Assign a clientID
-  * R 24.2 Notify all relevant subsystems to add the client.
+## **Team Members**
 
-R 25 The CIS will provide an internal service to upload new clients using a
-csv ﬁle. This service should optionally use (i.e. the user can choose) the
-service described in R 24.
+|Team Member | Details | 
+| :---         | :---         |    
+|**Len Bekker**|   **u11026953**    |
+|**Profile** |[Github](https://github.com/LenBekker)|
+|**Overview**|An undergraduate student who enjoys discovering new ways to improve the quality of life with use of software and technology. I enjoy learning about all things IT and try to keep informed of new developments in the field. I enjoy solving problems which is why I chose software development as its what I'm passionate about.|
+|**Position:** |Final year BSc IT|
+|**Interests:** |Reading, Learning, Games and Movies|
+|**Skills:**|C++, Java, C#, Web Dev, Go Lang, Databases|
 
-R 26 The CIS will provide a service to query the database, given the userID
-return the e-mail address of the client.
+|Team Member | Details | 
+| :---         | :---         |    
+|**Kearabiloe Nare**|   **u10068083**    |
+|**Profile** |[Github](https://github.com/KearabiloeNare)|
+|**Overview**| Individual who is mostly interested in using technology to better the lives of others(mostly those who at a disadvantage).  I feel most people spend most of thier on time phones rather than computers and because of this would like to focus on Android application development in the future. |
+|**Position:** |BSc Computer Science|
+|**Interests:** |Software Engineering, Computer Security, Fitness|
+|**Skills:**|Communictaion,Technical(HTML,CSS,Javascript,java,C++,MongoDB)|
 
-R 27 The CIS will provide a service to suspend (de-activate) a client identiﬁed
-with his/her clientID. This service should be used by the CIS web interface
-as well as being available to external subsystems such as AUTH.
-  * R 27.1 Mark the user as in-active
-  * R 27.2 Notify all relevant subsystems to de-activate the client.
+|Team Member | Details | 
+| :---         | :---         |    
+|**Reinhardt Eiselen**|    **u14043302**   |
+|**Profile** | [Github](https://github.com/EiselenR)|
+|**Overview**|Always positive looking for the next big challenge.Not afraid to say I don't know the answer, and willing to find out the answer lastly I take  a lot of pride in my work.|
+|**Position**|Final year student|
+|**Interests**|Music ,specifically live music.Some gaming here and there|
+|**Skills**| Python ,C++ ,C ,Java,x86 Assembler & full stack Web development and android.|
 
-R 28 The CIS will provide a service to re-activate a suspended client identiﬁed
-with his/her clientID. This service should be used by the CIS web interface
-only.
-  * R 28.1 Mark the user as active
-  * R 28.2 Notify all relevant subsystems to re-activate the client.
 
-R 29 The CIS will log all its events in a log ﬁle and push the ﬁle to the Re-
-porting subsystem (Section 9.9) using a service provided by the reporting
-subsystem. This log will contain system events (such as a request made
-by another subsystem) and database transactions.
+|Team Member | Details | 
+| :---         | :---         |    
+|**Mpho Mashaba**|    **u14309999**   |
+|**Profile** |[Github](https://github.com/MphoMashaba)|
+|**Overview**| I am currently dong my final year in BSc Information and knowledge systems. I like developing websites and producing music in my spare time along with other sports activities like rugby and basketball. I am a friendly person and i have the willingness to learn new things. |
+|**Position** |Final year BSc IT|
+|**Interests** | Meeting new people, Gaming , Gymming, Sports|
+|**Skills**|C++, C#, Java, HTML, PHP and JavaScript|
+
+|Team Member | Details | 
+| :---         | :---         |  
+|**Ryan Hartley**|    **u15016880**   |
+|**Profile** |[Github](https://github.com/RyanH08)|
+|**Overview**|I'm a friendly, hard working person who is deteremined to better myself by learning different skill sets from the people I encounter in my life. In addition to this, I am very passionate about the interests which have been listed below.   |
+|**Position** |Final year BSc Computer Science|
+|**Interests** |Graphic Development, Gaming, Mountain Biking, Shark Angling, General Computer Technological Developments|
+|**Skills**|C++, Java, Test Driven Development, 3DS Max, Web Development: HTML, CSS, AJAX, JSON, Mongo DB, Bootstrap, JavaScript, SQL|
+
+
+
+
+
+

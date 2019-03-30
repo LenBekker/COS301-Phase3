@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+        <title>CIS FrontEnd</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet"> 
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" rel="stylesheet"> 
+        <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!--Navbar not working-->  
+            <a class="navbar-brand" href="#">Client Information System</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">New Clients</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="update.html">Existing Clients</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="retrival.html">Retrievals</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="database.html">Database</a>
+                </li>
+                </ul>
+            </div>
+        </nav> 
+    </head>
+    <body >
+        <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                       
+                            <br>
+                            <label >Server URL</label>
+                            <select id="url" >
+                                <option value="http://localhost:3000">localhost:3000</option>
+                                
+                                <option value="https://merlotcisg7.herokuapp.com">merlotcisg7.herokuapp.com</option> 
+                            </select>
+
+ <!-- deactivate_Reactivate User -->    
+ <br>                     
+                            <div class = "panel-group form-control">
+                               
+                                <div class ="panel-body">
+                                  <div class="text-left">
+                                      <select id="Deactive_Reactive" >
+                                          <option value=1>Deactivate</option>
+                                          <option value=2>Reactivate</option>
+                                      </select>
+                                      <br>
+                                      <br>
+                                      <input id="reactivateDeactivateId" placeholder="ClientID" type="number"/>
+                                      <br>
+                                      <br>
+                                      <a class="btn btn-success" href="#" role="button" onclick="makeActive_Deactive(document.getElementById('url').value)">Deactivate/Reactivate</a>
+
+                                  </div>
+                                </div>
+                            </div>   
+                            <br> 
+
+<!-- update Requests-->
+                            <div class = "panel-group form-control">
+                                
+                                <div class ="panel-body">
+                                  <div class="text-left">
+                                      <select id="update" >
+                                          <option value=1>Email</option>
+                                          <option value=2>PhoneNumber</option>
+                                          <option value=3>Address</option>
+                                      </select>
+                                      <br>
+                                      <br>
+                                      <input id="ci" placeholder="ClientID" type="number"/>
+                                      <br>
+                                      <br>
+                                      <input id="e_p_a" placeholder="New Info" type="text"/>
+                                      <br>
+                                      <br>
+                                      <a class="btn btn-success" href="#" role="button" onclick="updateItem(document.getElementById('url').value)">Update Client </a>
+                                  </div>
+                                </div>
+                            </div> 
+                            <br>
+
+
+
+
+
+                
+    </body>
+
+    <script>
+        /*
+            Function preforms a HTTP POST Request to the server to query the database on the server 
+            and return the E-mail or Password of the UserId depending on the option selected.
+        */
+       
+
+        // print all clients function
+        function GetClients(u){
+          var url = u;
+          var http = new XMLHttpRequest();
+          http.open("POST", url, true);
+          http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+         // http.onreadystatechange = function()
+          //{
+            //if(this.readyState = 4 && this.status == 200)
+		        //{
+             // console.log(this.responseText);
+              //document.getElementById("sync").value=this.responseText;
+            //}
+          //}
+          http.send(JSON.stringify({"option" : "getUsers"}));
+          }
+        //reactivate deactivted functions
+        function makeActive_Deactive(u){
+            var url =u;
+            var item= document.getElementById("Deactive_Reactive").value;
+            var cid =document.getElementById("reactivateDeactivateId").value;
+            if(item==1){
+                deactivate(url,cid);
+            }else if(item==2){
+                reactivate(url,cid);
+            }
+        }
+        function deactivate(u,v){
+            var url=u, idclient=v;
+            var http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            // http.onreadystatechange = function(){
+            //     if(this.readyState = 4 && this.status == 200)
+            //         { GetClients(u);}
+            // }
+            
+            var obj={};
+            obj["option"]="deactivate";
+            obj["clientId"]=parseInt(idclient);
+            http.send(JSON.stringify(obj));
+
+        }
+        function reactivate(u,v){
+            var url=u, idclient=v;
+            var http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            // http.onreadystatechange = function(){
+            //     if(this.readyState = 4 && this.status == 200)
+            //         { GetClients(u);}
+            // }
+            
+            var obj={};
+            obj["option"]="reactivate";
+            obj["clientId"]=parseInt(idclient);
+            http.send(JSON.stringify(obj));
+
+        }
+
+
+
+
+
+
+
+          //update client information functions
+          function updateItem(u){
+            var url =u;
+            var item = document.getElementById("update").value;
+            var cid =document.getElementById("ci").value;
+            var ninfo =document.getElementById("e_p_a").value;
+            if(item==1){
+                updateEmail(url,cid,ninfo);
+            }else if(item==2){
+                updatePhonenumber(url,cid,ninfo);
+            }else if(item==3){
+                updateAddress(url,cid,ninfo);
+            }
+          }
+          function updateEmail(u,v,w){
+            var url=u, idclient=v, nemail=w;
+            var http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            // http.onreadystatechange = function(){
+            //     if(this.readyState = 4 && this.status == 200)
+            //         { GetClients(u);}
+            // }
+            
+            var obj={};
+            obj["option"]="updateEmail";
+            obj["clientId"]=parseInt(idclient);
+            obj["email"]=nemail;
+            http.send(JSON.stringify(obj));
+          
+        }
+        function updatePhonenumber(u,v,w){
+            var url=u, idclient=v, nphonenumber=w;
+            var http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            // http.onreadystatechange = function(){
+            //     if(this.readyState = 4 && this.status == 200)
+            //         { GetClients(u);}
+            // }
+            
+            var obj={};
+            obj["option"]="updatePhone";
+            obj["clientId"]=parseInt(idclient);
+            obj["phone"]=nphonenumber;
+            http.send(JSON.stringify(obj));
+          
+        }
+        function updateAddress(u,v,w){
+            var url=u, idclient=v, naddress=w;
+            var http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            // http.onreadystatechange = function(){
+            //     if(this.readyState = 4 && this.status == 200)
+            //         { GetClients(u);}
+            // }
+            
+            var obj={};
+            obj["option"]="updateAddress";
+            obj["clientId"]=parseInt(idclient);
+            obj["address"]=naddress;
+            http.send(JSON.stringify(obj));
+        }
+
+        
+     
+    </script>
+</html>
