@@ -9,7 +9,7 @@ const csv=require('csvtojson')
 const pool = new Pool({
   user: 'me',
   host: 'localhost',
-  database: 'clientinfo', //cis_data
+  database: 'cis_data', //cis_data
   password: 'password',
   port: 5432,
 })
