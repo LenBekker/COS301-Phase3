@@ -293,6 +293,38 @@ const csvFilePath='./test.csv'
 		response.status(200).json({"status":"success","message":"successfully inserted"});
 } 
 
+const insertCSVfilepath= (request,response)=>{
+  if(request.body.filepath){
+    const csvFilePath = request.body.filepath;
+    csv().fromFile(csvFilePath).then((jsonObj)=>{
+      //console.log();
+ for(i in jsonObj)
+ {
+    uName=jsonObj[i].name;
+  uSurname = jsonObj[i].surname;
+  uEmail = jsonObj[i].email;
+  uPhoneNumber = jsonObj[i].phonenumber;
+  uAddress = jsonObj[i].address;
+
+
+ const insertQuery = 'INSERT INTO client("name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6)';
+ pool2.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'])
+}
+})
+   console.log("successfull upload")
+   response.status(200).json({"status":"success","message":"successfully inserted"});
+  }
+  
+}
+
+
+
+
+
+
+
+
+
 
 function notifyNFC(id)
 {
@@ -324,6 +356,7 @@ console.log(data)
 module.exports = {
   getUsers,
   insertCSV,
+  insertCSVfilepath,	
   getUserById,
   updateUser,
   getActive,
