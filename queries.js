@@ -9,7 +9,7 @@ var http = require('http')
 const pool = new Pool({
   user: 'me',
   host: 'localhost',
-  database: 'cis_data', //cis_data
+  database: 'clientinfo', //cis_data
   password: 'password',
   port: 5432,
 })
@@ -17,7 +17,7 @@ const pool = new Pool({
 const pool2 = new Pool({
   user: 'me',
   host: 'localhost',
-  database: 'cis_data', //cis_data
+  database: 'clientinfo', //cis_data
   password: 'password',
   port: 5432,
 })
@@ -261,14 +261,6 @@ const UpdateAddress = (request,response) =>{
   }
 }
 
-
-
-
-
-
-
-
-
 const insertCSV = (request,response)=>{ 
 
 const csvFilePath='./test.csv'
@@ -316,14 +308,6 @@ const insertCSVfilepath= (request,response)=>{
   }
   
 }
-
-
-
-
-
-
-
-
 
 
 function notifyNFC(id)
