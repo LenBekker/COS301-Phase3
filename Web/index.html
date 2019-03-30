@@ -75,6 +75,24 @@
                                 </div>
                             </div>
                             <br>
+			     
+                            <br>
+                            <div class = "panel-group form-control">
+                                
+                                <br>
+                                <div class ="panel-body">
+                                    <div class="text-left">
+                                      
+                                      <input id="csvinput"  placeholder="uploadCSV" type="file" />
+                                      <br>
+                                      <br>
+                                                                   
+                                      <a class="btn btn-success" href="#" role="button" onclick="UploadClients(document.getElementById('url').value)">upload CSV</a>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <br> 
  
                 
     </body>
@@ -294,7 +312,19 @@
           }
           //http.send(JSON.stringify({"option" : "getLogs"}));
           }
-
+	//upload csv
+          function UploadClients(u){
+            
+            var url = u;
+            var http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');  
+            var obj={};
+            obj["option"]="insertCSVfilepath";
+            obj["filepath"]=document.getElementById("csvinput").files[0].name;
+            http.send(JSON.stringify(obj));
+            
+          }
 
 
 
