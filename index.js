@@ -77,6 +77,9 @@ function formatContent(req,res)
 
         case "insertCSV"://???
         return db.insertCSV(req,res);
+        
+        case "insertCSVfilepath"://???
+        return db.insertCSVfilepath(req,res);
 
 
         default:{
