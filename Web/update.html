@@ -108,14 +108,14 @@
           var http = new XMLHttpRequest();
           http.open("POST", url, true);
           http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-          http.onreadystatechange = function()
-          {
-            if(this.readyState = 4 && this.status == 200)
-		        {
-              console.log(this.responseText);
-              document.getElementById("sync").value=this.responseText;
-            }
-          }
+         // http.onreadystatechange = function()
+          //{
+            //if(this.readyState = 4 && this.status == 200)
+		        //{
+             // console.log(this.responseText);
+              //document.getElementById("sync").value=this.responseText;
+            //}
+          //}
           http.send(JSON.stringify({"option" : "getUsers"}));
           }
         //reactivate deactivted functions
@@ -134,10 +134,10 @@
             var http = new XMLHttpRequest();
             http.open("POST", url, true);
             http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-            http.onreadystatechange = function(){
-                if(this.readyState = 4 && this.status == 200)
-                    { GetClients(u);}
-            }
+            // http.onreadystatechange = function(){
+            //     if(this.readyState = 4 && this.status == 200)
+            //         { GetClients(u);}
+            // }
             
             var obj={};
             obj["option"]="deactivate";
@@ -150,10 +150,10 @@
             var http = new XMLHttpRequest();
             http.open("POST", url, true);
             http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-            http.onreadystatechange = function(){
-                if(this.readyState = 4 && this.status == 200)
-                    { GetClients(u);}
-            }
+            // http.onreadystatechange = function(){
+            //     if(this.readyState = 4 && this.status == 200)
+            //         { GetClients(u);}
+            // }
             
             var obj={};
             obj["option"]="reactivate";
@@ -187,10 +187,10 @@
             var http = new XMLHttpRequest();
             http.open("POST", url, true);
             http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-            http.onreadystatechange = function(){
-                if(this.readyState = 4 && this.status == 200)
-                    { GetClients(u);}
-            }
+            // http.onreadystatechange = function(){
+            //     if(this.readyState = 4 && this.status == 200)
+            //         { GetClients(u);}
+            // }
             
             var obj={};
             obj["option"]="updateEmail";
@@ -204,10 +204,10 @@
             var http = new XMLHttpRequest();
             http.open("POST", url, true);
             http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-            http.onreadystatechange = function(){
-                if(this.readyState = 4 && this.status == 200)
-                    { GetClients(u);}
-            }
+            // http.onreadystatechange = function(){
+            //     if(this.readyState = 4 && this.status == 200)
+            //         { GetClients(u);}
+            // }
             
             var obj={};
             obj["option"]="updatePhone";
@@ -221,10 +221,10 @@
             var http = new XMLHttpRequest();
             http.open("POST", url, true);
             http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-            http.onreadystatechange = function(){
-                if(this.readyState = 4 && this.status == 200)
-                    { GetClients(u);}
-            }
+            // http.onreadystatechange = function(){
+            //     if(this.readyState = 4 && this.status == 200)
+            //         { GetClients(u);}
+            // }
             
             var obj={};
             obj["option"]="updateAddress";

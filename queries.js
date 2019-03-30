@@ -1,6 +1,6 @@
 const Pool = require('pg').Pool
 const csv=require('csvtojson')
-
+var http = require('http')
 
 
 //Heroku connection url
@@ -162,6 +162,7 @@ const Reactivate =(request,response) =>{
         response.status(200).json({"status":"false","message":"unseccessfull"});
       }else{
         //console.log(res) 
+        notifyNFC(id);
         response.status(200).json({"status":"True","message":"successfully Reactivated"});
       }
     })
@@ -291,7 +292,34 @@ const csvFilePath='./test.csv'
 		console.log("successfull upload")
 		response.status(200).json({"status":"success","message":"successfully inserted"});
 } 
-		
+
+
+function notifyNFC(id)
+{
+
+   var url= 'https://merlot-card-authentication.herokuapp.com';
+  const data = JSON.stringify({
+  clientID: id
+});
+
+const options = {
+  hostname : "https://merlot-card-authentication.herokuapp.com",
+  port : 3000,
+  path : "/createCard",
+  method : "POST",
+  headers : {
+      'Content-Type': 'application/json',
+      'Content-Length': data.length
+  }
+}
+
+http.request(options, (res) =>{
+  res.on('data', (chunk) => {
+    console.log(`Response Body: ${chunk}`);
+  })
+}).write(data);
+console.log(data)
+}
 
 module.exports = {
   getUsers,
@@ -307,7 +335,4 @@ module.exports = {
   UpdateEmail,
   UpdatePhoneNumber,
   UpdateAddress,
-
-
 }
-
