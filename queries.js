@@ -312,7 +312,7 @@ function notifyNFC(id)
     res.on('data', (chunk) => {
       console.log(`Response Body: ${chunk}`);
     })
-    req.on('error', (error) => {
+    res.on('error', (error) => {
       console.error("notifyNFC: Could not notify subsystem");
     })
   });
