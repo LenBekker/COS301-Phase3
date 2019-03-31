@@ -2,13 +2,7 @@
 
 ## **Merlot Client Information System**
 
-* The client Information System is required to maintain a database of all client information.
-* Provide a CRUD service (Making use of a web human interface)
-* Have the following functions (To be shared with other modules)
-    * Give clientID -> Return E-Mail Address
-    * On creation of new client -> Assign a clientID and notify connected sub-systems
-    * Provide an active field -> If a client is de-activated/reactivated, all connected sub-systems should be notified 
-    * Log all audits in a log file -> Push the file to the reporting system 
+* See web folder for API usage and other software requirements.
 
 ## **Team Members**
 
@@ -25,10 +19,10 @@
 | :---         | :---         |    
 |**Kearabiloe Nare**|   **u10068083**    |
 |**Profile** |[Github](https://github.com/KearabiloeNare)|
-|**Overview**| Individual who is mostly interested in using technology to better the lives of others(mainly disadvantage individuals).  I feel most people spend most of thier time on phones rather than computers and because of this would like to focus on Android application development. |
+|**Overview**| Individual who is mostly interested in using technology to better the lives of others(mostly those who at a disadvantage).  I feel most people spend most of thier on time phones rather than computers and because of this would like to focus on Android application development in the future. |
 |**Position:** |BSc Computer Science|
 |**Interests:** |Software Engineering, Computer Security, Fitness|
-|**Skills:**|HTML,CSS,Javascript,java,C++,MongoDB|
+|**Skills:**|Communictaion,Technical(HTML,CSS,Javascript,java,C++,MongoDB)|
 
 |Team Member | Details | 
 | :---         | :---         |    
