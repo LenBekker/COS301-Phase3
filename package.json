@@ -1,8 +1,8 @@
 {
   "name": "group7server",
-  "version": "0.0.1",
-  "description": "Merlot client information system",
-  "main": "index.js",
+  "version": "0.0.0",
+  "description": "backend for merlot client information system",
+  "main": "app.js",
   "dependencies": {
     "chai-json": "^1.0.0",
     "cors": "^2.8.5",
@@ -22,6 +22,6 @@
     "test": "mocha --recursive",
     "start": "node index.js"
   },
-  "author": "COS301 - Group 7 Merlot",
+  "author": "COS301 - group 7 merlot",
   "license": "ISC"
 }
