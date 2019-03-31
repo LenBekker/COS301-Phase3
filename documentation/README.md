@@ -3,7 +3,6 @@
 ## API Documentation
 
     CIS_URL = N/A
-    CIS_PORT = N/A
 
 | Endpoint  | API              | Method 	|Option Parameter| Parameters  | Response   | 
 |:--------: |:------------     | :--:  	  | ----------- |-------------|----------|
@@ -29,7 +28,6 @@ const data = JSON.stringify({
 
 const options = {
   hostname : CIS_URL,
-  port : CIS_PORT,
   path : "/",
   method : "POST",
   headers : {
@@ -75,7 +73,6 @@ const data = JSON.stringify({
 
 const options = {
   hostname : CIS_URL,
-  port : CIS_PORT,
   path : "/",
   method : "POST",
   headers : {
