@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
 
 app.post('/', (req, res) => {
   var data = req.body;
-  console.log(data);
+  //console.log(data);
   var feedback = formatContent(req,res);
 })
 

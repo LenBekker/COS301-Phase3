@@ -304,7 +304,7 @@ function notifyNFC(id)
     //port : 3000,
     path : "/createCard",
     method : "POST",
-    headers : {
+    params : {
         'clientID' : id
     }
   }

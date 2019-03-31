@@ -20,7 +20,7 @@ describe('API endpoint for CIS subsystem', function() {
   });
 
   // Post - List all colors
-  it('should an Email', function()
+  it('Should be an Email', function()
    {
     return chai.request(app)
       .post('/')
@@ -47,10 +47,10 @@ describe('API endpoint for CIS subsystem', function() {
       })
       
         const obj = { a: res.body.email, b: res.body.name, c: res.body.surname};
-		expect(obj).to.not.be.undefined;
-		expect(obj.a).to.deep.equal("hwinwarda@tiny.cc");
-		expect(obj.b).to.deep.equal("Herman");
-		expect(obj.c).to.deep.equal("Winward");
+    expect(obj).to.not.be.undefined;
+    expect(obj.a).to.deep.equal("peter.griff@familymail.com");
+    expect(obj.b).to.deep.equal("Peter");
+    expect(obj.c).to.deep.equal("Griffin");
         //expect([{:1} ]).to.have.deep.members([ {a:1} ]);
         //expect(res.body).to.be.an.jsonObj(res.body).and.contain.jsonWithProps({"email":"hwinwarda@tiny.cc","name":"Herman","surname":"Winward" });
          //expect(res.body).to.be.an.jsonObj(res.body).and.contain.jsonWithProps({ email: 'hwinwarda@tiny.cc', name: 'Herman', surname: 'Winward' });
@@ -84,7 +84,7 @@ describe('API endpoint for CIS subsystem', function() {
       .post('/')
       .send({
         option: "getActive",
-        clientId: "1"
+        clientId: "41"
       })
       
         const obj = { a: res.body.data};
@@ -94,7 +94,7 @@ describe('API endpoint for CIS subsystem', function() {
        
       });
 
- // POST check if client is inactive
+ // POST get Client info
   it('Get a user by their ClientID', function()
    {
     return chai.request(app)
@@ -105,20 +105,115 @@ describe('API endpoint for CIS subsystem', function() {
       })
       
         const obj = { a: res.body.clienid, b: res.body.name, c: res.body.surname,
-        			  d: res.body.email, e: res.body.phonenumber, f: res.body.address,
-        			  g: res.body.active };
+                d: res.body.email, e: res.body.phonenumber, f: res.body.address,
+                g: res.body.active };
 
         expect(obj).to.not.be.undefined;
         expect(obj.a).to.deep.equal("5");
-        expect(obj.b).to.deep.equal("Orran");
-        expect(obj.c).to.deep.equal("McMome");
-        expect(obj.d).to.deep.equal("omccome0@un.org");
-        expect(obj.e).to.deep.equal("9091891581");
-        expect(obj.f).to.deep.equal("71229 Namekagon Drive");
+        expect(obj.b).to.deep.equal("Peter");
+        expect(obj.c).to.deep.equal("Griffin");
+        expect(obj.d).to.deep.equal("peter.griff@familymail.co");
+        expect(obj.e).to.deep.equal("5550112 ");
+        expect(obj.f).to.deep.equal("31 Spooner Street");
         expect(obj.g).to.deep.equal("true");
       
        
+      })
+//DEACTIVATE CLIENT
+    it('Update Active status / deactivate', function()
+   {
+    return chai.request(app)
+      .post('/')
+      .send({
+        option: "deactivate",
+        clientId: "1"
+      })
+      
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("true");
+        
+       
       });
+
+//REACTIVATE CLIENT
+    it('Update Active status / reactivate ', function()
+   {
+    return chai.request(app)
+      .post('/')
+      .send({
+        option: "reactivate",
+        clientId: "1"
+      })
+      
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("true");
+        
+       
+      });
+
+//UPDATE ADDRESS
+    it('Update Address ', function()
+   {
+    return chai.request(app)
+      .post('/')
+      .send({
+        option: "updateAddress",
+        clientId: "1",
+        address: "315 End Street"
+      })
+      
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("success");
+        
+       
+      });
+
+    //UPDATE Phone
+    it('Update Phone Number ', function()
+   {
+    return chai.request(app)
+      .post('/')
+      .send({
+        option: "updatePhone",
+        clientId: "11",
+        phone: "0987654212"
+      })
+      
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("success");
+        
+       
+      });
+
+    //Update Email
+    it('Update Email Address ', function()
+   {
+    return chai.request(app)
+      .post('/')
+      .send({
+        option: "updateEmail",
+        clientId: "9",
+        phone: "janee@gmail.com"
+      })
+      
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("success");
+        
+       
+      });
+
+
+      
+
+
+
+
+
  
 
  // POST - Add new color
