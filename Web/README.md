@@ -2,7 +2,7 @@
 
 ## API Documentation
 
-  ```CIS_URL = N/A```
+  ```CIS_URL = ``` https://merlotcisg7.herokuapp.com/
 
 | Endpoint  | API              | Method 	|Option Parameter| Parameters  | Response   | 
 |:--------: |:------------     | :--:  	  | ----------- |-------------|----------|
