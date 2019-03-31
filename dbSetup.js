@@ -1,16 +1,8 @@
 const { Pool } = require('pg');
+
+
 const pool = new Pool({
-    //Single line
-    connectionString: process.env.DATABASE_URL || "postgres://me:password@localhost:5432/clientinfo"
-    
-    //OR Multiline:
-    /*
-        user: 'me',
-        host: 'localhost',
-        database: 'clientinfo',
-        password: 'password',
-        port: 5432,
-    */
+    connectionString: process.env.DATABASE_URL || "postgres://me:password@localhost:5432/clientinfo"    
 })
 
 

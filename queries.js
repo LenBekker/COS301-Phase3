@@ -1,25 +1,9 @@
 const Pool = require('pg').Pool
 const csv=require('csvtojson')
-var http = require('http')
-
-
-//Heroku connection url
-//const conn = process.env.DATABASE_URL || pool?;
+var https = require('https')
 
 const pool = new Pool({
-  user: 'me',
-  host: 'localhost',
-  database: 'clientinfo', //cis_data
-  password: 'password',
-  port: 5432,
-})
-
-const pool2 = new Pool({
-  user: 'me',
-  host: 'localhost',
-  database: 'clientinfo', //cis_data
-  password: 'password',
-  port: 5432,
+  connectionString: process.env.DATABASE_URL || "postgres://me:password@localhost:5432/clientinfo"
 })
 
 //working
@@ -139,7 +123,7 @@ const Deactivate = (request,response) =>{
     const id = parseInt(request.body.clientId)
     const deactivateQuery='UPDATE client SET active= \'false\'  WHERE clientid = $1';
     pool.query(deactivateQuery,[id],(err,res)=> {
-      if(res.rowCount < 1 || err){
+      if(err || res.rowCount < 1){
         response.status(200).json({"status":"false","message":"unsuccessful"});
       }else{
         response.status(200).json({"status":"True","message":"successfully Deactivated"});
@@ -153,17 +137,16 @@ const Deactivate = (request,response) =>{
 }
 //Working
 const Reactivate =(request,response) =>{
-  if(request.body.clientId != null)
+  if(request.body.clientId)
   {
     const id = parseInt(request.body.clientId);
     const reactivateQuery='UPDATE client SET active = \'true\'  WHERE clientid = $1';
     pool.query(reactivateQuery,[id],(err,res) =>{
-      if(res.rowCount < 1 || err){
-        response.status(200).json({"status":"false","message":"unseccessfull"});
+      if(err || res.rowCount < 1){
+        response.status(200).json({"status":"false","message":"unsuccessful"});
       }else{
-        //console.log(res) 
-        notifyNFC(id);
         response.status(200).json({"status":"True","message":"successfully Reactivated"});
+        notifyNFC(id);
       }
     })
   }
@@ -278,7 +261,7 @@ const csvFilePath='./test.csv'
  
 
   const insertQuery = 'INSERT INTO client("name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6)';
-  pool2.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'])
+  pool.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'])
 }
 })
 		console.log("successfull upload")
@@ -300,7 +283,7 @@ const insertCSVfilepath= (request,response)=>{
 
 
  const insertQuery = 'INSERT INTO client("name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6)';
- pool2.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'])
+ pool.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'])
 }
 })
    console.log("successfull upload")
@@ -309,32 +292,32 @@ const insertCSVfilepath= (request,response)=>{
   
 }
 
+//Not working, but working? 
 
 function notifyNFC(id)
 {
 
-   var url= 'https://merlot-card-authentication.herokuapp.com';
-  const data = JSON.stringify({
-  clientID: id
-});
-
-const options = {
-  hostname : "https://merlot-card-authentication.herokuapp.com",
-  port : 3000,
-  path : "/createCard",
-  method : "POST",
-  headers : {
-      'Content-Type': 'application/json',
-      'Content-Length': data.length
+  var url= 'merlot-card-authentication.herokuapp.com';
+    
+  const options = {
+    hostname : url,
+    //port : 3000,
+    path : "/createCard",
+    method : "POST",
+    headers : {
+        'clientID' : id
+    }
   }
-}
+  var req = https.request(options, (res) =>{
+    res.on('data', (chunk) => {
+      console.log(`Response Body: ${chunk}`);
+    })
+    req.on('error', (error) => {
+      console.error("notifyNFC: Could not notify subsystem");
+    })
+  });
 
-http.request(options, (res) =>{
-  res.on('data', (chunk) => {
-    console.log(`Response Body: ${chunk}`);
-  })
-}).write(data);
-console.log(data)
+req.end();
 }
 
 module.exports = {
