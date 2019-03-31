@@ -2,7 +2,7 @@
 
 ## **Merlot Client Information System**
 
-* See documentation folder for API usage and other software requirements.
+* See web folder for API usage and other software requirements.
 
 ## **Team Members**
 
