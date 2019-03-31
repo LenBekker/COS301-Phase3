@@ -1,0 +1,21 @@
+.language-javascript {
+    padding: .2rem .4rem;
+    font-size: 99%;
+    color: #b6242c;
+    background-color: #f7f7f9;
+    border-radius: .25rem;
+    overflow: visible;
+}
+
+table, th, td {
+    padding: 15px;
+    border: 1px solid black;
+}
+
+pre{
+    overflow: hidden !important;
+}
+
+p {
+    font-weight: 500;
+}
