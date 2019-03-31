@@ -4,6 +4,7 @@
   "description": "Merlot client information system",
   "main": "index.js",
   "dependencies": {
+    "chai-json": "^1.0.0",
     "cors": "^2.8.5",
     "csv-parser": "^2.2.0",
     "csvtojson": "^2.0.8",
@@ -13,10 +14,12 @@
     "pg": "^7.9.0"
   },
   "devDependencies": {
-    "jest": "^24.5.0"
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
+    "mocha": "^6.0.2"
   },
   "scripts": {
-    "test": "jest",
+    "test": "mocha --recursive",
     "start": "node index.js"
   },
   "author": "COS301 - Group 7 Merlot",

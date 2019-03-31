@@ -88,7 +88,7 @@ function formatContent(req,res)
     }
 }
 
-app.listen(port, () => {
+module.exports = app.listen(port, () => {
   console.log(`App running on port ${port}.`)
 })
 
