@@ -3,7 +3,6 @@
 ## API Documentation
 
     CIS_URL = N/A
-    CIS_PORT = N/A
 
 | Endpoint  | API              | Method 	|Option Parameter| Parameters  | Response   | 
 |:--------: |:------------     | :--:  	  | ----------- |-------------|----------|
@@ -29,7 +28,6 @@ const data = JSON.stringify({
 
 const options = {
   hostname : CIS_URL,
-  port : CIS_PORT,
   path : "/",
   method : "POST",
   headers : {
@@ -58,7 +56,10 @@ RESPONSE: Add New Client
 
   * Failed
 ```javascript
-  //TODO
+{
+  "status":"failed",
+  "message":"invalid or missing field(s)" || "message":"unsuccessful insert"
+}
 ```
 
 REQUEST: Get Email
@@ -72,7 +73,6 @@ const data = JSON.stringify({
 
 const options = {
   hostname : CIS_URL,
-  port : CIS_PORT,
   path : "/",
   method : "POST",
   headers : {

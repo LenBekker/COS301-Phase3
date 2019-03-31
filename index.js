@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
 
 app.post('/', (req, res) => {
   var data = req.body;
-  console.log(data);
+  //console.log(data);
   var feedback = formatContent(req,res);
 })
 
@@ -88,7 +88,7 @@ function formatContent(req,res)
     }
 }
 
-app.listen(port, () => {
+module.exports = app.listen(port, () => {
   console.log(`App running on port ${port}.`)
 })
 
