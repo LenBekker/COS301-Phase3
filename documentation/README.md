@@ -58,7 +58,10 @@ RESPONSE: Add New Client
 
   * Failed
 ```javascript
-  //TODO
+{
+  "status":"failed",
+  "message":"invalid or missing field(s)" || "message":"unsuccessful insert"
+}
 ```
 
 REQUEST: Get Email
