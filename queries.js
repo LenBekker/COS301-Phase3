@@ -73,13 +73,12 @@ const updateUser = (request, response) => {
 }
 
 
-//works on a post reguest
+//works on a post request
 const deleteUser = (request, response) => {
-      clearLogs(request,response);
   if(request.body.clientId)
   {
     const id = parseInt(request.body.clientId)
-    //clearLogs(request,response);
+    clearLogs(request,response);
 
     pool.query('DELETE FROM client WHERE clientid = $1', [id], (error, results) => {
       if (error) {
@@ -194,7 +193,7 @@ const FindEmail = (request,response) =>{
 }
 //works on post request( bug that alters position in table,does not change ID though)
 const UpdateEmail = (request,response) =>{
-  clearLogs(reguest,response);
+  clearLogs(request,response);
   if(request.body.clientId && request.body.email)
   {
     const id = parseInt(request.body.clientId);
@@ -215,7 +214,7 @@ const UpdateEmail = (request,response) =>{
 }
 //Works
 const UpdatePhoneNumber = (request,response) =>{
-  clearLogs(reguest,response);
+  clearLogs(request,response);
   if(request.body.clientId && request.body.phone)
   {
   const id = parseInt(request.body.clientId);
@@ -237,7 +236,7 @@ const UpdatePhoneNumber = (request,response) =>{
 }
 //Works
 const UpdateAddress = (request,response) =>{
-  clearLogs(reguest,response);
+  clearLogs(request,response);
   if(request.body.clientId && request.body.address)
   {
     const id = parseInt(request.body.clientId);
@@ -259,7 +258,7 @@ const UpdateAddress = (request,response) =>{
 }
 
 const insertCSV = (request,response)=>{ 
-  clearLogs(reguest,response);
+  clearLogs(request,response);
 
 const csvFilePath='./test.csv'
 		csv()
@@ -284,7 +283,7 @@ const csvFilePath='./test.csv'
 } 
 
 const insertCSVfilepath= (request,response)=>{
-  clearLogs(request,response);
+
   if(request.body.filepath){
     const csvFilePath = request.body.filepath;
     csv().fromFile(csvFilePath).then((jsonObj)=>{
@@ -344,7 +343,7 @@ function notifyNFC(id)
 
 };
 
-const getLogs = (request, response) => {
+const clearLogs = (request, response) => {
 
   pool.query('DELETE from auditlog where clientID not in ( Select clientID from auditlog order by clientID desc limit 20)',(err,res)=>{
 if (err) {
@@ -357,11 +356,14 @@ if (err) {
 
 
 }
-const clearLogs = (reguest,response)=> {
+const getLogs = (request,response)=> {
   pool.query('SELECT * FROM auditlog ORDER BY ClientID ASC', (error, results) => {
     if (error) {
       response.status(500).json({"status":"failed","message":"query not executed"});
-    }
+    }else
+    {
+      response.json(results.rows);
+  }
   })
 }
 
