@@ -1,3 +1,6 @@
+//ALL RESPONSES ARE JSON OBJECTS,OR JSON ARRAYS OF OBJECTS
+
+
 const Pool = require('pg').Pool
 const csv=require('csvtojson')
 var http = require('http')
@@ -6,7 +9,7 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL || "postgres://me:password@localhost:5432/clientinfo"
 })
 
-//working
+//working (returns all users in the database)
 const getUsers = (request, response) => {
   pool.query('SELECT * FROM client ORDER BY ClientID ASC', (error, results) => {
     if (error) {
@@ -16,7 +19,7 @@ const getUsers = (request, response) => {
   })
 }
 
-//works returns json object
+//works returns json object( Returns the user specified by the ID if valid)
 const getUserById = (request, response) => {
   if(request.body.clientId)
   {
@@ -35,6 +38,7 @@ const getUserById = (request, response) => {
   }
 }
 
+//working (Return the user status Active -True/False)
 const getActive = (request, response) => {
   if(request.body.clientId)
   {
@@ -44,14 +48,7 @@ const getActive = (request, response) => {
       if (error) {
         response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
       }
-      try
-      {
-        response.status(200).json({"status":"success","data":results.rows[0].active});
-      }
-      catch(err)
-      {
-        response.status(200).json({"status":"failed","message":"query could not return data"});
-      }
+      response.status(200).json({"status":"success","data":results.rows[0].active});
     })
   }
   else
@@ -61,7 +58,7 @@ const getActive = (request, response) => {
 
 }
 
-//header params??
+//working update User (change attributes)
 const updateUser = (request, response) => {
   const id = parseInt(request.params.id)
   const { name, email } = request.body
@@ -80,7 +77,7 @@ const updateUser = (request, response) => {
 }
 
 
-//works on a post request
+//works on a post request (Deletes a user from the system)
 const deleteUser = (request, response) => {
   if(request.body.clientId)
   {
@@ -100,7 +97,7 @@ const deleteUser = (request, response) => {
   }
 }
 
-//Insert working on post request;
+//Insert working on post request (Inserts a user into the database)
 const insert = (request,response) => {
 
   clearLogs();
@@ -127,7 +124,9 @@ const insert = (request,response) => {
   } 
 
 }
-//Working
+//Working (Deactivates the status of a user from true to false.)
+//Remark this function does not delete a user it simply changed the active status of the user
+//WIll also notify Subsystems to cancel a user account/card
 const Deactivate = (request,response) =>{
   clearLogs();
   if(request.body.clientId != null)
@@ -148,7 +147,10 @@ const Deactivate = (request,response) =>{
     response.status(200).json({"status":"failed","message":"invalid clientId"});
   }
 }
-//Working
+
+
+//Working (Reactivates the status of a user from false to true.)
+//WIll also notify Subsystems to create a user account/card
 const Reactivate =(request,response) =>{
   clearLogs();
   if(request.body.clientId)
@@ -169,7 +171,8 @@ const Reactivate =(request,response) =>{
     response.status(200).json({"status":"failed","message":"invalid clientId"});
   }
 }
-//
+//Return the email Address along with the name and surname of a user
+//Returning the name and surname for the subsystem
 const FindEmail = (request,response) =>{
   clearLogs();
   if(request.body.clientId)
@@ -199,7 +202,7 @@ const FindEmail = (request,response) =>{
   }
 
 }
-//works on post request( bug that alters position in table,does not change ID though)
+//works on post request( Changes the email based on client ID)
 const UpdateEmail = (request,response) =>{
   clearLogs();
   if(request.body.clientId && request.body.email)
@@ -220,7 +223,7 @@ const UpdateEmail = (request,response) =>{
     response.status(200).json({"status":"failed","message":"invalid clientId or missing email"});
   }
 }
-//Works
+//Works Updates the phone number of a user
 const UpdatePhoneNumber = (request,response) =>{
   clearLogs();
   if(request.body.clientId && request.body.phone)
@@ -243,6 +246,8 @@ const UpdatePhoneNumber = (request,response) =>{
 
 }
 //Works
+//Updates the address of the user
+
 const UpdateAddress = (request,response) =>{
   clearLogs();
   if(request.body.clientId && request.body.address)
@@ -264,6 +269,9 @@ const UpdateAddress = (request,response) =>{
     response.status(200).json({"status":"failed","message":"invalid clientId or missing address"});
   }
 }
+
+//inserts a file of users using a CSV file
+//from a host directory (could be used for backups)
 
 const insertCSV = (request,response)=>{ 
   clearLogs();
@@ -290,6 +298,10 @@ const csvFilePath='./test.csv'
 		response.status(200).json({"status":"success","message":"successfully inserted"});
 } 
 
+
+//inserts a file of users using a CSV file
+//from a host directory (could be used for backups)
+
 const insertCSVfilepath= (request,response)=>{
 
   if(request.body.filepath){
@@ -315,7 +327,8 @@ const insertCSVfilepath= (request,response)=>{
   
 }
 
-//Not working, but working? 
+//Working 
+//EXTERNAL SERVICE  to notify subsystem NFC to cancel card
 
 function notifyNFCCancel(id)
 {
@@ -355,6 +368,9 @@ function notifyNFCCancel(id)
 
 };
 
+
+//Working 
+//EXTERNAL SERVICE  to notify subsystem NFC to create/
 function notifyNFCCreate(id)
 {
 
@@ -392,11 +408,13 @@ function notifyNFCCreate(id)
     req.end();
 
 };
-
+//Function to update logs on a number limit basis
+//todo - send request to reporting system
+//Still waiting on them
 
 function clearLogs(){
 
-  pool.query('DELETE from auditlog where clientID not in ( Select clientID from auditlog order by clientID desc limit 20)',(err,res)=>{
+  pool.query('DELETE from auditlog where clientID not in ( Select clientID from auditlog order by clientID desc limit 50)',(err,res)=>{
 if (err) {
       console.log("something went wrong");
     }else
@@ -407,6 +425,10 @@ if (err) {
 
 
 }
+
+//Function to update logs on a number limit basis
+//todo - send request to reporting system
+//Still waiting on them
 const getLogs = (request,response)=> {
   pool.query('SELECT * FROM auditlog ORDER BY ClientID ASC', (error, results) => {
     if (error) {
@@ -419,7 +441,8 @@ const getLogs = (request,response)=> {
 }
 
 
-
+//Exporting modules to index.js to be used for API requests
+//Both externally and internally
 module.exports = {
   getUsers,
   getLogs,
