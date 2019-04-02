@@ -39,7 +39,7 @@
 |**Reinhardt Eiselen**|    **u14043302**   |
 |**Profile** | [Github](https://github.com/EiselenR)|
 |**Overview**|Always positive looking for the next big challenge.Not afraid to say I don't know the answer, and willing to find out the answer lastly I take  a lot of pride in my work.|
-|**Position**|Final year student|
+|**Position**|BSc IT Final year Student|
 |**Interests**|Music ,specifically live music.Some gaming here and there|
 |**Skills**| Python ,C++ ,C ,Java,x86 Assembler & full stack Web development and android.|
 
