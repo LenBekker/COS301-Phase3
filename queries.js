@@ -58,6 +58,7 @@ const getActive = (request, response) => {
 const updateUser = (request, response) => {
   const id = parseInt(request.params.id)
   const { name, email } = request.body
+  clearLogs(request,response);
 
   pool.query(
     'UPDATE users SET name = $1, email = $2 WHERE id = $3',
@@ -74,9 +75,11 @@ const updateUser = (request, response) => {
 
 //works on a post reguest
 const deleteUser = (request, response) => {
+      clearLogs(request,response);
   if(request.body.clientId)
   {
     const id = parseInt(request.body.clientId)
+    //clearLogs(request,response);
 
     pool.query('DELETE FROM client WHERE clientid = $1', [id], (error, results) => {
       if (error) {
@@ -93,6 +96,8 @@ const deleteUser = (request, response) => {
 
 //Insert working on post request;
 const insert = (request,response) => {
+
+  clearLogs(request,response);
   if(request.body.name && request.body.surname && request.body.email && request.body.phonenumber && request.body.address)
   {
     const uName=request.body.name;
@@ -118,6 +123,7 @@ const insert = (request,response) => {
 }
 //Working
 const Deactivate = (request,response) =>{
+  clearLogs(request,response);
   if(request.body.clientId != null)
   {
     const id = parseInt(request.body.clientId)
@@ -137,6 +143,7 @@ const Deactivate = (request,response) =>{
 }
 //Working
 const Reactivate =(request,response) =>{
+  clearLogs(request,response);
   if(request.body.clientId)
   {
     const id = parseInt(request.body.clientId);
@@ -157,6 +164,7 @@ const Reactivate =(request,response) =>{
 }
 //
 const FindEmail = (request,response) =>{
+  clearLogs(request,response);
   if(request.body.clientId)
   {
     const id = parseInt(request.body.clientId)
@@ -186,6 +194,7 @@ const FindEmail = (request,response) =>{
 }
 //works on post request( bug that alters position in table,does not change ID though)
 const UpdateEmail = (request,response) =>{
+  clearLogs(reguest,response);
   if(request.body.clientId && request.body.email)
   {
     const id = parseInt(request.body.clientId);
@@ -206,6 +215,7 @@ const UpdateEmail = (request,response) =>{
 }
 //Works
 const UpdatePhoneNumber = (request,response) =>{
+  clearLogs(reguest,response);
   if(request.body.clientId && request.body.phone)
   {
   const id = parseInt(request.body.clientId);
@@ -227,6 +237,7 @@ const UpdatePhoneNumber = (request,response) =>{
 }
 //Works
 const UpdateAddress = (request,response) =>{
+  clearLogs(reguest,response);
   if(request.body.clientId && request.body.address)
   {
     const id = parseInt(request.body.clientId);
@@ -248,6 +259,7 @@ const UpdateAddress = (request,response) =>{
 }
 
 const insertCSV = (request,response)=>{ 
+  clearLogs(reguest,response);
 
 const csvFilePath='./test.csv'
 		csv()
@@ -272,6 +284,7 @@ const csvFilePath='./test.csv'
 } 
 
 const insertCSVfilepath= (request,response)=>{
+  clearLogs(request,response);
   if(request.body.filepath){
     const csvFilePath = request.body.filepath;
     csv().fromFile(csvFilePath).then((jsonObj)=>{
@@ -332,13 +345,23 @@ function notifyNFC(id)
 };
 
 const getLogs = (request, response) => {
+
+  pool.query('DELETE from auditlog where clientID not in ( Select clientID from auditlog order by clientID desc limit 20)',(err,res)=>{
+if (err) {
+      console.log("something went wrong");
+    }else
+    {
+      console.log(res);
+  }
+  })
+
+
+}
+const clearLogs = (reguest,response)=> {
   pool.query('SELECT * FROM auditlog ORDER BY ClientID ASC', (error, results) => {
     if (error) {
       response.status(500).json({"status":"failed","message":"query not executed"});
-    }else
-    {
-    console.log(response.json(results.rows));
-  }
+    }
   })
 }
 
