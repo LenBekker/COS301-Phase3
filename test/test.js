@@ -8,6 +8,17 @@ chai.use(require('chai-http'));
 
 const app = require('../index.js'); // Our app
 
+    function sleep(time, callback) {
+    var stop = new Date().getTime();
+    while(new Date().getTime() < stop + time) {
+        ;
+    }
+    callback();
+}
+
+
+
+   
 describe('API endpoint for CIS subsystem', function() {
   this.timeout(5000); // How long to wait for a response (ms)
 
@@ -19,13 +30,31 @@ describe('API endpoint for CIS subsystem', function() {
 
   });
 
+  sleep(1000,function(){
+
+      console.log("Setting enivorment")
+   });
+
+   sleep(1000,function(){
+
+      console.log("Warming things up")
+   });
+
+   sleep(2000,function(){
+
+      console.log("Lets get Testing")
+   });
+   sleep(1000,function(){
+
+     
+   });
   // Post - List all colors
   it('Should be an Email', function()
    {
     return chai.request(app)
       .post('/')
       .send({
-        option: "getEmail",
+        option: "getemail",
         clientId: "10"
       })
       .then(function(res) {
@@ -36,28 +65,6 @@ describe('API endpoint for CIS subsystem', function() {
       });
   });
 
-//POST check email
-  it('Correct Email returned', function()
-   {
-    return chai.request(app)
-      .post('/')
-      .send({
-        option: "getEmail",
-        clientId: "10"
-      })
-      
-        const obj = { a: res.body.email, b: res.body.name, c: res.body.surname};
-    expect(obj).to.not.be.undefined;
-    expect(obj.a).to.deep.equal("peter.griff@familymail.com");
-    expect(obj.b).to.deep.equal("Peter");
-    expect(obj.c).to.deep.equal("Griffin");
-        //expect([{:1} ]).to.have.deep.members([ {a:1} ]);
-        //expect(res.body).to.be.an.jsonObj(res.body).and.contain.jsonWithProps({"email":"hwinwarda@tiny.cc","name":"Herman","surname":"Winward" });
-         //expect(res.body).to.be.an.jsonObj(res.body).and.contain.jsonWithProps({ email: 'hwinwarda@tiny.cc', name: 'Herman', surname: 'Winward' });
-        //expect(res.body.name).to.be("Herman");
-        //expect(res.body.surname).to.be("Winward");
-      });
-  
 
 
 //POST check if active contect
@@ -84,7 +91,7 @@ describe('API endpoint for CIS subsystem', function() {
       .post('/')
       .send({
         option: "getActive",
-        clientId: "41"
+        clientId: "6"
       })
       
         const obj = { a: res.body.data};
@@ -119,7 +126,43 @@ describe('API endpoint for CIS subsystem', function() {
       
        
       })
-//DEACTIVATE CLIENT
+
+})
+
+describe('CRUD TESTING (specific information testing)', function() {
+  this.timeout(5000); // How long to wait for a response (ms)
+
+  before(function() {
+
+  });
+
+  after(function() {
+
+  });
+
+
+  //POST check email
+  it('Correct Email returned', function()
+   {
+    return chai.request(app)
+      .post('/')
+      .send({
+        option: "getEmail",
+        clientId: "10"
+      })
+      
+        const obj = { a: res.body.email, b: res.body.name, c: res.body.surname};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("peter.griff@familymail.com");
+        expect(obj.b).to.deep.equal("Peter");
+        expect(obj.c).to.deep.equal("Griffin");
+      
+      });
+  
+
+
+  //DEACTIVATE CLIENT
+
     it('Update Active status / deactivate', function()
    {
     return chai.request(app)
@@ -207,15 +250,249 @@ describe('API endpoint for CIS subsystem', function() {
        
       });
 
-
-      
-
-
-
-
-
+});
  
+describe('Integration tests ', function() {
 
- // POST - Add new color
- 
+    this.timeout(5000); // How long to wait for a response (ms)
+
+    before(function() {
+
+    });
+
+    after(function() {
+
+    });
+
+    it('Check if client is active (client is supposed to be inactive)', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "getActive",
+                clientId: "6"
+            })
+
+        const obj = { a: res.body.data};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("false");
+
+
+
+    });
+
+    it('Check if client is inactive (client is supposed to be active)', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "getActive",
+                clientId: "6"
+            })
+
+        const obj = { a: res.body.data};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("false");
+
+
+    });
+
+    it('Get a user by their ClientID(invalid ID entered)', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "getUserById",
+                clientId: "3156892"
+            })
+
+        const obj = { a: res.body.clienid};
+
+        should(obj).be.null;
+
+    })
+
+    //DEACTIVATE CLIENT
+    it('Update Active status / deactivate if already deactivated', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "deactivate",
+                clientId: "7"
+            })
+
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("false");
+
+
+    });
+
+    it('Trying to deactivate an invalid clientID should fail ', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "deactivate",
+                clientId: "78945613"
+            })
+
+        const obj = { a: res.body.status};
+        should(obj).be.null;
+
+    });
+
+//REACTIVATE CLIENT
+    it('Update Active status / reactivate actived client', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "reactivate",
+                clientId: "1"
+            })
+
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("false");
+
+
+    });
+
+    it('Trying to Activate an invalid clientID should fail ', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "deactivate",
+                clientId: "78945613"
+            })
+
+        const obj = { a: res.body.status};
+        should(obj).be.null;
+
+    });
+
+//UPDATE ADDRESS
+    it('Update Address to empty string should fail ', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "updateAddress",
+                clientId: "1",
+                address: ""
+            })
+
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("fail");
+
+
+    });
+
+    it('Update Address to with invalid clientID should fail ', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "updateAddress",
+                clientId: "7946855",
+                address: "341 Puffadder Street"
+            })
+
+        const obj = { a: res.body.status};
+        should(obj).be.null;
+
+
+    });
+
+    //UPDATE Phone
+    it('Update Phone Number to empty string should fail ', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "updatePhone",
+                clientId: "11",
+                phone: ""
+            })
+
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("fail");
+
+
+    });
+
+    it('Update Phone Number of invalid clientID should fail ', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "updatePhone",
+                clientId: "7877777",
+                phone: "0589634528"
+            })
+
+        const obj = { a: res.body.status};
+        should(obj).be.null;
+
+
+
+    });
+
+    //Update Email
+    it('Update Email Address to empty string should fail ', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "updateEmail",
+                clientId: "9",
+                email: ""
+            })
+
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("fail");
+
+
+    });
+
+    it('Update Email Address of invalid clientID should fail ', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "updateEmail",
+                clientId: "9999999",
+                email: "joe@1234.com"
+            })
+
+        const obj = { a: res.body.status};
+        should(obj).be.null;
+
+
+    });
+
+    it('using get email with an invalid clientID should fail', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "getEmail",
+                clientId: "789456852"
+            })
+
+        const obj = { a: res.body.email};
+        should(obj).be.null;
+
+    });
+
+     
+
+
+
 });

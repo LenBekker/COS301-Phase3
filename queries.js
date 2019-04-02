@@ -1,6 +1,6 @@
 const Pool = require('pg').Pool
 const csv=require('csvtojson')
-var https = require('https')
+var http = require('http')
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || "postgres://me:password@localhost:5432/clientinfo"
@@ -168,7 +168,10 @@ const FindEmail = (request,response) =>{
       }
       
       if(res.rows[0])
+      {
+        //getLogs(request,response);
         response.status(200).json({"email": res.rows[0].email, "name":res.rows[0].name, "surname":res.rows[0].surname});
+      }
       else
         response.status(200).json({'status':'failed','message':'id does not exist'});
       
@@ -275,7 +278,7 @@ const insertCSVfilepath= (request,response)=>{
       //console.log();
  for(i in jsonObj)
  {
-    uName=jsonObj[i].name;
+  uName=jsonObj[i].name;
   uSurname = jsonObj[i].surname;
   uEmail = jsonObj[i].email;
   uPhoneNumber = jsonObj[i].phonenumber;
@@ -297,31 +300,53 @@ const insertCSVfilepath= (request,response)=>{
 function notifyNFC(id)
 {
 
-  var url= 'merlot-card-authentication.herokuapp.com';
-    
-  const options = {
-    hostname : url,
-    //port : 3000,
-    path : "/createCard",
-    method : "POST",
-    params : {
-        'clientID' : id
-    }
-  }
-  var req = https.request(options, (res) =>{
-    res.on('data', (chunk) => {
-      console.log(`Response Body: ${chunk}`);
-    })
-    res.on('error', (error) => {
-      console.error("notifyNFC: Could not notify subsystem");
-    })
-  });
+      var url= 'merlot-card-authentication.herokuapp.com';
+     
+    //http.request(options, callback).write(bodyString)
 
-req.end();
+      const options = {
+        hostname : url,
+       // port : 3000,
+        path: '/cancelCard',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+      }
+    }
+      
+    var req = http.request(options, function(res) {
+     // console.log('Status: ' + res.statusCode);
+      //console.log('Headers: ' + JSON.stringify(res.headers));
+      res.setEncoding('utf8');
+      res.on('data', function (body) {
+        //console.log('Body: ' + body);
+      });
+    });
+    req.on('error', function(e) {
+      console.log('problem with request: ' + e.message);
+    });
+    // write data to request body
+    req.write('{"clientID": "id"}');
+    req.end();
+
+};
+
+const getLogs = (request, response) => {
+  pool.query('SELECT * FROM auditlog ORDER BY ClientID ASC', (error, results) => {
+    if (error) {
+      response.status(500).json({"status":"failed","message":"query not executed"});
+    }else
+    {
+    console.log(response.json(results.rows));
+  }
+  })
 }
+
+
 
 module.exports = {
   getUsers,
+  getLogs,
   insertCSV,
   insertCSVfilepath,	
   getUserById,
