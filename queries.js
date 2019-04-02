@@ -44,7 +44,14 @@ const getActive = (request, response) => {
       if (error) {
         response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
       }
-      response.status(200).json({"status":"success","data":results.rows[0].active});
+      try
+      {
+        response.status(200).json({"status":"success","data":results.rows[0].active});
+      }
+      catch(err)
+      {
+        response.status(200).json({"status":"failed","message":"query could not return data"});
+      }
     })
   }
   else
