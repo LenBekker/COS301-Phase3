@@ -1,6 +1,6 @@
 const Pool = require('pg').Pool
 const csv=require('csvtojson')
-var https = require('https')
+var http = require('http')
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || "postgres://me:password@localhost:5432/clientinfo"
@@ -44,7 +44,14 @@ const getActive = (request, response) => {
       if (error) {
         response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
       }
-      response.status(200).json({"status":"success","data":results.rows[0].active});
+      try
+      {
+        response.status(200).json({"status":"success","data":results.rows[0].active});
+      }
+      catch(err)
+      {
+        response.status(200).json({"status":"failed","message":"query could not return data"});
+      }
     })
   }
   else
@@ -58,6 +65,7 @@ const getActive = (request, response) => {
 const updateUser = (request, response) => {
   const id = parseInt(request.params.id)
   const { name, email } = request.body
+  clearLogs();
 
   pool.query(
     'UPDATE users SET name = $1, email = $2 WHERE id = $3',
@@ -72,11 +80,12 @@ const updateUser = (request, response) => {
 }
 
 
-//works on a post reguest
+//works on a post request
 const deleteUser = (request, response) => {
   if(request.body.clientId)
   {
     const id = parseInt(request.body.clientId)
+    clearLogs();
 
     pool.query('DELETE FROM client WHERE clientid = $1', [id], (error, results) => {
       if (error) {
@@ -93,6 +102,8 @@ const deleteUser = (request, response) => {
 
 //Insert working on post request;
 const insert = (request,response) => {
+
+  clearLogs();
   if(request.body.name && request.body.surname && request.body.email && request.body.phonenumber && request.body.address)
   {
     const uName=request.body.name;
@@ -118,6 +129,7 @@ const insert = (request,response) => {
 }
 //Working
 const Deactivate = (request,response) =>{
+  clearLogs();
   if(request.body.clientId != null)
   {
     const id = parseInt(request.body.clientId)
@@ -127,6 +139,7 @@ const Deactivate = (request,response) =>{
         response.status(200).json({"status":"false","message":"unsuccessful"});
       }else{
         response.status(200).json({"status":"True","message":"successfully Deactivated"});
+        notifyNFCCancel(id);
       }
     })
   }
@@ -137,6 +150,7 @@ const Deactivate = (request,response) =>{
 }
 //Working
 const Reactivate =(request,response) =>{
+  clearLogs();
   if(request.body.clientId)
   {
     const id = parseInt(request.body.clientId);
@@ -146,7 +160,7 @@ const Reactivate =(request,response) =>{
         response.status(200).json({"status":"false","message":"unsuccessful"});
       }else{
         response.status(200).json({"status":"True","message":"successfully Reactivated"});
-        notifyNFC(id);
+        notifyNFCCreate(id);
       }
     })
   }
@@ -157,6 +171,7 @@ const Reactivate =(request,response) =>{
 }
 //
 const FindEmail = (request,response) =>{
+  clearLogs();
   if(request.body.clientId)
   {
     const id = parseInt(request.body.clientId)
@@ -168,7 +183,10 @@ const FindEmail = (request,response) =>{
       }
       
       if(res.rows[0])
+      {
+        //getLogs(request,response);
         response.status(200).json({"email": res.rows[0].email, "name":res.rows[0].name, "surname":res.rows[0].surname});
+      }
       else
         response.status(200).json({'status':'failed','message':'id does not exist'});
       
@@ -183,6 +201,7 @@ const FindEmail = (request,response) =>{
 }
 //works on post request( bug that alters position in table,does not change ID though)
 const UpdateEmail = (request,response) =>{
+  clearLogs();
   if(request.body.clientId && request.body.email)
   {
     const id = parseInt(request.body.clientId);
@@ -203,6 +222,7 @@ const UpdateEmail = (request,response) =>{
 }
 //Works
 const UpdatePhoneNumber = (request,response) =>{
+  clearLogs();
   if(request.body.clientId && request.body.phone)
   {
   const id = parseInt(request.body.clientId);
@@ -224,6 +244,7 @@ const UpdatePhoneNumber = (request,response) =>{
 }
 //Works
 const UpdateAddress = (request,response) =>{
+  clearLogs();
   if(request.body.clientId && request.body.address)
   {
     const id = parseInt(request.body.clientId);
@@ -245,6 +266,7 @@ const UpdateAddress = (request,response) =>{
 }
 
 const insertCSV = (request,response)=>{ 
+  clearLogs();
 
 const csvFilePath='./test.csv'
 		csv()
@@ -269,13 +291,14 @@ const csvFilePath='./test.csv'
 } 
 
 const insertCSVfilepath= (request,response)=>{
+
   if(request.body.filepath){
     const csvFilePath = request.body.filepath;
     csv().fromFile(csvFilePath).then((jsonObj)=>{
       //console.log();
  for(i in jsonObj)
  {
-    uName=jsonObj[i].name;
+  uName=jsonObj[i].name;
   uSurname = jsonObj[i].surname;
   uEmail = jsonObj[i].email;
   uPhoneNumber = jsonObj[i].phonenumber;
@@ -294,34 +317,112 @@ const insertCSVfilepath= (request,response)=>{
 
 //Not working, but working? 
 
-function notifyNFC(id)
+function notifyNFCCancel(id)
 {
 
-  var url= 'merlot-card-authentication.herokuapp.com';
-    
-  const options = {
-    hostname : url,
-    //port : 3000,
-    path : "/createCard",
-    method : "POST",
-    params : {
-        'clientID' : id
-    }
-  }
-  var req = https.request(options, (res) =>{
-    res.on('data', (chunk) => {
-      console.log(`Response Body: ${chunk}`);
-    })
-    res.on('error', (error) => {
-      console.error("notifyNFC: Could not notify subsystem");
-    })
-  });
+      var url= 'merlot-card-authentication.herokuapp.com';
+     
+    //http.request(options, callback).write(bodyString)
 
-req.end();
+      var data = {
+        "clientID" : id
+      }
+
+      const options = {
+        hostname : url,
+       // port : 3000,
+        path: '/cancelCard',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+      }
+    }
+      
+    var req = http.request(options, function(res) {
+     // console.log('Status: ' + res.statusCode);
+      //console.log('Headers: ' + JSON.stringify(res.headers));
+      res.setEncoding('utf8');
+      res.on('data', function (body) {
+        console.log('Cancel card response: ' + body);
+      });
+    });
+    req.on('error', function(e) {
+      console.log('problem with request: ' + e.message);
+    });
+    // write data to request body
+    req.write(JSON.stringify(data));
+    req.end();
+
+};
+
+function notifyNFCCreate(id)
+{
+
+      var url= 'merlot-card-authentication.herokuapp.com';
+     
+    //http.request(options, callback).write(bodyString)
+
+      var data = {
+        "clientID" : id
+      }
+
+      const options = {
+        hostname : url,
+       // port : 3000,
+        path: '/createCard',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+      }
+    }
+      
+    var req = http.request(options, function(res) {
+     // console.log('Status: ' + res.statusCode);
+      //console.log('Headers: ' + JSON.stringify(res.headers));
+      res.setEncoding('utf8');
+      res.on('data', function (body) {
+        console.log('Create card response: ' + body);
+      });
+    });
+    req.on('error', function(e) {
+      console.log('problem with request: ' + e.message);
+    });
+    // write data to request body
+    req.write(JSON.stringify(data));
+    req.end();
+
+};
+
+
+function clearLogs(){
+
+  pool.query('DELETE from auditlog where clientID not in ( Select clientID from auditlog order by clientID desc limit 20)',(err,res)=>{
+if (err) {
+      console.log("something went wrong");
+    }else
+    {
+      //console.log("Logs have been updated and sent to reports");
+  }
+  })
+
+
 }
+const getLogs = (request,response)=> {
+  pool.query('SELECT * FROM auditlog ORDER BY ClientID ASC', (error, results) => {
+    if (error) {
+      response.status(500).json({"status":"failed","message":"query not executed"});
+    }else
+    {
+      response.json(results.rows);
+  }
+  })
+}
+
+
 
 module.exports = {
   getUsers,
+  getLogs,
   insertCSV,
   insertCSVfilepath,	
   getUserById,

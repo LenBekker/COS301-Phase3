@@ -81,6 +81,9 @@ function formatContent(req,res)
         case "insertCSVfilepath"://???
         return db.insertCSVfilepath(req,res);
 
+        case "getLogs"://???
+        return db.getLogs(req,res);
+
 
         default:{
             return res.status(200).json({ 'status':'failed','message':'Invalid Type'})
