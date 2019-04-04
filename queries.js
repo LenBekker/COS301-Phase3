@@ -1,4 +1,4 @@
-//ALL RESPONSES ARE JSON OBJECTS,OR JSON ARRAYS OF OBJECTS
+//ALL RESPONSES ARE JSON OBJECTS, OR JSON ARRAYS OF OBJECTS
 const promise = require('bluebird'); // or any other Promise/A+ compatible library;
 
 const initOptions = {
@@ -8,20 +8,33 @@ const initOptions = {
 const pgp = require('pg-promise')(initOptions);
 // See also: http://vitaly-t.github.io/pg-promise/module-pg-promise.html
 
-// Database connection details;
-const cn = {
+var db1;
+
+if(process.env.DATABASE_URL)
+{
+  //On Heroku
+  const cnheroku = process.env.DATABASE_URL; // + "?ssl=true"; 
+  db1 = pgp(cnheroku); // database instance;
+}
+else
+{
+  //Heroku Manually
+  const cnheroku = "postgres://dfobpdvebyywwn:4a99ec66f412b864f66b0d4dec1df6e06ca52ea61ccf70b14a70087f87b04192@ec2-54-228-252-67.eu-west-1.compute.amazonaws.com:5432/d9g7uhfunct4ve" + "?ssl=true";
+
+  // Local Database connection details;
+  const cn = {
     host  :'localhost',
     //host: 'https://merlotcisg7.herokuapp.com', // 'localhost' is the default;
     port: 5432, // 5432 is the default;
     database: 'clientinfo',
     user: 'me',
-    password: 'password',
-    ssl: 'true'
-};
-// You can check for all default values in:
-// https://github.com/brianc/node-postgres/blob/master/lib/defaults.js
+    password: 'password'
+    //,ssl: 'true'
+  };
 
-const db1 = pgp(cn); // database instance;
+  db1 = pgp(cnheroku); // database instance;
+}
+
 
 //const db1 = pgp('postgres://me:password@localhost:5432/clientinfo?ssl=true');
 
@@ -31,12 +44,12 @@ const csv=require('csvtojson')
 var http = require('http')
 
 
-
+//connecting to the database
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || "postgres://me:password@localhost:5432/clientinfo"
 })
 
-//working (returns all users in the database)
+//returns all users in the database
 const getUsers = (request, response) => {
   pool.query('SELECT * FROM client ORDER BY ClientID ASC', (error, results) => {
     if (error) {
@@ -46,7 +59,7 @@ const getUsers = (request, response) => {
   })
 }
 
-//works returns json object( Returns the user specified by the ID if valid)
+//Returns the user specified by the ID if valid
 const getUserById = (request, response) => {
   if(request.body.clientId)
   {
@@ -71,7 +84,7 @@ const getUserById = (request, response) => {
   }
 }
 
-//working (Return the user status Active -True/False)
+//Return the user status Active -True/False
 const getActive = (request, response) => {
   if(request.body.clientId)
   {
@@ -86,7 +99,6 @@ const getActive = (request, response) => {
         if (error) {
           response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
         }
-
         if(results.rows[0])
           response.status(200).json({"status":"success","data":results.rows[0].active});
         else
@@ -98,30 +110,9 @@ const getActive = (request, response) => {
   {
     response.status(200).json({"status":"failed","message":"invalid clientId"});
   }
-
 }
 
-//working update User (change attributes) //
-/* I dont think this function is ever used?
-const updateUser = (request, response) => {
-  const id = parseInt(request.params.id)
-  const { name, email } = request.body
-  clearLogs();
-
-  pool.query(
-    'UPDATE users SET name = $1, email = $2 WHERE id = $3',
-    [name, email, id],
-    (error, results) => {
-      if (error) {
-        response.status(500).json({"status":"failed","message":"query not executed or invalid fields"});
-      }
-      response.status(200).json({"status":"success","message":`successfully updated user: ${id}`})
-    }
-  )
-}
-*/
-
-//works on a post request (Deletes a user from the system)
+//Deletes a user from the client table given the clientId
 const deleteUser = (request, response) => {
   if(request.body.clientId)
   {
@@ -147,7 +138,7 @@ const deleteUser = (request, response) => {
   }
 }
 
-//Insert working on post request (Inserts a user into the database)
+//Inserts a user into the database
 const insert = (request,response) => {
 
   clearLogs();
@@ -174,8 +165,9 @@ const insert = (request,response) => {
   } 
 
 }
-//Working (Deactivates the status of a user from true to false.)
-//Remark this function does not delete a user it simply changed the active status of the user
+
+//Deactivates the status of a user from true to false.
+//Mark/store the user as suspended
 //WIll also notify Subsystems to cancel a user account/card
 const Deactivate = (request,response) =>{
   clearLogs();
@@ -206,7 +198,8 @@ const Deactivate = (request,response) =>{
 }
 
 
-//Working (Reactivates the status of a user from false to true.)
+//Reactivates the status of a user from false to true.
+//Mark/store the user as active
 //WIll also notify Subsystems to create a user account/card
 const Reactivate =(request,response) =>{
   clearLogs();
@@ -235,6 +228,7 @@ const Reactivate =(request,response) =>{
     response.status(200).json({"status":"failed","message":"invalid clientId"});
   }
 }
+
 //Return the email Address along with the name and surname of a user
 //Returning the name and surname for the subsystem
 const FindEmail = (request,response) =>{
@@ -255,15 +249,12 @@ const FindEmail = (request,response) =>{
         {
           response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
         }
-        
         if(res.rows[0])
         {
-          //getLogs(request,response);
           response.status(200).json({"email": res.rows[0].email, "name":res.rows[0].name, "surname":res.rows[0].surname});
         }
         else
-          response.status(200).json({'status':'failed','message':'id does not exist'});
-        
+          response.status(200).json({'status':'failed','message':'id does not exist'});      
       })
     }
   }
@@ -274,10 +265,10 @@ const FindEmail = (request,response) =>{
   }
  } catch (err){
     response.json({'message':'stop breaking my server'});
-} 
-
+ } 
 }
-//works on post request( Changes the email based on client ID)
+
+//Changes/Updates the email of a client based on client ID
 const UpdateEmail = (request,response) =>{
   clearLogs();
   if(request.body.clientId && request.body.email)
@@ -305,7 +296,8 @@ const UpdateEmail = (request,response) =>{
     response.status(200).json({"status":"failed","message":"invalid clientId or missing email"});
   }
 }
-//Works Updates the phone number of a user
+
+//Updates the phone number of a user given a clientID
 const UpdatePhoneNumber = (request,response) =>{
   clearLogs();
   if(request.body.clientId && request.body.phone)
@@ -334,9 +326,9 @@ const UpdatePhoneNumber = (request,response) =>{
   }
 
 }
-//Works
-//Updates the address of the user
 
+
+//Updates the address of the client
 const UpdateAddress = (request,response) =>{
   clearLogs();
   if(request.body.clientId && request.body.address)
@@ -366,73 +358,44 @@ const UpdateAddress = (request,response) =>{
   }
 }
 
-//inserts a file of users using a CSV file
-//from a host directory (could be used for backups)
-
-const insertCSV = (request,response)=>{ 
-  clearLogs();
-
-const csvFilePath='./test.csv'
-		csv()
-		.fromFile(csvFilePath)
-		.then((jsonObj)=>{
-		   //console.log();
-	for(i in jsonObj)
-	{
-  	 uName=jsonObj[i].name;
-	 uSurname = jsonObj[i].surname;
-	 uEmail = jsonObj[i].email;
-	 uPhoneNumber = jsonObj[i].phonenumber;
-	 uAddress = jsonObj[i].address;
- 
-
-  const insertQuery = 'INSERT INTO client("name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6)';
-  db1.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'])
-}
-})
-		console.log("successfull upload")
-		response.status(200).json({"status":"success","message":"successfully inserted"});
-} 
-
 
 //inserts a file of users using a CSV file
 //from a host directory (could be used for backups)
-
 const insertCSVfilepath= (request,response)=>{
 
   if(request.body.filepath){
     const csvFilePath = request.body.filepath;
+
     csv().fromFile(csvFilePath).then((jsonObj)=>{
       //console.log();
- for(i in jsonObj)
- {
-  uName=jsonObj[i].name;
-  uSurname = jsonObj[i].surname;
-  uEmail = jsonObj[i].email;
-  uPhoneNumber = jsonObj[i].phonenumber;
-  uAddress = jsonObj[i].address;
+    for(i in jsonObj)
+    {
+      uName=jsonObj[i].name;
+      uSurname = jsonObj[i].surname;
+      uEmail = jsonObj[i].email;
+      uPhoneNumber = jsonObj[i].phonenumber;
+      uAddress = jsonObj[i].address;
 
 
- const insertQuery = 'INSERT INTO client("name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6)';
- db1.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'])
-}
-})
+    const insertQuery = 'INSERT INTO client("name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6)';
+    db1.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'])
+        .catch(error => {
+        console.log('ERROR:', error);
+        });
+    }
+  });
+
    console.log("successfull upload")
    response.status(200).json({"status":"success","message":"successfully inserted"});
   }
   
 }
 
-//Working 
 //EXTERNAL SERVICE  to notify subsystem NFC to cancel card
-
 function notifyNFCCancel(id)
 {
 
       var url= 'merlot-card-authentication.herokuapp.com';
-     
-    //http.request(options, callback).write(bodyString)
-
       var data = {
         "clientID" : id
       }
@@ -464,16 +427,11 @@ function notifyNFCCancel(id)
 
 };
 
-
-//Working 
 //EXTERNAL SERVICE  to notify subsystem NFC to create/
 function notifyNFCCreate(id)
 {
 
       var url= 'merlot-card-authentication.herokuapp.com';
-     
-    //http.request(options, callback).write(bodyString)
-
       var data = {
         "clientID" : id
       }
@@ -486,11 +444,9 @@ function notifyNFCCreate(id)
         headers: {
           'Content-Type': 'application/json',
       }
-    }
+    }   
       
     var req = http.request(options, function(res) {
-     // console.log('Status: ' + res.statusCode);
-      //console.log('Headers: ' + JSON.stringify(res.headers));
       res.setEncoding('utf8');
       res.on('data', function (body) {
         console.log('Create card response: ' + body);
@@ -504,10 +460,10 @@ function notifyNFCCreate(id)
     req.end();
 
 };
+
 //Function to update logs on a number limit basis
 //todo - send request to reporting system
 //Still waiting on them
-
 function clearLogs(){
 
   pool.query('DELETE from auditlog where clientID not in ( Select clientID from auditlog order by clientID desc limit 100)',(err,res)=>{
@@ -515,11 +471,8 @@ if (err) {
       console.log("something went wrong");
     }else
     {
-      //console.log("Logs have been updated and sent to reports");
   }
   })
-
-
 }
 
 //Function to update logs on a number limit basis
@@ -532,22 +485,18 @@ const getLogs = (request,response)=> {
     }else
     {
       notifyLogs(JSON.stringify(results.rows));
-      //console.log(JSON.stringify(results.rows));
       response.json(results.rows);
   }
   //notifyLogs(JSON.stringify(results.rows));
   })
 }
 
-
+//Function to notify all the other subsystems about the AuditLogs.
 function notifyLogs(result)
 {
   console.log("NotifyLogs")
-
-
   var request = require("request");
-
-var options = { method: 'POST',
+  var options = { method: 'POST',
   url: 'http://still-oasis-34724.herokuapp.com/uploadLog',
   headers: 
    { 'Postman-Token': '5d1436e7-228e-421b-bb71-5083dabb6b22',
@@ -568,13 +517,11 @@ request(options, function (error, response, body) {
 
 };
 
-
 //Exporting modules to index.js to be used for API requests
 //Both externally and internally
 module.exports = {
   getUsers,
   getLogs,
-  insertCSV,
   insertCSVfilepath,	
   getUserById,
   getActive,
