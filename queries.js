@@ -50,14 +50,20 @@ const getUsers = (request, response) => {
 const getUserById = (request, response) => {
   if(request.body.clientId)
   {
-    const id = parseInt(request.body.clientId)
-
-    pool.query('SELECT * FROM client WHERE clientid = $1', [id], (error, results) => {
-      if (error) {
-        response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
-      }
-      response.status(200).json(results.rows)
-    })
+    const id = parseInt(request.body.clientId);
+    if (isNaN(id))
+    {
+      response.status(200).json({'status':'failed','message':'id is NaN'});    
+    }
+    else
+    {
+      pool.query('SELECT * FROM client WHERE clientid = $1', [id], (error, results) => {
+        if (error) {
+          response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
+        }
+        response.status(200).json(results.rows)
+      })
+    }
   }
   else
   {
@@ -69,14 +75,24 @@ const getUserById = (request, response) => {
 const getActive = (request, response) => {
   if(request.body.clientId)
   {
-    const id = parseInt(request.body.clientId)
+    const id = parseInt(request.body.clientId);
+    if (isNaN(id))
+    {
+      response.status(200).json({'status':'failed','message':'id is NaN'});    
+    }
+    else
+    {
+      pool.query('SELECT active FROM client WHERE clientid = $1', [id], (error, results) => {
+        if (error) {
+          response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
+        }
 
-    pool.query('SELECT active FROM client WHERE clientid = $1', [id], (error, results) => {
-      if (error) {
-        response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
-      }
-      response.status(200).json({"status":"success","data":results.rows[0].active});
-    })
+        if(results.rows[0])
+          response.status(200).json({"status":"success","data":results.rows[0].active});
+        else
+          response.status(200).json({'status':'failed','message':'id does not exist'});
+      })
+    }
   }
   else
   {
@@ -85,7 +101,8 @@ const getActive = (request, response) => {
 
 }
 
-//working update User (change attributes)
+//working update User (change attributes) //
+/* I dont think this function is ever used?
 const updateUser = (request, response) => {
   const id = parseInt(request.params.id)
   const { name, email } = request.body
@@ -102,21 +119,27 @@ const updateUser = (request, response) => {
     }
   )
 }
-
+*/
 
 //works on a post request (Deletes a user from the system)
 const deleteUser = (request, response) => {
   if(request.body.clientId)
   {
-    const id = parseInt(request.body.clientId)
-    clearLogs();
-
-    pool.query('DELETE FROM client WHERE clientid = $1', [id], (error, results) => {
-      if (error) {
-        response.status(500).json({"status":"failed","message":"deletion not executed or invalid clientId"});
-      }
-      response.status(200).json({"status":"success","message":`successfully deleted user: ${id}`})
-    })
+    const id = parseInt(request.body.clientId);
+    if (isNaN(id))
+    {
+      response.status(200).json({'status':'failed','message':'id is NaN'});    
+    }
+    else
+    {
+      clearLogs();
+      pool.query('DELETE FROM client WHERE clientid = $1', [id], (error, results) => {
+        if (error) {
+          response.status(500).json({"status":"failed","message":"deletion not executed or invalid clientId"});
+        }
+        response.status(200).json({"status":"success","message":`successfully deleted user: ${id}`})
+      })
+    }
   }
   else
   {
@@ -158,16 +181,23 @@ const Deactivate = (request,response) =>{
   clearLogs();
   if(request.body.clientId != null)
   {
-    const id = parseInt(request.body.clientId)
-    const deactivateQuery='UPDATE client SET active= \'false\'  WHERE clientid = $1';
-    pool.query(deactivateQuery,[id],(err,res)=> {
-      if(err || res.rowCount < 1){
-        response.status(200).json({"status":"false","message":"unsuccessful"});
-      }else{
-        response.status(200).json({"status":"True","message":"successfully Deactivated"});
-        notifyNFCCancel(id);
-      }
-    })
+    const id = parseInt(request.body.clientId);
+    if (isNaN(id))
+    {
+      response.status(200).json({'status':'failed','message':'id is NaN'});    
+    }
+    else
+    {
+      const deactivateQuery='UPDATE client SET active= \'false\'  WHERE clientid = $1';
+      pool.query(deactivateQuery,[id],(err,res)=> {
+        if(err || res.rowCount < 1){
+          response.status(200).json({"status":"false","message":"unsuccessful"});
+        }else{
+          response.status(200).json({"status":"True","message":"successfully Deactivated"});
+          notifyNFCCancel(id);
+        }
+      })
+    }
   }
   else
   {
@@ -183,15 +213,22 @@ const Reactivate =(request,response) =>{
   if(request.body.clientId)
   {
     const id = parseInt(request.body.clientId);
-    const reactivateQuery='UPDATE client SET active = \'true\'  WHERE clientid = $1';
-    pool.query(reactivateQuery,[id],(err,res) =>{
-      if(err || res.rowCount < 1){
-        response.status(200).json({"status":"false","message":"unsuccessful"});
-      }else{
-        response.status(200).json({"status":"True","message":"successfully Reactivated"});
-        notifyNFCCreate(id);
-      }
-    })
+    if (isNaN(id))
+    {
+      response.status(200).json({'status':'failed','message':'id is NaN'});    
+    }
+    else
+    {
+      const reactivateQuery='UPDATE client SET active = \'true\'  WHERE clientid = $1';
+      pool.query(reactivateQuery,[id],(err,res) =>{
+        if(err || res.rowCount < 1){
+          response.status(200).json({"status":"false","message":"unsuccessful"});
+        }else{
+          response.status(200).json({"status":"True","message":"successfully Reactivated"});
+          notifyNFCCreate(id);
+        }
+      })
+    }
   }
   else
   {
@@ -246,15 +283,22 @@ const UpdateEmail = (request,response) =>{
   if(request.body.clientId && request.body.email)
   {
     const id = parseInt(request.body.clientId);
-    const uEmail = request.body.email;
-    const updateemailQuery='UPDATE client SET email = $1  WHERE clientid = $2';
-    pool.query(updateemailQuery,[uEmail,id],(err,res)=>{
-      if(err){
-        response.status(500).json({"status":"failed","message":"update not executed or invalid field(s)"});
-      }else{
-        response.status(200).json({"status":"success","message":`Email of ClientID: ${id} updated`})
-      }
-    })
+    if (isNaN(id))
+    {
+      response.status(200).json({'status':'failed','message':'id is NaN'});    
+    }
+    else
+    {
+      const uEmail = request.body.email;
+      const updateemailQuery='UPDATE client SET email = $1  WHERE clientid = $2';
+      pool.query(updateemailQuery,[uEmail,id],(err,res)=>{
+        if(err){
+          response.status(500).json({"status":"failed","message":"update not executed or invalid field(s)"});
+        }else{
+          response.status(200).json({"status":"success","message":`Email of ClientID: ${id} updated`})
+        }
+      })
+    }
   }
   else
   {
@@ -266,16 +310,23 @@ const UpdatePhoneNumber = (request,response) =>{
   clearLogs();
   if(request.body.clientId && request.body.phone)
   {
-  const id = parseInt(request.body.clientId);
-  const uPhoneNumber = parseInt(request.body.phone);
-  const updatephonenumberQuery='UPDATE client SET phonenumber = $1  WHERE clientid = $2';
-  pool.query(updatephonenumberQuery,[uPhoneNumber,id],(err,res)=>{
-    if(err){
-      response.status(500).json({"status":"failed","message":"update not executed or invalid field(s)"});
-    }else{
-      response.status(200).json({"status":"success","message":`PhoneNumber of ClientID: ${id} updated`})
+    const id = parseInt(request.body.clientId);
+    if (isNaN(id))
+    {
+      response.status(200).json({'status':'failed','message':'id is NaN'});    
     }
-  })
+    else
+    {
+      const uPhoneNumber = request.body.phone;
+      const updatephonenumberQuery='UPDATE client SET phonenumber = $1  WHERE clientid = $2';
+      pool.query(updatephonenumberQuery,[uPhoneNumber,id],(err,res)=>{
+        if(err){
+          response.status(500).json({"status":"failed","message":"update not executed or invalid field(s)"});
+        }else{
+          response.status(200).json({"status":"success","message":`PhoneNumber of ClientID: ${id} updated`})
+        }
+      })
+    }
   }
   else
   {
@@ -291,16 +342,23 @@ const UpdateAddress = (request,response) =>{
   if(request.body.clientId && request.body.address)
   {
     const id = parseInt(request.body.clientId);
-    const uAddress = request.body.address;
-    const updateaddressQuery='UPDATE client SET address = $1  WHERE clientid = $2';
-    
-    pool.query(updateaddressQuery,[uAddress,id],(err,res)=>{
-        if(err){
-          response.status(500).json({"status":"failed","message":"update not executed or invalid field(s)"});
-        }else{
-          response.status(200).json({"status":"success","message":`Address of ClientID: ${id} updated`})
-        }
-    })
+    if (isNaN(id))
+    {
+      response.status(200).json({'status':'failed','message':'id is NaN'});    
+    }
+    else
+    {
+      const uAddress = request.body.address;
+      const updateaddressQuery='UPDATE client SET address = $1  WHERE clientid = $2';
+      
+      pool.query(updateaddressQuery,[uAddress,id],(err,res)=>{
+          if(err){
+            response.status(500).json({"status":"failed","message":"update not executed or invalid field(s)"});
+          }else{
+            response.status(200).json({"status":"success","message":`Address of ClientID: ${id} updated`})
+          }
+      })
+    }
   }
   else
   {
@@ -519,7 +577,6 @@ module.exports = {
   insertCSV,
   insertCSVfilepath,	
   getUserById,
-  updateUser,
   getActive,
   deleteUser,
   insert,
