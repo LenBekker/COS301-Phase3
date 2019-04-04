@@ -33,7 +33,7 @@ const psqlSetup = () => {
 
     /*------ 6 digit unique code function ------ */
     
-    /* Creates a random logID for each trigger function */
+    /* Creates a random logID for each user */
 
     CREATE OR REPLACE FUNCTION random_string()
     RETURNS text AS $$
