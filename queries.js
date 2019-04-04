@@ -1,4 +1,4 @@
-//ALL RESPONSES ARE JSON OBJECTS,OR JSON ARRAYS OF OBJECTS
+//ALL RESPONSES ARE JSON OBJECTS, OR JSON ARRAYS OF OBJECTS
 const promise = require('bluebird'); // or any other Promise/A+ compatible library;
 
 const initOptions = {
@@ -8,7 +8,7 @@ const initOptions = {
 const pgp = require('pg-promise')(initOptions);
 // See also: http://vitaly-t.github.io/pg-promise/module-pg-promise.html
 
-// Database connection details;
+//Database connection details;
 const cn = {
     host  :'localhost',
     //host: 'https://merlotcisg7.herokuapp.com', // 'localhost' is the default;
@@ -20,12 +20,12 @@ const cn = {
 };
 
 const db1 = pgp(cn); // database instance;
-const Pool = require('pg').Pool
-const csv=require('csvtojson')
+const Pool = require('pg').Pool 
+const csv=require('csvtojson') //json object for csv
 var http = require('http')
 
 
-
+//connecting to the database
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || "postgres://me:password@localhost:5432/clientinfo"
 })
@@ -80,7 +80,6 @@ const getActive = (request, response) => {
         if (error) {
           response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
         }
-
         if(results.rows[0])
           response.status(200).json({"status":"success","data":results.rows[0].active});
         else
@@ -92,10 +91,9 @@ const getActive = (request, response) => {
   {
     response.status(200).json({"status":"failed","message":"invalid clientId"});
   }
-
 }
 
-//Deletes a user from the system
+//Deletes a user from the client table given the clientId
 const deleteUser = (request, response) => {
   if(request.body.clientId)
   {
@@ -280,8 +278,7 @@ const UpdateEmail = (request,response) =>{
   }
 }
 
-
-//Updates the phone number of a user
+//Updates the phone number of a user given a clientID
 const UpdatePhoneNumber = (request,response) =>{
   clearLogs();
   if(request.body.clientId && request.body.phone)
@@ -312,7 +309,7 @@ const UpdatePhoneNumber = (request,response) =>{
 }
 
 
-//Updates the address of the user
+//Updates the address of the client
 const UpdateAddress = (request,response) =>{
   clearLogs();
   if(request.body.clientId && request.body.address)
@@ -342,8 +339,7 @@ const UpdateAddress = (request,response) =>{
   }
 }
 
-//inserts users from a file in CSV format.
-//from a host directory (could be used for backups)
+//inserts clients from a file. file is in CSV format.
 const insertCSV = (request,response)=>{ 
   clearLogs();
 
@@ -358,7 +354,6 @@ const csvFilePath='./test.csv'
 	 uEmail = jsonObj[i].email;
 	 uPhoneNumber = jsonObj[i].phonenumber;
 	 uAddress = jsonObj[i].address;
- 
 
   const insertQuery = 'INSERT INTO client("name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6)';
   db1.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'])
@@ -401,9 +396,6 @@ function notifyNFCCancel(id)
 {
 
       var url= 'merlot-card-authentication.herokuapp.com';
-     
-    //http.request(options, callback).write(bodyString)
-
       var data = {
         "clientID" : id
       }
@@ -435,7 +427,6 @@ function notifyNFCCancel(id)
 
 };
 
- 
 //EXTERNAL SERVICE  to notify subsystem NFC to create/
 function notifyNFCCreate(id)
 {
@@ -453,8 +444,7 @@ function notifyNFCCreate(id)
         headers: {
           'Content-Type': 'application/json',
       }
-    }
-      
+    }   
       
     var req = http.request(options, function(res) {
       res.setEncoding('utf8');
@@ -504,11 +494,8 @@ const getLogs = (request,response)=> {
 function notifyLogs(result)
 {
   console.log("NotifyLogs")
-
-
   var request = require("request");
-
-var options = { method: 'POST',
+  var options = { method: 'POST',
   url: 'http://still-oasis-34724.herokuapp.com/uploadLog',
   headers: 
    { 'Postman-Token': '5d1436e7-228e-421b-bb71-5083dabb6b22',
@@ -528,7 +515,6 @@ request(options, function (error, response, body) {
 });
 
 };
-
 
 //Exporting modules to index.js to be used for API requests
 //Both externally and internally
