@@ -1,9 +1,49 @@
 //ALL RESPONSES ARE JSON OBJECTS,OR JSON ARRAYS OF OBJECTS
+const promise = require('bluebird'); // or any other Promise/A+ compatible library;
+
+const initOptions = {
+    promiseLib: promise // overriding the default (ES6 Promise);
+};
+
+const pgp = require('pg-promise')(initOptions);
+// See also: http://vitaly-t.github.io/pg-promise/module-pg-promise.html
+
+var db1;
+
+if(process.env.DATABASE_URL)
+{
+  //On Heroku
+  const cnheroku = process.env.DATABASE_URL; // + "?ssl=true"; 
+  db1 = pgp(cnheroku); // database instance;
+}
+else
+{
+  //Heroku Manually
+  const cnheroku = "postgres://dfobpdvebyywwn:4a99ec66f412b864f66b0d4dec1df6e06ca52ea61ccf70b14a70087f87b04192@ec2-54-228-252-67.eu-west-1.compute.amazonaws.com:5432/d9g7uhfunct4ve" + "?ssl=true";
+
+  // Local Database connection details;
+  const cn = {
+    host  :'localhost',
+    //host: 'https://merlotcisg7.herokuapp.com', // 'localhost' is the default;
+    port: 5432, // 5432 is the default;
+    database: 'clientinfo',
+    user: 'me',
+    password: 'password'
+    //,ssl: 'true'
+  };
+
+  db1 = pgp(cnheroku); // database instance;
+}
+
+
+//const db1 = pgp('postgres://me:password@localhost:5432/clientinfo?ssl=true');
 
 
 const Pool = require('pg').Pool
 const csv=require('csvtojson')
 var http = require('http')
+
+
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || "postgres://me:password@localhost:5432/clientinfo"
@@ -212,6 +252,7 @@ const Reactivate =(request,response) =>{
 //Returning the name and surname for the subsystem
 const FindEmail = (request,response) =>{
   clearLogs();
+  try{
   if(request.body.clientId)
   {
     const id = parseInt(request.body.clientId);
@@ -244,6 +285,9 @@ const FindEmail = (request,response) =>{
     console.log(request.body.clientId);
     response.status(200).json({"status":"failed","message":"invalid clientId"});
   }
+ } catch (err){
+    response.json({'message':'stop breaking my server'});
+} 
 
 }
 //works on post request( Changes the email based on client ID)
@@ -335,34 +379,6 @@ const UpdateAddress = (request,response) =>{
   }
 }
 
-//inserts a file of users using a CSV file
-//from a host directory (could be used for backups)
-
-const insertCSV = (request,response)=>{ 
-  clearLogs();
-
-const csvFilePath='./test.csv'
-		csv()
-		.fromFile(csvFilePath)
-		.then((jsonObj)=>{
-		   //console.log();
-	for(i in jsonObj)
-	{
-  	 uName=jsonObj[i].name;
-	 uSurname = jsonObj[i].surname;
-	 uEmail = jsonObj[i].email;
-	 uPhoneNumber = jsonObj[i].phonenumber;
-	 uAddress = jsonObj[i].address;
- 
-
-  const insertQuery = 'INSERT INTO client("name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6)';
-  pool.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'])
-}
-})
-		console.log("successfull upload")
-		response.status(200).json({"status":"success","message":"successfully inserted"});
-} 
-
 
 //inserts a file of users using a CSV file
 //from a host directory (could be used for backups)
@@ -371,21 +387,23 @@ const insertCSVfilepath= (request,response)=>{
 
   if(request.body.filepath){
     const csvFilePath = request.body.filepath;
+
     csv().fromFile(csvFilePath).then((jsonObj)=>{
       //console.log();
- for(i in jsonObj)
- {
-  uName=jsonObj[i].name;
-  uSurname = jsonObj[i].surname;
-  uEmail = jsonObj[i].email;
-  uPhoneNumber = jsonObj[i].phonenumber;
-  uAddress = jsonObj[i].address;
+    for(i in jsonObj)
+    {
+      uName=jsonObj[i].name;
+      uSurname = jsonObj[i].surname;
+      uEmail = jsonObj[i].email;
+      uPhoneNumber = jsonObj[i].phonenumber;
+      uAddress = jsonObj[i].address;
 
 
- const insertQuery = 'INSERT INTO client("name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6)';
- pool.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'])
-}
-})
+    const insertQuery = 'INSERT INTO client("name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6)';
+    db1.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'])
+    }
+  });
+
    console.log("successfull upload")
    response.status(200).json({"status":"success","message":"successfully inserted"});
   }
@@ -479,7 +497,7 @@ function notifyNFCCreate(id)
 
 function clearLogs(){
 
-  pool.query('DELETE from auditlog where clientID not in ( Select clientID from auditlog order by clientID desc limit 50)',(err,res)=>{
+  pool.query('DELETE from auditlog where clientID not in ( Select clientID from auditlog order by clientID desc limit 100)',(err,res)=>{
 if (err) {
       console.log("something went wrong");
     }else
@@ -500,10 +518,42 @@ const getLogs = (request,response)=> {
       response.status(500).json({"status":"failed","message":"query not executed"});
     }else
     {
+      notifyLogs(JSON.stringify(results.rows));
+      //console.log(JSON.stringify(results.rows));
       response.json(results.rows);
   }
+  //notifyLogs(JSON.stringify(results.rows));
   })
 }
+
+
+function notifyLogs(result)
+{
+  console.log("NotifyLogs")
+
+
+  var request = require("request");
+
+var options = { method: 'POST',
+  url: 'http://still-oasis-34724.herokuapp.com/uploadLog',
+  headers: 
+   { 'Postman-Token': '5d1436e7-228e-421b-bb71-5083dabb6b22',
+     'cache-control': 'no-cache',
+     'Content-Type': 'application/json' },
+  body: 
+   { log_set: 
+      { logs: result
+      }
+    },
+  json: true };
+
+request(options, function (error, response, body) {
+  if (error) throw new Error(error);
+
+  console.log(body);
+});
+
+};
 
 
 //Exporting modules to index.js to be used for API requests
@@ -511,7 +561,6 @@ const getLogs = (request,response)=> {
 module.exports = {
   getUsers,
   getLogs,
-  insertCSV,
   insertCSVfilepath,	
   getUserById,
   getActive,
