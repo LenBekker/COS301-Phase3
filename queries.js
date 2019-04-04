@@ -1,9 +1,36 @@
 //ALL RESPONSES ARE JSON OBJECTS,OR JSON ARRAYS OF OBJECTS
+const promise = require('bluebird'); // or any other Promise/A+ compatible library;
+
+const initOptions = {
+    promiseLib: promise // overriding the default (ES6 Promise);
+};
+
+const pgp = require('pg-promise')(initOptions);
+// See also: http://vitaly-t.github.io/pg-promise/module-pg-promise.html
+
+// Database connection details;
+const cn = {
+    host  :'localhost',
+    //host: 'https://merlotcisg7.herokuapp.com', // 'localhost' is the default;
+    port: 5432, // 5432 is the default;
+    database: 'clientinfo',
+    user: 'me',
+    password: 'password',
+    ssl: 'true'
+};
+// You can check for all default values in:
+// https://github.com/brianc/node-postgres/blob/master/lib/defaults.js
+
+const db1 = pgp(cn); // database instance;
+
+//const db1 = pgp('postgres://me:password@localhost:5432/clientinfo?ssl=true');
 
 
 const Pool = require('pg').Pool
 const csv=require('csvtojson')
 var http = require('http')
+
+
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || "postgres://me:password@localhost:5432/clientinfo"
@@ -175,6 +202,7 @@ const Reactivate =(request,response) =>{
 //Returning the name and surname for the subsystem
 const FindEmail = (request,response) =>{
   clearLogs();
+  try{
   if(request.body.clientId)
   {
     const id = parseInt(request.body.clientId);
@@ -207,6 +235,9 @@ const FindEmail = (request,response) =>{
     console.log(request.body.clientId);
     response.status(200).json({"status":"failed","message":"invalid clientId"});
   }
+ } catch (err){
+    response.json({'message':'stop breaking my server'});
+} 
 
 }
 //works on post request( Changes the email based on client ID)
@@ -298,7 +329,7 @@ const csvFilePath='./test.csv'
  
 
   const insertQuery = 'INSERT INTO client("name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6)';
-  pool.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'])
+  db1.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'])
 }
 })
 		console.log("successfull upload")
@@ -325,7 +356,7 @@ const insertCSVfilepath= (request,response)=>{
 
 
  const insertQuery = 'INSERT INTO client("name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6)';
- pool.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'])
+ db1.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'])
 }
 })
    console.log("successfull upload")
@@ -421,7 +452,7 @@ function notifyNFCCreate(id)
 
 function clearLogs(){
 
-  pool.query('DELETE from auditlog where clientID not in ( Select clientID from auditlog order by clientID desc limit 50)',(err,res)=>{
+  pool.query('DELETE from auditlog where clientID not in ( Select clientID from auditlog order by clientID desc limit 100)',(err,res)=>{
 if (err) {
       console.log("something went wrong");
     }else
@@ -442,10 +473,42 @@ const getLogs = (request,response)=> {
       response.status(500).json({"status":"failed","message":"query not executed"});
     }else
     {
+      notifyLogs(JSON.stringify(results.rows));
+      //console.log(JSON.stringify(results.rows));
       response.json(results.rows);
   }
+  //notifyLogs(JSON.stringify(results.rows));
   })
 }
+
+
+function notifyLogs(result)
+{
+  console.log("NotifyLogs")
+
+
+  var request = require("request");
+
+var options = { method: 'POST',
+  url: 'http://still-oasis-34724.herokuapp.com/uploadLog',
+  headers: 
+   { 'Postman-Token': '5d1436e7-228e-421b-bb71-5083dabb6b22',
+     'cache-control': 'no-cache',
+     'Content-Type': 'application/json' },
+  body: 
+   { log_set: 
+      { logs: result
+      }
+    },
+  json: true };
+
+request(options, function (error, response, body) {
+  if (error) throw new Error(error);
+
+  console.log(body);
+});
+
+};
 
 
 //Exporting modules to index.js to be used for API requests
