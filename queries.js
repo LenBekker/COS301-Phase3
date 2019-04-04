@@ -32,7 +32,7 @@ else
     //,ssl: 'true'
   };
 
-  db1 = pgp(cnheroku); // database instance;
+  db1 = pgp(cn); // database instance;
 }
 
 
@@ -461,6 +461,142 @@ function notifyNFCCreate(id)
 
 };
 
+function notifyFRCreate(id)
+{
+
+      var url= 'merlot-facial-recognition.herokuapp.com';
+      var data = {
+              "clientID": id,
+              "Message": "New client created"
+}
+
+      const options = {
+        hostname : url,
+       // port : 3000,
+        path: '/createCard',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+      }
+    }   
+      
+    var req = http.request(options, function(res) {
+      res.setEncoding('utf8');
+      res.on('data', function (body) {
+        console.log('Create card response: ' + body);
+      });
+    });
+    req.on('error', function(e) {
+      console.log('problem with request: ' + e.message);
+    });
+    // write data to request body
+    req.write(JSON.stringify(data));
+    req.end();
+
+};
+
+function notifyFRDelete(id)
+{
+
+      var url= '';
+      var data = {
+        "clientID": id,
+        "Message": "Client deactivated"
+      }
+
+      const options = {
+        hostname : url,
+       // port : 3000,
+        path: '/createCard',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+      }
+    }   
+      
+    var req = http.request(options, function(res) {
+      res.setEncoding('utf8');
+      res.on('data', function (body) {
+        console.log('Create card response: ' + body);
+      });
+    });
+    req.on('error', function(e) {
+      console.log('problem with request: ' + e.message);
+    });
+    // write data to request body
+    req.write(JSON.stringify(data));
+    req.end();
+
+};
+
+function notifyCASDEL(id)
+{
+
+      var url= '';
+      var data = {
+        "clientID": id,
+        "Message": "Client deactivated"
+      }
+
+      const options = {
+        hostname : url,
+       // port : 3000,
+        path: '/createCard',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+      }
+    }   
+      
+    var req = http.request(options, function(res) {
+      res.setEncoding('utf8');
+      res.on('data', function (body) {
+        console.log('Create card response: ' + body);
+      });
+    });
+    req.on('error', function(e) {
+      console.log('problem with request: ' + e.message);
+    });
+    // write data to request body
+    req.write(JSON.stringify(data));
+    req.end();
+
+};
+
+function notifyCASCreate(id)
+{
+
+      var url= '';
+      var data = {
+        "clientID": id,
+        "Message": "Client deactivated"
+      }
+
+      const options = {
+        hostname : url,
+       // port : 3000,
+        path: '/createCard',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+      }
+    }   
+      
+    var req = http.request(options, function(res) {
+      res.setEncoding('utf8');
+      res.on('data', function (body) {
+        console.log('Create card response: ' + body);
+      });
+    });
+    req.on('error', function(e) {
+      console.log('problem with request: ' + e.message);
+    });
+    // write data to request body
+    req.write(JSON.stringify(data));
+    req.end();
+
+};
+
 //Function to update logs on a number limit basis
 //todo - send request to reporting system
 //Still waiting on them
@@ -516,11 +652,25 @@ request(options, function (error, response, body) {
 });
 
 };
+const syncSubSystems= (request,response)=>
+{
+
+  for(var i = 0; i < 10;i++)
+  {
+    notifyNFCCreate(i);
+    notifyFRCreate(i);
+    notifyCASCreate(i);
+  }
+    response.status(200).json({"status":"success","message":"Systems Synced"});
+}
+
+
 
 //Exporting modules to index.js to be used for API requests
 //Both externally and internally
 module.exports = {
   getUsers,
+  syncSubSystems,
   getLogs,
   insertCSVfilepath,	
   getUserById,
