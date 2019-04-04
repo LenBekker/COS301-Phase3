@@ -1,3 +1,6 @@
+//ALL RESPONSES ARE JSON OBJECTS,OR JSON ARRAYS OF OBJECTS
+
+
 const Pool = require('pg').Pool
 const csv=require('csvtojson')
 var http = require('http')
@@ -6,7 +9,7 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL || "postgres://me:password@localhost:5432/clientinfo"
 })
 
-//working
+//working (returns all users in the database)
 const getUsers = (request, response) => {
   pool.query('SELECT * FROM client ORDER BY ClientID ASC', (error, results) => {
     if (error) {
@@ -16,18 +19,24 @@ const getUsers = (request, response) => {
   })
 }
 
-//works returns json object
+//works returns json object( Returns the user specified by the ID if valid)
 const getUserById = (request, response) => {
   if(request.body.clientId)
   {
-    const id = parseInt(request.body.clientId)
-
-    pool.query('SELECT * FROM client WHERE clientid = $1', [id], (error, results) => {
-      if (error) {
-        response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
-      }
-      response.status(200).json(results.rows)
-    })
+    const id = parseInt(request.body.clientId);
+    if (isNaN(id))
+    {
+      response.status(200).json({'status':'failed','message':'id is NaN'});    
+    }
+    else
+    {
+      pool.query('SELECT * FROM client WHERE clientid = $1', [id], (error, results) => {
+        if (error) {
+          response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
+        }
+        response.status(200).json(results.rows)
+      })
+    }
   }
   else
   {
@@ -35,24 +44,28 @@ const getUserById = (request, response) => {
   }
 }
 
+//working (Return the user status Active -True/False)
 const getActive = (request, response) => {
   if(request.body.clientId)
   {
-    const id = parseInt(request.body.clientId)
+    const id = parseInt(request.body.clientId);
+    if (isNaN(id))
+    {
+      response.status(200).json({'status':'failed','message':'id is NaN'});    
+    }
+    else
+    {
+      pool.query('SELECT active FROM client WHERE clientid = $1', [id], (error, results) => {
+        if (error) {
+          response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
+        }
 
-    pool.query('SELECT active FROM client WHERE clientid = $1', [id], (error, results) => {
-      if (error) {
-        response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
-      }
-      try
-      {
-        response.status(200).json({"status":"success","data":results.rows[0].active});
-      }
-      catch(err)
-      {
-        response.status(200).json({"status":"failed","message":"query could not return data"});
-      }
-    })
+        if(results.rows[0])
+          response.status(200).json({"status":"success","data":results.rows[0].active});
+        else
+          response.status(200).json({'status':'failed','message':'id does not exist'});
+      })
+    }
   }
   else
   {
@@ -61,7 +74,8 @@ const getActive = (request, response) => {
 
 }
 
-//header params??
+//working update User (change attributes) //
+/* I dont think this function is ever used?
 const updateUser = (request, response) => {
   const id = parseInt(request.params.id)
   const { name, email } = request.body
@@ -78,21 +92,27 @@ const updateUser = (request, response) => {
     }
   )
 }
+*/
 
-
-//works on a post request
+//works on a post request (Deletes a user from the system)
 const deleteUser = (request, response) => {
   if(request.body.clientId)
   {
-    const id = parseInt(request.body.clientId)
-    clearLogs();
-
-    pool.query('DELETE FROM client WHERE clientid = $1', [id], (error, results) => {
-      if (error) {
-        response.status(500).json({"status":"failed","message":"deletion not executed or invalid clientId"});
-      }
-      response.status(200).json({"status":"success","message":`successfully deleted user: ${id}`})
-    })
+    const id = parseInt(request.body.clientId);
+    if (isNaN(id))
+    {
+      response.status(200).json({'status':'failed','message':'id is NaN'});    
+    }
+    else
+    {
+      clearLogs();
+      pool.query('DELETE FROM client WHERE clientid = $1', [id], (error, results) => {
+        if (error) {
+          response.status(500).json({"status":"failed","message":"deletion not executed or invalid clientId"});
+        }
+        response.status(200).json({"status":"success","message":`successfully deleted user: ${id}`})
+      })
+    }
   }
   else
   {
@@ -100,7 +120,7 @@ const deleteUser = (request, response) => {
   }
 }
 
-//Insert working on post request;
+//Insert working on post request (Inserts a user into the database)
 const insert = (request,response) => {
 
   clearLogs();
@@ -127,70 +147,97 @@ const insert = (request,response) => {
   } 
 
 }
-//Working
+//Working (Deactivates the status of a user from true to false.)
+//Remark this function does not delete a user it simply changed the active status of the user
+//WIll also notify Subsystems to cancel a user account/card
 const Deactivate = (request,response) =>{
   clearLogs();
   if(request.body.clientId != null)
   {
-    const id = parseInt(request.body.clientId)
-    const deactivateQuery='UPDATE client SET active= \'false\'  WHERE clientid = $1';
-    pool.query(deactivateQuery,[id],(err,res)=> {
-      if(err || res.rowCount < 1){
-        response.status(200).json({"status":"false","message":"unsuccessful"});
-      }else{
-        response.status(200).json({"status":"True","message":"successfully Deactivated"});
-        notifyNFCCancel(id);
-      }
-    })
+    const id = parseInt(request.body.clientId);
+    if (isNaN(id))
+    {
+      response.status(200).json({'status':'failed','message':'id is NaN'});    
+    }
+    else
+    {
+      const deactivateQuery='UPDATE client SET active= \'false\'  WHERE clientid = $1';
+      pool.query(deactivateQuery,[id],(err,res)=> {
+        if(err || res.rowCount < 1){
+          response.status(200).json({"status":"false","message":"unsuccessful"});
+        }else{
+          response.status(200).json({"status":"True","message":"successfully Deactivated"});
+          notifyNFCCancel(id);
+        }
+      })
+    }
   }
   else
   {
     response.status(200).json({"status":"failed","message":"invalid clientId"});
   }
 }
-//Working
+
+
+//Working (Reactivates the status of a user from false to true.)
+//WIll also notify Subsystems to create a user account/card
 const Reactivate =(request,response) =>{
   clearLogs();
   if(request.body.clientId)
   {
     const id = parseInt(request.body.clientId);
-    const reactivateQuery='UPDATE client SET active = \'true\'  WHERE clientid = $1';
-    pool.query(reactivateQuery,[id],(err,res) =>{
-      if(err || res.rowCount < 1){
-        response.status(200).json({"status":"false","message":"unsuccessful"});
-      }else{
-        response.status(200).json({"status":"True","message":"successfully Reactivated"});
-        notifyNFCCreate(id);
-      }
-    })
+    if (isNaN(id))
+    {
+      response.status(200).json({'status':'failed','message':'id is NaN'});    
+    }
+    else
+    {
+      const reactivateQuery='UPDATE client SET active = \'true\'  WHERE clientid = $1';
+      pool.query(reactivateQuery,[id],(err,res) =>{
+        if(err || res.rowCount < 1){
+          response.status(200).json({"status":"false","message":"unsuccessful"});
+        }else{
+          response.status(200).json({"status":"True","message":"successfully Reactivated"});
+          notifyNFCCreate(id);
+        }
+      })
+    }
   }
   else
   {
     response.status(200).json({"status":"failed","message":"invalid clientId"});
   }
 }
-//
+//Return the email Address along with the name and surname of a user
+//Returning the name and surname for the subsystem
 const FindEmail = (request,response) =>{
   clearLogs();
   if(request.body.clientId)
   {
-    const id = parseInt(request.body.clientId)
-    const findemailQuery='SELECT email, name, surname FROM client WHERE clientid = $1';
-    pool.query(findemailQuery,[id],(err,res) =>{
-      if(err)
-      {
-        response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
-      }
-      
-      if(res.rows[0])
-      {
-        //getLogs(request,response);
-        response.status(200).json({"email": res.rows[0].email, "name":res.rows[0].name, "surname":res.rows[0].surname});
-      }
-      else
-        response.status(200).json({'status':'failed','message':'id does not exist'});
-      
-    })
+    const id = parseInt(request.body.clientId);
+    if (isNaN(id))
+    {
+      response.status(200).json({'status':'failed','message':'id is NaN'});    
+    }
+    else
+    {
+      const findemailQuery='SELECT email, name, surname FROM client WHERE clientid = $1';
+      pool.query(findemailQuery,[id],(err,res) =>{
+        if(err)
+        {
+          response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
+        }
+        
+        if(res.rows[0])
+        {
+          //getLogs(request,response);
+          response.status(200).json({"email": res.rows[0].email, "name":res.rows[0].name, "surname":res.rows[0].surname});
+        }
+        else
+          response.status(200).json({'status':'failed','message':'id does not exist'});
+        
+      })
+    }
   }
   else
   {
@@ -199,42 +246,56 @@ const FindEmail = (request,response) =>{
   }
 
 }
-//works on post request( bug that alters position in table,does not change ID though)
+//works on post request( Changes the email based on client ID)
 const UpdateEmail = (request,response) =>{
   clearLogs();
   if(request.body.clientId && request.body.email)
   {
     const id = parseInt(request.body.clientId);
-    const uEmail = request.body.email;
-    const updateemailQuery='UPDATE client SET email = $1  WHERE clientid = $2';
-    pool.query(updateemailQuery,[uEmail,id],(err,res)=>{
-      if(err){
-        response.status(500).json({"status":"failed","message":"update not executed or invalid field(s)"});
-      }else{
-        response.status(200).json({"status":"success","message":`Email of ClientID: ${id} updated`})
-      }
-    })
+    if (isNaN(id))
+    {
+      response.status(200).json({'status':'failed','message':'id is NaN'});    
+    }
+    else
+    {
+      const uEmail = request.body.email;
+      const updateemailQuery='UPDATE client SET email = $1  WHERE clientid = $2';
+      pool.query(updateemailQuery,[uEmail,id],(err,res)=>{
+        if(err){
+          response.status(500).json({"status":"failed","message":"update not executed or invalid field(s)"});
+        }else{
+          response.status(200).json({"status":"success","message":`Email of ClientID: ${id} updated`})
+        }
+      })
+    }
   }
   else
   {
     response.status(200).json({"status":"failed","message":"invalid clientId or missing email"});
   }
 }
-//Works
+//Works Updates the phone number of a user
 const UpdatePhoneNumber = (request,response) =>{
   clearLogs();
   if(request.body.clientId && request.body.phone)
   {
-  const id = parseInt(request.body.clientId);
-  const uPhoneNumber = parseInt(request.body.phone);
-  const updatephonenumberQuery='UPDATE client SET phonenumber = $1  WHERE clientid = $2';
-  pool.query(updatephonenumberQuery,[uPhoneNumber,id],(err,res)=>{
-    if(err){
-      response.status(500).json({"status":"failed","message":"update not executed or invalid field(s)"});
-    }else{
-      response.status(200).json({"status":"success","message":`PhoneNumber of ClientID: ${id} updated`})
+    const id = parseInt(request.body.clientId);
+    if (isNaN(id))
+    {
+      response.status(200).json({'status':'failed','message':'id is NaN'});    
     }
-  })
+    else
+    {
+      const uPhoneNumber = request.body.phone;
+      const updatephonenumberQuery='UPDATE client SET phonenumber = $1  WHERE clientid = $2';
+      pool.query(updatephonenumberQuery,[uPhoneNumber,id],(err,res)=>{
+        if(err){
+          response.status(500).json({"status":"failed","message":"update not executed or invalid field(s)"});
+        }else{
+          response.status(200).json({"status":"success","message":`PhoneNumber of ClientID: ${id} updated`})
+        }
+      })
+    }
   }
   else
   {
@@ -243,27 +304,39 @@ const UpdatePhoneNumber = (request,response) =>{
 
 }
 //Works
+//Updates the address of the user
+
 const UpdateAddress = (request,response) =>{
   clearLogs();
   if(request.body.clientId && request.body.address)
   {
     const id = parseInt(request.body.clientId);
-    const uAddress = request.body.address;
-    const updateaddressQuery='UPDATE client SET address = $1  WHERE clientid = $2';
-    
-    pool.query(updateaddressQuery,[uAddress,id],(err,res)=>{
-        if(err){
-          response.status(500).json({"status":"failed","message":"update not executed or invalid field(s)"});
-        }else{
-          response.status(200).json({"status":"success","message":`Address of ClientID: ${id} updated`})
-        }
-    })
+    if (isNaN(id))
+    {
+      response.status(200).json({'status':'failed','message':'id is NaN'});    
+    }
+    else
+    {
+      const uAddress = request.body.address;
+      const updateaddressQuery='UPDATE client SET address = $1  WHERE clientid = $2';
+      
+      pool.query(updateaddressQuery,[uAddress,id],(err,res)=>{
+          if(err){
+            response.status(500).json({"status":"failed","message":"update not executed or invalid field(s)"});
+          }else{
+            response.status(200).json({"status":"success","message":`Address of ClientID: ${id} updated`})
+          }
+      })
+    }
   }
   else
   {
     response.status(200).json({"status":"failed","message":"invalid clientId or missing address"});
   }
 }
+
+//inserts a file of users using a CSV file
+//from a host directory (could be used for backups)
 
 const insertCSV = (request,response)=>{ 
   clearLogs();
@@ -290,6 +363,10 @@ const csvFilePath='./test.csv'
 		response.status(200).json({"status":"success","message":"successfully inserted"});
 } 
 
+
+//inserts a file of users using a CSV file
+//from a host directory (could be used for backups)
+
 const insertCSVfilepath= (request,response)=>{
 
   if(request.body.filepath){
@@ -315,7 +392,8 @@ const insertCSVfilepath= (request,response)=>{
   
 }
 
-//Not working, but working? 
+//Working 
+//EXTERNAL SERVICE  to notify subsystem NFC to cancel card
 
 function notifyNFCCancel(id)
 {
@@ -355,6 +433,9 @@ function notifyNFCCancel(id)
 
 };
 
+
+//Working 
+//EXTERNAL SERVICE  to notify subsystem NFC to create/
 function notifyNFCCreate(id)
 {
 
@@ -392,11 +473,13 @@ function notifyNFCCreate(id)
     req.end();
 
 };
-
+//Function to update logs on a number limit basis
+//todo - send request to reporting system
+//Still waiting on them
 
 function clearLogs(){
 
-  pool.query('DELETE from auditlog where clientID not in ( Select clientID from auditlog order by clientID desc limit 20)',(err,res)=>{
+  pool.query('DELETE from auditlog where clientID not in ( Select clientID from auditlog order by clientID desc limit 50)',(err,res)=>{
 if (err) {
       console.log("something went wrong");
     }else
@@ -407,6 +490,10 @@ if (err) {
 
 
 }
+
+//Function to update logs on a number limit basis
+//todo - send request to reporting system
+//Still waiting on them
 const getLogs = (request,response)=> {
   pool.query('SELECT * FROM auditlog ORDER BY ClientID ASC', (error, results) => {
     if (error) {
@@ -419,14 +506,14 @@ const getLogs = (request,response)=> {
 }
 
 
-
+//Exporting modules to index.js to be used for API requests
+//Both externally and internally
 module.exports = {
   getUsers,
   getLogs,
   insertCSV,
   insertCSVfilepath,	
   getUserById,
-  updateUser,
   getActive,
   deleteUser,
   insert,
