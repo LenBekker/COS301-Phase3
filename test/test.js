@@ -580,7 +580,7 @@ describe('Own Database Integration tests ', function() {
 
 describe('Integration tests between internal functions  ', function() {
 
-    his.timeout(5000); // How long to wait for a response (ms)
+    this.timeout(5000); // How long to wait for a response (ms)
 
     before(function () {
 
