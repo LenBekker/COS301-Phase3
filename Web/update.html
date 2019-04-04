@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8">
+	<meta charset="UTF-8">
         <title>CIS FrontEnd</title>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet"> 
         <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" rel="stylesheet"> 
@@ -41,11 +41,9 @@
                                 
                                 <option value="https://merlotcisg7.herokuapp.com">merlotcisg7.herokuapp.com</option> 
                             </select>
-
- <!-- deactivate_Reactivate User -->    
- <br>                     
-                            <div class = "panel-group form-control">
-                               
+ 			    <!-- deactivate_Reactivate User -->    
+ 			    <br>                     
+                            <div class = "panel-group form-control">   
                                 <div class ="panel-body">
                                   <div class="text-left">
                                       <select id="Deactive_Reactive" >
@@ -62,99 +60,77 @@
                                   </div>
                                 </div>
                             </div>   
-                            <br> 
-
-<!-- update Requests-->
-                            <div class = "panel-group form-control">
-                                
-                                <div class ="panel-body">
-                                  <div class="text-left">
-                                      <select id="update" >
-                                          <option value=1>Email</option>
-                                          <option value=2>PhoneNumber</option>
-                                          <option value=3>Address</option>
-                                      </select>
-                                      <br>
-                                      <br>
-                                      <input id="ci" placeholder="ClientID" type="number"/>
-                                      <br>
-                                      <br>
-                                      <input id="e_p_a" placeholder="New Info" type="text"/>
-                                      <br>
-                                      <br>
-                                      <a class="btn btn-success" href="#" role="button" onclick="updateItem(document.getElementById('url').value)">Update Client </a>
-                                  </div>
-                                </div>
-                            </div> 
                             <br>
-
-
-
-
-
-                
-    </body>
-
-    <script>
+			    
+		    <!-- update Requests-->
+		    <div class = "panel-group form-control">
+			<div class ="panel-body">
+			  <div class="text-left">
+			      <select id="update" >
+				  <option value=1>Email</option>
+				  <option value=2>PhoneNumber</option>
+				  <option value=3>Address</option>
+			      </select>
+			      <br>
+			      <br>
+			      <input id="ci" placeholder="ClientID" type="number"/>
+			      <br>
+			      <br>
+			      <input id="e_p_a" placeholder="New Info" type="text"/>
+			      <br>
+			      <br>
+			      <a class="btn btn-success" href="#" role="button" onclick="updateItem(document.getElementById('url').value)">Update Client </a>
+			  </div>
+			</div>
+	    </div> 
+	    <br>          
+</body>
+<script>
         /*
             Function preforms a HTTP POST Request to the server to query the database on the server 
             and return the E-mail or Password of the UserId depending on the option selected.
         */
        
-
-        // print all clients function
+        //This is a function to print all the functions
         function GetClients(u){
           var url = u;
           var http = new XMLHttpRequest();
           http.open("POST", url, true);
           http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-         // http.onreadystatechange = function()
-          //{
-            //if(this.readyState = 4 && this.status == 200)
-		        //{
-             // console.log(this.responseText);
-              //document.getElementById("sync").value=this.responseText;
-            //}
-          //}
           http.send(JSON.stringify({"option" : "getUsers"}));
           }
-        //reactivate deactivted functions
+	        
+        //Function to activate and deactivate a client.
         function makeActive_Deactive(u){
             var url =u;
             var item= document.getElementById("Deactive_Reactive").value;
             var cid =document.getElementById("reactivateDeactivateId").value;
             if(item==1){
                 deactivate(url,cid);
-            }else if(item==2){
+            }
+	    else if(item==2){
                 reactivate(url,cid);
             }
         }
+	    
+	//Function to deactivate/suspend a user.
         function deactivate(u,v){
             var url=u, idclient=v;
             var http = new XMLHttpRequest();
             http.open("POST", url, true);
-            http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-            // http.onreadystatechange = function(){
-            //     if(this.readyState = 4 && this.status == 200)
-            //         { GetClients(u);}
-            // }
-            
+            http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');            
             var obj={};
             obj["option"]="deactivate";
             obj["clientId"]=parseInt(idclient);
             http.send(JSON.stringify(obj));
-
         }
-        function reactivate(u,v){
+        
+	//Function to reactivate/activate a suspended user.
+	  function reactivate(u,v){
             var url=u, idclient=v;
             var http = new XMLHttpRequest();
             http.open("POST", url, true);
             http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-            // http.onreadystatechange = function(){
-            //     if(this.readyState = 4 && this.status == 200)
-            //         { GetClients(u);}
-            // }
-            
             var obj={};
             obj["option"]="reactivate";
             obj["clientId"]=parseInt(idclient);
@@ -162,36 +138,27 @@
 
         }
 
-
-
-
-
-
-
-          //update client information functions
-          function updateItem(u){
-            var url =u;
-            var item = document.getElementById("update").value;
-            var cid =document.getElementById("ci").value;
-            var ninfo =document.getElementById("e_p_a").value;
-            if(item==1){
-                updateEmail(url,cid,ninfo);
-            }else if(item==2){
-                updatePhonenumber(url,cid,ninfo);
-            }else if(item==3){
-                updateAddress(url,cid,ninfo);
-            }
-          }
+	  //Function to update the client information.
+	  function updateItem(u){
+	    var url =u;
+	    var item = document.getElementById("update").value;
+	    var cid =document.getElementById("ci").value;
+	    var ninfo =document.getElementById("e_p_a").value;
+	    if(item==1){
+		updateEmail(url,cid,ninfo);
+	    }else if(item==2){
+		updatePhonenumber(url,cid,ninfo);
+	    }else if(item==3){
+		updateAddress(url,cid,ninfo);
+	    }
+	  }
+	    
+	  //Functions to update the email of a client.
           function updateEmail(u,v,w){
             var url=u, idclient=v, nemail=w;
             var http = new XMLHttpRequest();
             http.open("POST", url, true);
             http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-            // http.onreadystatechange = function(){
-            //     if(this.readyState = 4 && this.status == 200)
-            //         { GetClients(u);}
-            // }
-            
             var obj={};
             obj["option"]="updateEmail";
             obj["clientId"]=parseInt(idclient);
@@ -199,41 +166,31 @@
             http.send(JSON.stringify(obj));
           
         }
+	
+	//Function to update the phone number of a client
         function updatePhonenumber(u,v,w){
             var url=u, idclient=v, nphonenumber=w;
             var http = new XMLHttpRequest();
             http.open("POST", url, true);
             http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-            // http.onreadystatechange = function(){
-            //     if(this.readyState = 4 && this.status == 200)
-            //         { GetClients(u);}
-            // }
-            
             var obj={};
             obj["option"]="updatePhone";
             obj["clientId"]=parseInt(idclient);
             obj["phone"]=nphonenumber;
             http.send(JSON.stringify(obj));
-          
         }
+	    
+	//Function to update the address of client.
         function updateAddress(u,v,w){
             var url=u, idclient=v, naddress=w;
             var http = new XMLHttpRequest();
             http.open("POST", url, true);
             http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-            // http.onreadystatechange = function(){
-            //     if(this.readyState = 4 && this.status == 200)
-            //         { GetClients(u);}
-            // }
-            
             var obj={};
             obj["option"]="updateAddress";
             obj["clientId"]=parseInt(idclient);
             obj["address"]=naddress;
             http.send(JSON.stringify(obj));
-        }
-
-        
-     
+        }   
     </script>
 </html>
