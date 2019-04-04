@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8">
+	<meta charset="UTF-8">
         <title>CIS FrontEnd</title>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet"> 
         <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" rel="stylesheet"> 
@@ -9,7 +9,6 @@
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <!--Navbar not working-->  
             <a class="navbar-brand" href="index.html">Client Information System</a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
@@ -33,18 +32,14 @@
         <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                       
                             <br>
                             <label >Server URL</label>
                             <select id="url" >
                                 <option value="http://localhost:3000">localhost:3000</option>
-                                
                                 <option value="https://merlotcisg7.herokuapp.com">merlotcisg7.herokuapp.com</option> 
-                            </select>
-<!--Create client section-->                            
+                            </select>                           
                             <br>
-                            <div class = "panel-group form-control">
-                                
+                            <div class = "panel-group form-control">                             
                                 <br>
                                 <div class ="panel-body">
                                     <div class="text-left">
@@ -74,8 +69,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <br>
-			     
+                            <br>  
                             <br>
                             <div class = "panel-group form-control">
                                 
@@ -85,24 +79,19 @@
                                       
                                       <input id="csvinput"  placeholder="uploadCSV" type="file" />
                                       <br>
-                                      <br>
-                                                                   
-                                      <a class="btn btn-success" href="#" role="button" onclick="UploadCSV(document.getElementById('url').value)">upload CSV</a>
-                                        
+                                      <br>                                                                  
+                                      <a class="btn btn-success" href="#" role="button" onclick="UploadCSV(document.getElementById('url').value)">upload CSV</a>                                       
                                     </div>
                                 </div>
                             </div>
-                            <br> 
- 
-                
+                            <br>            
     </body>
-
     <script>
     
-        /*
-            Function preforms a HTTP POST Request to the server to query the database on the server 
-            and return the E-mail or Password of the UserId depending on the option selected.
-        */
+/* Function preforms a HTTP POST Request to the server to query the database on the server 
+   and return the E-mail or Password of the UserId depending on the option selected.
+*/
+	    
         // create a new client function
         function CreateClient(u){
             var url = u;
@@ -117,10 +106,9 @@
             obj["phonenumber"]=document.getElementById("PhoneNumber").value;
             obj["address"]=document.getElementById("Address").value;
             http.send(JSON.stringify(obj));
-
         }
 
-        //upload csv
+        //uploading new users from a csv file 
         function UploadCSV(u){
             var url = u;
             var http = new XMLHttpRequest();
@@ -130,8 +118,7 @@
             obj["option"]="insertCSVfilepath";
             obj["filepath"]=document.getElementById("csvinput").files[0].name;
             http.send(JSON.stringify(obj));
-        
         } 
-       
+	    
     </script>
 </html>

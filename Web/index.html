@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8">
-        
+	<meta charset="UTF-8">
         <title>CIS FrontEnd</title>
         <link href="css/highlight.css" rel="stylesheet"> 
         <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet"> 
@@ -10,12 +9,10 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"> 
         <script src="https://cdn.jsdelivr.net/remarkable/1.7.1/remarkable.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script> 
-
         <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
-            </button>
-            <!--Navbar not working-->  
+            </button>  
             <a class="navbar-brand" href="index.html">Client Information System</a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
@@ -49,35 +46,26 @@
                                 return hljs.highlight(lang, str).value;
                             } catch (__) {}
                             }
-
-                            return ''; // use external default escaping
+                            return ''; 
                             }
                         });
-
                         md.set({
                             html: true,
                             breaks: true,
                             linkify: true,
                             typographer: true
                         });
-
                         document.getElementById('content').innerHTML = md.render(fileContents);
                     }
-
                     var xmlhttp;
                     xmlhttp=new XMLHttpRequest();
                     xmlhttp.addEventListener("load", done, false);
                     xmlhttp.open("GET","README.md",true);
-                    xmlhttp.send();
-
-                    
+                    xmlhttp.send();       
                 </script>
             </div>
-        </div>
-                
+        </div>             
     </body>
-    <script>
-        
-      </script>
-
+    <script>  
+    </script>
 </html>
