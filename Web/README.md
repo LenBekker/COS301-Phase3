@@ -29,7 +29,6 @@ REQUEST: Add New Client
 
     const options = {
       hostname : CIS_URL,
-      port : CIS_PORT,
       path : "/",
       method : "POST",
       headers : {
@@ -74,7 +73,6 @@ REQUEST: Add New Client
 
     const options = {
       hostname : CIS_URL,
-      port : CIS_PORT,
       path : "/",
       method : "POST",
       headers : {
