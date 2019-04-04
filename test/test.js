@@ -578,5 +578,210 @@ describe('Own Database Integration tests ', function() {
 
 });
 
+describe('Integration tests between internal functions  ', function() {
+
+    his.timeout(5000); // How long to wait for a response (ms)
+
+    before(function () {
+
+    });
+
+    after(function () {
+
+    });
+
+    it('Get a user by their ClientID', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "getUserById",
+                clientId: "5"
+            })
+
+        const obj = { a: res.body.clienid, b: res.body.name, c: res.body.surname,
+            d: res.body.email, e: res.body.phonenumber, f: res.body.address,
+            g: res.body.active };
+
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("5");
+        expect(obj.b).to.deep.equal("Peter");
+        expect(obj.c).to.deep.equal("Griffin");
+        expect(obj.d).to.deep.equal("peter.griff@familymail.co");
+        expect(obj.e).to.deep.equal("5550112 ");
+        expect(obj.f).to.deep.equal("31 Spooner Street");
+        expect(obj.g).to.deep.equal("true");
+
+
+    })
+
+    it('Deactivating the user who was found in the previous test (clientID = 5)', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "deactivate",
+                clientId: "5"
+            })
+
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("true");
+
+
+    })
+
+    it('Making sure the client has been deactivated (clientID = 5)', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "getActive",
+                clientId: "5"
+            })
+
+        const obj = { a: res.body.data};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("true");
+
+
+    });
+
+    it('Reactivating the deactivated client (clientID = 5)', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "reactivate",
+                clientId: "5"
+            })
+
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("true");
+
+
+    });
+
+    it('Making sure the client has been reactivated (cleintID = 5)', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "getActive",
+                clientId: "5"
+            })
+
+        const obj = { a: res.body.data};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("true");
+
+
+    });
+
+    it('Update Email Address (clientID = 5)', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "updateEmail",
+                clientId: "5",
+                email: "janee@gmail.com"
+            })
+
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("success");
+
+
+    });
+
+    it('Check if correct updated email is returned (clientID = 5)', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "getEmail",
+                clientId: "5"
+            })
+
+        const obj = { a: res.body.email, b: res.body.name, c: res.body.surname};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("janee@gmail.com");
+        expect(obj.b).to.deep.equal("Peter");
+        expect(obj.c).to.deep.equal("Griffin");
+
+    });
+
+    it('Update Phone Number (clientID = 5)', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "updatePhone",
+                clientId: "5",
+                phone: "0856369528"
+            })
+
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("success");
+
+
+    });
+
+    it('Check if correct updated phone number is returned (clientID = 5)', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "getNumber",
+                clientId: "5"
+            })
+
+        const obj = { a: res.body.phonenumber, b: res.body.name, c: res.body.surname};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("0856369528");
+        expect(obj.b).to.deep.equal("Peter");
+        expect(obj.c).to.deep.equal("Griffin");
+
+    });
+
+    it('Update address (clientID = 5)', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "updateAddress",
+                clientId: "5",
+                address: "21 Fast Road"
+            })
+
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("success");
+
+
+    });
+
+    it('Check if correct updated address is returned (clientID = 5)', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "getAddress",
+                clientId: "5"
+            })
+
+        const obj = { a: res.body.address, b: res.body.name, c: res.body.surname};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("21 Fast Road");
+        expect(obj.b).to.deep.equal("Peter");
+        expect(obj.c).to.deep.equal("Griffin");
+
+    });
+
+});
+
 
 
