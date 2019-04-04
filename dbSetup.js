@@ -31,9 +31,8 @@ const psqlSetup = () => {
         Active BOOLEAN NOT NULL
      );
 
-    /*------ 6 digit unique code function ------ */
-    
-    /* Creates a random logID for each user */
+    /*------ 6 digit unique code function ------ 
+     Creates a random logID for each user */
 
     CREATE OR REPLACE FUNCTION random_string()
     RETURNS text AS $$
