@@ -174,23 +174,30 @@ const FindEmail = (request,response) =>{
   clearLogs();
   if(request.body.clientId)
   {
-    const id = parseInt(request.body.clientId)
-    const findemailQuery='SELECT email, name, surname FROM client WHERE clientid = $1';
-    pool.query(findemailQuery,[id],(err,res) =>{
-      if(err)
-      {
-        response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
-      }
-      
-      if(res.rows[0])
-      {
-        //getLogs(request,response);
-        response.status(200).json({"email": res.rows[0].email, "name":res.rows[0].name, "surname":res.rows[0].surname});
-      }
-      else
-        response.status(200).json({'status':'failed','message':'id does not exist'});
-      
-    })
+    const id = parseInt(request.body.clientId);
+    if (isNaN(id))
+    {
+      response.status(200).json({'status':'failed','message':'id is NaN'});    
+    }
+    else
+    {
+      const findemailQuery='SELECT email, name, surname FROM client WHERE clientid = $1';
+      pool.query(findemailQuery,[id],(err,res) =>{
+        if(err)
+        {
+          response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
+        }
+        
+        if(res.rows[0])
+        {
+          //getLogs(request,response);
+          response.status(200).json({"email": res.rows[0].email, "name":res.rows[0].name, "surname":res.rows[0].surname});
+        }
+        else
+          response.status(200).json({'status':'failed','message':'id does not exist'});
+        
+      })
+    }
   }
   else
   {
