@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8">
+	<meta charset="UTF-8">
         <title>CIS FrontEnd</title>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet"> 
         <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" rel="stylesheet"> 
         <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
-            </button>
-            <!--Navbar not working-->  
+            </button> 
             <a class="navbar-brand"  href="index.html">Client Information System</a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
@@ -31,20 +30,16 @@
     </head>
     <body >
         <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12">
-                       
-                            <br>
-                            <label >Server URL</label>
-                            <select id="url" >
-                                <option value="http://localhost:3000">localhost:3000</option>
-                                
-                                <option value="https://merlotcisg7.herokuapp.com">merlotcisg7.herokuapp.com</option> 
-                            </select>
-
-
+	<div class="row">
+	    <div class="col-md-12">
+		    <br>
+		    <label >Server URL</label>
+		    <select id="url" >
+			<option value="http://localhost:3000">localhost:3000</option>  
+			<option value="https://merlotcisg7.herokuapp.com">merlotcisg7.herokuapp.com</option> 
+		    </select>
+			    
 <!--Retrival of email and active status given ID-->
-
 <div class = "panel-group form-control">
    
     <div class ="panel-body">
@@ -66,30 +61,27 @@
       </div>
     </div>
 </div> 
-
-
-
-    <br>
-    <!--Reterive logs-->
-    <br>
-    <div class="text-left">
-    <a class="btn btn-success" href="#" role="button" onclick="getLogs(document.getElementById('url').value)">retrieve logs</a>
-    <br><br>
-    </div>
+<br>
+			    
+<!--Reterive logs-->
+<br>
+<div class="text-left">
+<a class="btn btn-success" href="#" role="button" onclick="getLogs(document.getElementById('url').value)">retrieve logs</a>
+<br><br>
+</div>
 
 </div>
 </div>
-        </div>         
-    </body>
+</div>         
+</body>
 
     <script>
         /*
             Function preforms a HTTP POST Request to the server to query the database on the server 
             and return the E-mail or Password of the UserId depending on the option selected.
         */
-      
 
-        // print all clients function
+        // Function to print all the clients.
         function GetClients(u){
           var url = u;
           var http = new XMLHttpRequest();
@@ -105,11 +97,9 @@
           }
           http.send(JSON.stringify({"option" : "getUsers"}));
           }
-       
 
-        //give id retive email and  active status functions
-
-          function getItem(u){
+        //Function to give ClientId and retrieve the email and  active status functions
+         function getItem(u){
             var url =u;
             var item = document.getElementById("retrieve").value;
             var cid =document.getElementById("retid").value;
@@ -119,7 +109,8 @@
                 getActive(url,cid);
             }
           }
-
+	
+	//Function to get the email of a client.
         function getEmail(u,v){
           var url=u, idclient=v;
           var http = new XMLHttpRequest();
@@ -134,8 +125,9 @@
             obj["option"]="getEmail";
             obj["clientId"]=parseInt(idclient);
             http.send(JSON.stringify(obj));
-          
         }
+	    
+	//Function to get all the active clients.
         function getActive(u,v){
           var url=u, idclient=v;
           var http = new XMLHttpRequest();
@@ -152,7 +144,7 @@
             http.send(JSON.stringify(obj));
         }
         
-	 //getlog function
+	 //Function to save all the logs to a file
           function getLogs(u){
           var url = u;
           var http = new XMLHttpRequest();
@@ -161,18 +153,9 @@
           http.onreadystatechange = function()
           {
             if(this.readyState = 4 && this.status == 200)
-		        {  }
+	    {  }
           }
           http.send(JSON.stringify({"option" : "getLogs"}));
-          }
-
-
-
-
-
-
-
-       
-       
+          }   
     </script>
 </html>
