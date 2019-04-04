@@ -32,7 +32,7 @@ else
     //,ssl: 'true'
   };
 
-  db1 = pgp(cnheroku); // database instance;
+  db1 = pgp(cn); // database instance;
 }
 
 
@@ -516,11 +516,23 @@ request(options, function (error, response, body) {
 });
 
 };
+const syncSubSystems= (request,response)=>
+{
+
+  for(var i = 0; i < 10;i++)
+  {
+    notifyNFCCreate(i);
+  }
+    response.status(200).json({"status":"success","message":"Systems Synced"});
+}
+
+
 
 //Exporting modules to index.js to be used for API requests
 //Both externally and internally
 module.exports = {
   getUsers,
+  syncSubSystems,
   getLogs,
   insertCSVfilepath,	
   getUserById,
