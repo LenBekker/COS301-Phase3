@@ -48,6 +48,7 @@ describe('API endpoint for CIS subsystem', function() {
 
      
    });
+    
   // Post - List all colors
   it('Should be an Email', function()
    {
@@ -65,9 +66,7 @@ describe('API endpoint for CIS subsystem', function() {
       });
   });
 
-
-
-//POST check if active contect
+  //POST check if active contect
   it('Check if client is active (client is supposed to be active)', function()
    {
     return chai.request(app)
@@ -96,12 +95,10 @@ describe('API endpoint for CIS subsystem', function() {
       
         const obj = { a: res.body.data};
         expect(obj).to.not.be.undefined;
-        expect(obj.a).to.deep.equal("true");
-        
-       
+        expect(obj.a).to.deep.equal("true"); 
       });
 
- // POST get Client info
+ // POST get Client information
   it('Get a user by their ClientID', function()
    {
     return chai.request(app)
@@ -151,20 +148,15 @@ describe('CRUD TESTING (specific information testing)', function() {
         clientId: "11"
       })
       
-        const obj = { a: res.body.email, b: res.body.name, c: res.body.surname};
-       expect(obj).to.not.be.undefined;
-        //expect(obj.a).to.deep.equal("peter.griff@familymail.com");
-        //expect(obj.b).to.deep.equal("Peter");
-        //expect(obj.c).to.deep.equal("Griffin");
-      
-      });
+   const obj = { a: res.body.email, b: res.body.name, c: res.body.surname};
+   expect(obj).to.not.be.undefined;  
+  });
   
 
 
   //DEACTIVATE CLIENT
-
     it('Update Active status / deactivate', function()
-   {
+    {
     return chai.request(app)
       .post('/')
       .send({
@@ -174,9 +166,7 @@ describe('CRUD TESTING (specific information testing)', function() {
       
         const obj = { a: res.body.status};
         expect(obj).to.not.be.undefined;
-        expect(obj.a).to.deep.equal("true");
-        
-       
+        expect(obj.a).to.deep.equal("true");          
       });
 
 //REACTIVATE CLIENT
@@ -490,9 +480,5 @@ describe('Integration tests ', function() {
         should(obj).be.null;
 
     });
-
-     
-
-
 
 });
