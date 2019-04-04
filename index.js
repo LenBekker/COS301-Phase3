@@ -1,3 +1,4 @@
+//libraries that need to used.
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
@@ -7,28 +8,21 @@ var path = require('path');
 var http = require('http');
 const fs = require('fs');
 const cors = require('cors')
-
 const port = process.env.PORT || 3000;
 
-//Setup connect to postgres database(must exist) and create table if does not exist
+//Setup connect to postgres database and create table if does not exist
 dbsetup.psqlSetup();
-
 app.use(bodyParser.json())
 app.use(
   bodyParser.urlencoded({
     extended: true,
   })
 )
-app.use(cors());//Middleware for CORS 
+app.use(cors()); //Middleware for CORS library 
 
 // Static Home Page
 const HomePage = path.join(__dirname, '/Web');
 app.use("/", express.static(HomePage));
-
-/* //Non-static page
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname + '/Web/index.html'));
-});*/
 
 app.post('/', (req, res) => {
   var data = req.body;
@@ -36,54 +30,52 @@ app.post('/', (req, res) => {
   var feedback = formatContent(req,res);
 })
 
-
-
+//Menu options that the CIS system offers.
 function formatContent(req,res)
 {
     switch(req.body.option)
     {
-        case "getUsers"://works
+        case "getUsers":
         return db.getUsers(req,res);
 
-        case "getUserById"://works
+        case "getUserById":
         return db.getUserById(req,res);
 
-        case "getActive"://works
+        case "getActive":
         return db.getActive(req,res);
 
-        case "getEmail"://does not work
+        case "getEmail":
         return db.FindEmail(req,res);
 
-        case "insert"://works
+        case "insert":
         return db.insert(req,res);
 
-        case "delete"://works 
+        case "delete":
         return db.deleteUser(req,res);
 
-        case "updateEmail"://works 
+        case "updateEmail":
         return db.UpdateEmail(req,res);
 
-        case "updatePhone"://works
+        case "updatePhone":
         return db.UpdatePhoneNumber(req,res);
 
-        case "updateAddress"://works
+        case "updateAddress":
         return db.UpdateAddress(req,res);
 
-        case "reactivate"://???
+        case "reactivate":
         return db.Reactivate(req,res);
 
-        case "deactivate"://???
+        case "deactivate":
         return db.Deactivate(req,res);
 
-        case "insertCSV"://???
+        case "insertCSV":
         return db.insertCSV(req,res);
         
-        case "insertCSVfilepath"://???
+        case "insertCSVfilepath":
         return db.insertCSVfilepath(req,res);
 
-        case "getLogs"://???
+        case "getLogs":
         return db.getLogs(req,res);
-
 
         default:{
             return res.status(200).json({ 'status':'failed','message':'Invalid Type'})
@@ -92,16 +84,11 @@ function formatContent(req,res)
 }
 
 module.exports = app.listen(port, () => {
-  console.log(`App running on port ${port}.`)
+console.log(`App running on port ${port}.`)
 })
 
-
-
-///upload of csv file 
-
-
 /* TEMORARY HTTP POST USING JSON TEST */
-
+//mock data of a client that will be inserted
 const data = JSON.stringify({
   option : 'insert',
   name: 'Peter',
@@ -126,10 +113,3 @@ const options = {
       'Content-Length': data.length
   }
 }
-/*
-http.request(options, (res) =>{
-  res.on('data', (chunk) => {
-    console.log(`Response Body: ${chunk}`);
-  });
-}).write(data);
-*/
