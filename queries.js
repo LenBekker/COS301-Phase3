@@ -49,7 +49,7 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL || "postgres://me:password@localhost:5432/clientinfo"
 })
 
-//working (returns all users in the database)
+//returns all users in the database
 const getUsers = (request, response) => {
   pool.query('SELECT * FROM client ORDER BY ClientID ASC', (error, results) => {
     if (error) {
@@ -59,7 +59,7 @@ const getUsers = (request, response) => {
   })
 }
 
-//works returns json object( Returns the user specified by the ID if valid)
+//Returns the user specified by the ID if valid
 const getUserById = (request, response) => {
   if(request.body.clientId)
   {
@@ -84,7 +84,7 @@ const getUserById = (request, response) => {
   }
 }
 
-//working (Return the user status Active -True/False)
+//Return the user status Active -True/False
 const getActive = (request, response) => {
   if(request.body.clientId)
   {
@@ -114,27 +114,7 @@ const getActive = (request, response) => {
 
 }
 
-//working update User (change attributes) //
-/* I dont think this function is ever used?
-const updateUser = (request, response) => {
-  const id = parseInt(request.params.id)
-  const { name, email } = request.body
-  clearLogs();
-
-  pool.query(
-    'UPDATE users SET name = $1, email = $2 WHERE id = $3',
-    [name, email, id],
-    (error, results) => {
-      if (error) {
-        response.status(500).json({"status":"failed","message":"query not executed or invalid fields"});
-      }
-      response.status(200).json({"status":"success","message":`successfully updated user: ${id}`})
-    }
-  )
-}
-*/
-
-//works on a post request (Deletes a user from the system)
+//Deletes a user from the system
 const deleteUser = (request, response) => {
   if(request.body.clientId)
   {
@@ -160,7 +140,7 @@ const deleteUser = (request, response) => {
   }
 }
 
-//Insert working on post request (Inserts a user into the database)
+//Inserts a user into the database
 const insert = (request,response) => {
 
   clearLogs();
@@ -187,8 +167,9 @@ const insert = (request,response) => {
   } 
 
 }
-//Working (Deactivates the status of a user from true to false.)
-//Remark this function does not delete a user it simply changed the active status of the user
+
+//Deactivates the status of a user from true to false.
+//Mark/store the user as suspended
 //WIll also notify Subsystems to cancel a user account/card
 const Deactivate = (request,response) =>{
   clearLogs();
@@ -219,7 +200,8 @@ const Deactivate = (request,response) =>{
 }
 
 
-//Working (Reactivates the status of a user from false to true.)
+//Reactivates the status of a user from false to true.
+//Mark/store the user as active
 //WIll also notify Subsystems to create a user account/card
 const Reactivate =(request,response) =>{
   clearLogs();
@@ -248,6 +230,7 @@ const Reactivate =(request,response) =>{
     response.status(200).json({"status":"failed","message":"invalid clientId"});
   }
 }
+
 //Return the email Address along with the name and surname of a user
 //Returning the name and surname for the subsystem
 const FindEmail = (request,response) =>{
@@ -268,15 +251,12 @@ const FindEmail = (request,response) =>{
         {
           response.status(500).json({"status":"failed","message":"query not executed or invalid clientId"});
         }
-        
         if(res.rows[0])
         {
-          //getLogs(request,response);
           response.status(200).json({"email": res.rows[0].email, "name":res.rows[0].name, "surname":res.rows[0].surname});
         }
         else
-          response.status(200).json({'status':'failed','message':'id does not exist'});
-        
+          response.status(200).json({'status':'failed','message':'id does not exist'});      
       })
     }
   }
@@ -287,10 +267,10 @@ const FindEmail = (request,response) =>{
   }
  } catch (err){
     response.json({'message':'stop breaking my server'});
-} 
-
+ } 
 }
-//works on post request( Changes the email based on client ID)
+
+//Changes/Updates the email of a client based on client ID
 const UpdateEmail = (request,response) =>{
   clearLogs();
   if(request.body.clientId && request.body.email)
@@ -318,7 +298,9 @@ const UpdateEmail = (request,response) =>{
     response.status(200).json({"status":"failed","message":"invalid clientId or missing email"});
   }
 }
-//Works Updates the phone number of a user
+
+
+//Updates the phone number of a user
 const UpdatePhoneNumber = (request,response) =>{
   clearLogs();
   if(request.body.clientId && request.body.phone)
@@ -347,9 +329,9 @@ const UpdatePhoneNumber = (request,response) =>{
   }
 
 }
-//Works
-//Updates the address of the user
 
+
+//Updates the address of the user
 const UpdateAddress = (request,response) =>{
   clearLogs();
   if(request.body.clientId && request.body.address)
@@ -382,7 +364,6 @@ const UpdateAddress = (request,response) =>{
 
 //inserts a file of users using a CSV file
 //from a host directory (could be used for backups)
-
 const insertCSVfilepath= (request,response)=>{
 
   if(request.body.filepath){
@@ -410,9 +391,7 @@ const insertCSVfilepath= (request,response)=>{
   
 }
 
-//Working 
 //EXTERNAL SERVICE  to notify subsystem NFC to cancel card
-
 function notifyNFCCancel(id)
 {
 
@@ -451,16 +430,12 @@ function notifyNFCCancel(id)
 
 };
 
-
-//Working 
+ 
 //EXTERNAL SERVICE  to notify subsystem NFC to create/
 function notifyNFCCreate(id)
 {
 
       var url= 'merlot-card-authentication.herokuapp.com';
-     
-    //http.request(options, callback).write(bodyString)
-
       var data = {
         "clientID" : id
       }
@@ -475,9 +450,8 @@ function notifyNFCCreate(id)
       }
     }
       
+      
     var req = http.request(options, function(res) {
-     // console.log('Status: ' + res.statusCode);
-      //console.log('Headers: ' + JSON.stringify(res.headers));
       res.setEncoding('utf8');
       res.on('data', function (body) {
         console.log('Create card response: ' + body);
@@ -491,10 +465,10 @@ function notifyNFCCreate(id)
     req.end();
 
 };
+
 //Function to update logs on a number limit basis
 //todo - send request to reporting system
 //Still waiting on them
-
 function clearLogs(){
 
   pool.query('DELETE from auditlog where clientID not in ( Select clientID from auditlog order by clientID desc limit 100)',(err,res)=>{
@@ -502,11 +476,8 @@ if (err) {
       console.log("something went wrong");
     }else
     {
-      //console.log("Logs have been updated and sent to reports");
   }
   })
-
-
 }
 
 //Function to update logs on a number limit basis
@@ -519,14 +490,13 @@ const getLogs = (request,response)=> {
     }else
     {
       notifyLogs(JSON.stringify(results.rows));
-      //console.log(JSON.stringify(results.rows));
       response.json(results.rows);
   }
   //notifyLogs(JSON.stringify(results.rows));
   })
 }
 
-
+//Function to notify all the other subsystems about the AuditLogs.
 function notifyLogs(result)
 {
   console.log("NotifyLogs")

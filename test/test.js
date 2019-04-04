@@ -64,72 +64,13 @@ describe('API endpoint for CIS subsystem', function() {
  
       });
   });
-
+});
 
 
 //POST check if active contect
-  it('Check if client is active (client is supposed to be active)', function()
-   {
-    return chai.request(app)
-      .post('/')
-      .send({
-        option: "getActive",
-        clientId: "6"
-      })
-      
-        const obj = { a: res.body.data};
-        expect(obj).to.not.be.undefined;
-        expect(obj.a).to.deep.equal("true");
-        
-       
-      });
+  
 
-//POST check if client is inactive
-  it('Check if client is inactive (client is supposed to be inactive)', function()
-   {
-    return chai.request(app)
-      .post('/')
-      .send({
-        option: "getActive",
-        clientId: "6"
-      })
-      
-        const obj = { a: res.body.data};
-        expect(obj).to.not.be.undefined;
-        expect(obj.a).to.deep.equal("true");
-        
-       
-      });
-
- // POST get Client info
-  it('Get a user by their ClientID', function()
-   {
-    return chai.request(app)
-      .post('/')
-      .send({
-        option: "getUserById",
-        clientId: "5"
-      })
-      
-        const obj = { a: res.body.clienid, b: res.body.name, c: res.body.surname,
-                d: res.body.email, e: res.body.phonenumber, f: res.body.address,
-                g: res.body.active };
-
-        expect(obj).to.not.be.undefined;
-        expect(obj.a).to.deep.equal("5");
-        expect(obj.b).to.deep.equal("Peter");
-        expect(obj.c).to.deep.equal("Griffin");
-        expect(obj.d).to.deep.equal("peter.griff@familymail.co");
-        expect(obj.e).to.deep.equal("5550112 ");
-        expect(obj.f).to.deep.equal("31 Spooner Street");
-        expect(obj.g).to.deep.equal("true");
-      
-       
-      })
-
-})
-
-describe('CRUD TESTING (specific information testing)', function() {
+describe('CRUD TESTING', function() {
   this.timeout(5000); // How long to wait for a response (ms)
 
   before(function() {
@@ -163,12 +104,13 @@ describe('CRUD TESTING (specific information testing)', function() {
 
   //DEACTIVATE CLIENT
 
-    it('Update Active status / deactivate', function()
+//REACTIVATE CLIENT
+    it('Update Active status / reactivate ', function()
    {
     return chai.request(app)
       .post('/')
       .send({
-        option: "deactivate",
+        option: "reactivate",
         clientId: "1"
       })
       
@@ -179,13 +121,13 @@ describe('CRUD TESTING (specific information testing)', function() {
        
       });
 
-//REACTIVATE CLIENT
-    it('Update Active status / reactivate ', function()
+
+    it('Update Active status / deactivate', function()
    {
     return chai.request(app)
       .post('/')
       .send({
-        option: "reactivate",
+        option: "deactivate",
         clientId: "1"
       })
       
@@ -252,7 +194,7 @@ describe('CRUD TESTING (specific information testing)', function() {
 
 });
  
-describe('Integration tests ', function() {
+describe('Own Database Integration tests ', function() {
 
     this.timeout(5000); // How long to wait for a response (ms)
 
@@ -264,115 +206,7 @@ describe('Integration tests ', function() {
 
     });
 
-    it('Check if client is active (client is supposed to be inactive)', function()
-    {
-        return chai.request(app)
-            .post('/')
-            .send({
-                option: "getActive",
-                clientId: "6"
-            })
-
-        const obj = { a: res.body.data};
-        expect(obj).to.not.be.undefined;
-        expect(obj.a).to.deep.equal("false");
-
-
-
-    });
-
-    it('Check if client is inactive (client is supposed to be active)', function()
-    {
-        return chai.request(app)
-            .post('/')
-            .send({
-                option: "getActive",
-                clientId: "6"
-            })
-
-        const obj = { a: res.body.data};
-        expect(obj).to.not.be.undefined;
-        expect(obj.a).to.deep.equal("false");
-
-
-    });
-
-    it('Get a user by their ClientID(invalid ID entered)', function()
-    {
-        return chai.request(app)
-            .post('/')
-            .send({
-                option: "getUserById",
-                clientId: "3156892"
-            })
-
-        const obj = { a: res.body.clienid};
-
-        should(obj).be.null;
-
-    })
-
-    //DEACTIVATE CLIENT
-    it('Update Active status / deactivate if already deactivated', function()
-    {
-        return chai.request(app)
-            .post('/')
-            .send({
-                option: "deactivate",
-                clientId: "7"
-            })
-
-        const obj = { a: res.body.status};
-        expect(obj).to.not.be.undefined;
-        expect(obj.a).to.deep.equal("false");
-
-
-    });
-
-    it('Trying to deactivate an invalid clientID should fail ', function()
-    {
-        return chai.request(app)
-            .post('/')
-            .send({
-                option: "deactivate",
-                clientId: "78945613"
-            })
-
-        const obj = { a: res.body.status};
-        should(obj).be.null;
-
-    });
-
-//REACTIVATE CLIENT
-    it('Update Active status / reactivate actived client', function()
-    {
-        return chai.request(app)
-            .post('/')
-            .send({
-                option: "reactivate",
-                clientId: "1"
-            })
-
-        const obj = { a: res.body.status};
-        expect(obj).to.not.be.undefined;
-        expect(obj.a).to.deep.equal("false");
-
-
-    });
-
-    it('Trying to Activate an invalid clientID should fail ', function()
-    {
-        return chai.request(app)
-            .post('/')
-            .send({
-                option: "deactivate",
-                clientId: "78945613"
-            })
-
-        const obj = { a: res.body.status};
-        should(obj).be.null;
-
-    });
+  
 
 //UPDATE ADDRESS
     it('Update Address to empty string should fail ', function()
@@ -491,8 +325,258 @@ describe('Integration tests ', function() {
 
     });
 
-     
+  });
+
+    describe('Service Integration tests (Invalid request testing) ', function() {
+
+    this.timeout(5000); // How long to wait for a response (ms)
+
+    before(function() {
+
+    });
+
+    after(function() {
+
+    });
+
+
+    it('Check if client is active (client is supposed to be inactive)', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "getActive",
+                clientId: "6"
+            })
+
+        const obj = { a: res.body.data};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("false");
+
+
+
+    });
+
+    it('Check if client is inactive (client is supposed to be active)', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "getActive",
+                clientId: "6"
+            })
+
+        const obj = { a: res.body.data};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("false");
+
+
+    });
+
+    it('Get a user by their ClientID(invalid ID entered)', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "getUserById",
+                clientId: "3156892"
+            })
+
+        const obj = { a: res.body.clienid};
+
+        should(obj).be.null;
+
+    })
+
+
+    it('Trying to deactivate an invalid clientID should fail ', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "deactivate",
+                clientId: "78945613"
+            })
+
+        const obj = { a: res.body.status};
+        should(obj).be.null;
+
+    });
+
+
+     //DEACTIVATE CLIENT
+    it('Update Active status / deactivate already deactivated client', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "deactivate",
+                clientId: "7"
+            })
+
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("false");
+
+
+    });
+
+//REACTIVATE CLIENT
+    it('Update Active status / reactivate actived client', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "reactivate",
+                clientId: "1"
+            })
+
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("false");
+
+
+    });
+
+    it('Trying to Reactivate an invalid clientID should fail ', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "reactivate",
+                clientId: "78945613"
+            })
+
+        const obj = { a: res.body.status};
+        should(obj).be.null;
+
+    });
+  });
+
+    describe('Service Integration tests (Valid request testing) ', function() {
+
+    this.timeout(5000); // How long to wait for a response (ms)
+
+    before(function() {
+
+    });
+
+    after(function() {
+
+    });
+
+     it('Check if client is active (client is supposed to be active)', function()
+   {
+    return chai.request(app)
+      .post('/')
+      .send({
+        option: "getActive",
+        clientId: "6"
+      })
+      
+        const obj = { a: res.body.data};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("true");
+        
+       
+      });
+
+//POST check if client is inactive
+  it('Check if client is inactive (client is supposed to be inactive)', function()
+   {
+    return chai.request(app)
+      .post('/')
+      .send({
+        option: "getActive",
+        clientId: "6"
+      })
+      
+        const obj = { a: res.body.data};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("true");
+        
+       
+      });
+
+ // POST get Client info
+  it('Get a user by their ClientID', function()
+   {
+    return chai.request(app)
+      .post('/')
+      .send({
+        option: "getUserById",
+        clientId: "5"
+      })
+      
+        const obj = { a: res.body.clienid, b: res.body.name, c: res.body.surname,
+                d: res.body.email, e: res.body.phonenumber, f: res.body.address,
+                g: res.body.active };
+
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("5");
+        expect(obj.b).to.deep.equal("Peter");
+        expect(obj.c).to.deep.equal("Griffin");
+        expect(obj.d).to.deep.equal("peter.griff@familymail.co");
+        expect(obj.e).to.deep.equal("5550112 ");
+        expect(obj.f).to.deep.equal("31 Spooner Street");
+        expect(obj.g).to.deep.equal("true");
+      
+       
+      })
+
+
+  it('Update Active status / deactivate activated client', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "deactivate",
+                clientId: "7"
+            })
+
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("false");
+
+
+    });
+
+//REACTIVATE CLIENT
+    it('Update Active status / reactivate deactivated client', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "reactivate",
+                clientId: "1"
+            })
+
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("false");
+
+
+    });
+
+    it('send logs to reporting (manual test)', function()
+    {
+        return chai.request(app)
+            .post('/')
+            .send({
+                option: "getLogs",
+            })
+
+        const obj = { a: res.body.status};
+        expect(obj).to.not.be.undefined;
+        expect(obj.a).to.deep.equal("true");
+
+
+    });
+
 
 
 
 });
+
+
+
