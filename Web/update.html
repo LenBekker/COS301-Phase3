@@ -123,6 +123,9 @@
             obj["option"]="deactivate";
             obj["clientId"]=parseInt(idclient);
             http.send(JSON.stringify(obj));
+	    if(idclient){
+                alert("Client Deactivated");
+            }
         }
         
 	//Function to reactivate/activate a suspended user.
@@ -135,6 +138,9 @@
             obj["option"]="reactivate";
             obj["clientId"]=parseInt(idclient);
             http.send(JSON.stringify(obj));
+	    if(idclient){
+                alert("Client Reactivated");
+            }
 
         }
 
@@ -164,6 +170,9 @@
             obj["clientId"]=parseInt(idclient);
             obj["email"]=nemail;
             http.send(JSON.stringify(obj));
+	    if(nemail&&idclient){
+            	alert("Email Updated");
+            }
           
         }
 	
@@ -178,6 +187,9 @@
             obj["clientId"]=parseInt(idclient);
             obj["phone"]=nphonenumber;
             http.send(JSON.stringify(obj));
+	    if(nphonenumber&&idclient){
+            	alert("PhoneNumber Updated");
+            }
         }
 	    
 	//Function to update the address of client.
@@ -191,6 +203,9 @@
             obj["clientId"]=parseInt(idclient);
             obj["address"]=naddress;
             http.send(JSON.stringify(obj));
+	    if(naddress&&idclient){
+                alert("Address Updated");
+            }
         }   
     </script>
 </html>
