@@ -106,9 +106,7 @@
             obj["phonenumber"]=document.getElementById("PhoneNumber").value;
             obj["address"]=document.getElementById("Address").value;
             http.send(JSON.stringify(obj));
-	    if(document.getElementById("Name").value && document.getElementById("Surname").value && document.getElementById("Email").value && document.getElementById("PhoneNumber").value && document.getElementById("Address").value){
-                alert("Client Successfully Created");
-            }	
+	    	
         }
 
         //uploading new users from a csv file 
@@ -121,9 +119,7 @@
             obj["option"]="insertCSVfilepath";
             obj["filepath"]=document.getElementById("csvinput").files[0].name;
             http.send(JSON.stringify(obj));
-	    if(document.getElementById("csvinput").files[0].name){
-                alert("CSV file Uploaded");
-            }
+	    
         } 
 	    
     </script>
