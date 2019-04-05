@@ -155,7 +155,7 @@ const insert = (request,response) => {
       if(err){
           response.status(500).json({"status":"failed","message":"unsuccessful insert"});
       }else{
-        console.log(res.rows[0].clientid)
+        //console.log(res.rows[0].clientid)
         notifyCASCreate(res.rows[0].clientid)
         notifyNFCCreate(res.rows[0].clientid)
         notifyFRCreate(res.rows[0].clientid)
@@ -268,7 +268,7 @@ const FindEmail = (request,response) =>{
   }
   else
   {
-    console.log(request.body.clientId);
+    //console.log(request.body.clientId);
     response.status(200).json({"status":"failed","message":"invalid clientId"});
   }
  } catch (err){
@@ -423,7 +423,7 @@ function notifyNFCCancel(id)
       //console.log('Headers: ' + JSON.stringify(res.headers));
       res.setEncoding('utf8');
       res.on('data', function (body) {
-        console.log('Cancel card response: ' + body);
+      //  console.log('Cancel card response: ' + body);
       });
     });
     req.on('error', function(e) {
@@ -457,7 +457,7 @@ function notifyNFCCreate(id)
     var req = http.request(options, function(res) {
       res.setEncoding('utf8');
       res.on('data', function (body) {
-        console.log('Create card response: ' + body);
+       // console.log('Create card response: ' + body);
       });
     });
     req.on('error', function(e) {
@@ -491,7 +491,7 @@ function notifyFRCreate(id)
     var req = http.request(options, function(res) {
       res.setEncoding('utf8');
       res.on('data', function (body) {
-        console.log('Create card response: ' + body);
+       // console.log('Create card response: ' + body);
       });
     });
     req.on('error', function(e) {
@@ -525,7 +525,7 @@ function notifyFRDelete(id)
     var req = http.request(options, function(res) {
       res.setEncoding('utf8');
       res.on('data', function (body) {
-        console.log('Create card response: ' + body);
+       // console.log('Create card response: ' + body);
       });
     });
     req.on('error', function(e) {
@@ -559,7 +559,7 @@ function notifyCASDelete(id)
     var req = http.request(options, function(res) {
       res.setEncoding('utf8');
       res.on('data', function (body) {
-        console.log('Create card response: ' + body);
+      //  console.log('Create card response: ' + body);
       });
     });
     req.on('error', function(e) {
@@ -581,7 +581,7 @@ function notifyCASCreate(id)
 
       //console.log("JSON array:::")
       var obj = JSON.parse(id);
-      console.log(JSON.stringify(obj));
+      //console.log(JSON.stringify(obj));
       const options = {
         hostname : url,
        // port : 3000,
@@ -595,7 +595,7 @@ function notifyCASCreate(id)
     var req = http.request(options, function(res) {
       res.setEncoding('utf8');
       res.on('data', function (body) {
-        console.log('Create client response: ' + body);
+       // console.log('Create client response: ' + body);
       });
     });
     req.on('error', function(e) {
@@ -640,7 +640,7 @@ const getLogs = (request,response)=> {
 //Function to notify all the other subsystems about the AuditLogs.
 function notifyLogs(result)
 {
-  console.log("NotifyLogs")
+  //console.log("NotifyLogs")
   var request = require("request");
   var options = { method: 'POST',
   url: 'http://still-oasis-34724.herokuapp.com/uploadLog',
@@ -658,7 +658,7 @@ function notifyLogs(result)
 request(options, function (error, response, body) {
   if (error) throw new Error(error);
 
-  console.log(body);
+  //console.log(body);
 });
 
 };
