@@ -77,6 +77,9 @@ function formatContent(req,res)
         case "getLogs":
         return db.getLogs(req,res);
 
+        case "sync":
+        return db.syncSubSystems(req,res);
+
         default:{
             return res.status(200).json({ 'status':'failed','message':'Invalid Type'})
         }

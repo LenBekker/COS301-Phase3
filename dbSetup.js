@@ -53,7 +53,7 @@ const psqlSetup = () => {
     ClientID integer default null,
     accountID text not null default random_string(), 
     event text NOT NULL,
-    timesstamp TIMESTAMP NOT NULL,
+    timesstamp timestamp(0) default date_trunc('second', now()),
     FOREIGN KEY (ClientID) REFERENCES Client(ClientID) on delete cascade on update cascade
     );
 
