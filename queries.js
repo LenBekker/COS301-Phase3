@@ -150,11 +150,15 @@ const insert = (request,response) => {
     const uPhoneNumber = request.body.phonenumber;
     const uAddress = request.body.address;
   
-    const insertQuery = 'INSERT INTO client("name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6)';
+    const insertQuery = 'INSERT INTO client("name","surname","email","phonenumber","address","active") VALUES($1, $2, $3, $4, $5, $6) returning clientid';
     pool.query(insertQuery,[uName,uSurname,uEmail,uPhoneNumber,uAddress,'True'], (err,res) => {
       if(err){
           response.status(500).json({"status":"failed","message":"unsuccessful insert"});
       }else{
+        console.log(res.rows[0].clientid)
+        notifyCASCreate(res.rows[0].clientid)
+        notifyNFCCreate(res.rows[0].clientid)
+        notifyFRCreate(res.rows[0].clientid)
         response.status(200).json({"status":"success","message":"successfully inserted"});
       }
     })
@@ -186,7 +190,9 @@ const Deactivate = (request,response) =>{
           response.status(200).json({"status":"false","message":"unsuccessful"});
         }else{
           response.status(200).json({"status":"True","message":"successfully Deactivated"});
-          notifyNFCCancel(id);
+          notifyNFCCancel(id)
+          notifyFRDelete(id)
+          notifyCASDelete(id)
         }
       })
     }
@@ -218,7 +224,9 @@ const Reactivate =(request,response) =>{
           response.status(200).json({"status":"false","message":"unsuccessful"});
         }else{
           response.status(200).json({"status":"True","message":"successfully Reactivated"});
-          notifyNFCCreate(id);
+           notifyCASCreate(id)
+          notifyNFCCreate(id)
+          notifyFRCreate(id)
         }
       })
     }
@@ -473,7 +481,7 @@ function notifyFRCreate(id)
       const options = {
         hostname : url,
        // port : 3000,
-        path: '/createCard',
+        path: '',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -498,7 +506,7 @@ function notifyFRCreate(id)
 function notifyFRDelete(id)
 {
 
-      var url= '';
+      var url= 'merlot-facial-recognition.herokuapp.com';
       var data = {
         "clientID": id,
         "Message": "Client deactivated"
@@ -507,7 +515,7 @@ function notifyFRDelete(id)
       const options = {
         hostname : url,
        // port : 3000,
-        path: '/createCard',
+        path: '',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -529,10 +537,10 @@ function notifyFRDelete(id)
 
 };
 
-function notifyCASDEL(id)
+function notifyCASDelete(id)
 {
 
-      var url= '';
+      var url= 'enigmatic-tundra-96709.herokuapp.com';
       var data = {
         "clientID": id,
         "Message": "Client deactivated"
@@ -541,7 +549,7 @@ function notifyCASDEL(id)
       const options = {
         hostname : url,
        // port : 3000,
-        path: '/createCard',
+        path: '/api/accounts/deleteUsers',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -566,16 +574,18 @@ function notifyCASDEL(id)
 function notifyCASCreate(id)
 {
 
-      var url= '';
+      var url= 'enigmatic-tundra-96709.herokuapp.com';
       var data = {
-        "clientID": id,
-        "Message": "Client deactivated"
+         id
       }
 
+      //console.log("JSON array:::")
+      var obj = JSON.parse(id);
+      console.log(JSON.stringify(obj));
       const options = {
         hostname : url,
        // port : 3000,
-        path: '/createCard',
+        path: '/api/accounts/createUsers',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -585,14 +595,14 @@ function notifyCASCreate(id)
     var req = http.request(options, function(res) {
       res.setEncoding('utf8');
       res.on('data', function (body) {
-        console.log('Create card response: ' + body);
+        console.log('Create client response: ' + body);
       });
     });
     req.on('error', function(e) {
       console.log('problem with request: ' + e.message);
     });
     // write data to request body
-    req.write(JSON.stringify(data));
+    req.write(JSON.stringify(obj));
     req.end();
 
 };
@@ -654,14 +664,26 @@ request(options, function (error, response, body) {
 };
 const syncSubSystems= (request,response)=>
 {
+  var array = {
+      "userIds": []
+  } ;
 
-  for(var i = 0; i < 10;i++)
+
+   for(var i = 1; i < 1000;i++)
   {
-    notifyNFCCreate(i);
-    notifyFRCreate(i);
-    notifyCASCreate(i);
+    array.userIds.push(i);
   }
+  for(var i = 1; i < 1000;i++)
+  {
+    //array.push(i);
+   notifyNFCCreate(i);
+   notifyFRCreate(i);
+    //notifyCASCreate(i);
+  }
+  //console.log(JSON.stringify(array));
     response.status(200).json({"status":"success","message":"Systems Synced"});
+    //console.log(JSON.stringify(array))
+    notifyCASCreate(JSON.stringify(array));
 }
 
 
